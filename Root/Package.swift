@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.6
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -13,8 +13,8 @@ let package = Package(
         .library(name: "Root", targets: ["Root"]),
     ],
     dependencies: [
-        .package(name: "Firebase", url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMajor(from: "8.10.0")),
-        .package(name: "GoogleSignIn", url: "https://github.com/google/GoogleSignIn-iOS.git", .upToNextMajor(from: "6.1.0")),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMajor(from: "8.10.0")),
+        .package(url: "https://github.com/google/GoogleSignIn-iOS.git", .upToNextMajor(from: "6.1.0")),
         .package(url: "https://github.com/uber/needle.git", .upToNextMajor(from: "0.17.0")),
         .package(url: "https://github.com/SFSafeSymbols/SFSafeSymbols.git", .upToNextMajor(from: "2.1.3")),
     ],
@@ -29,15 +29,15 @@ let package = Package(
         ]),
         .target(name: "Auth", dependencies: [
             "Core",
-            .byName(name: "GoogleSignIn", condition: .when(platforms: [.iOS])),
-            .product(name: "FirebaseAuth", package: "Firebase"),
+            .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS", condition: .when(platforms: [.iOS])),
+            .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
         ]),
         .target(name: "Proposal", dependencies: [
             "Core",
             "SwiftEvolutionAPI",
-            .product(name: "FirebaseFirestore", package: "Firebase"),
-            .product(name: "FirebaseFirestoreSwift-Beta", package: "Firebase"),
-            .product(name: "FirebaseFirestoreCombine-Community", package: "Firebase"),
+            .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
+            .product(name: "FirebaseFirestoreSwift-Beta", package: "firebase-ios-sdk"),
+            .product(name: "FirebaseFirestoreCombine-Community", package: "firebase-ios-sdk"),
         ]),
         .target(name: "SwiftEvolutionAPI", dependencies: []),
         .testTarget(
