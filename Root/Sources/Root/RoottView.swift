@@ -51,8 +51,8 @@ public struct RootView: View {
                 }
             }
             .listStyle(SidebarListStyle())
-            .appToolbar()
         }
+        .appToolbar()
         #else
         TabView {
             NavigationView {
