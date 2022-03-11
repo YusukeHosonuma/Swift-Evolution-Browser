@@ -38,7 +38,7 @@ public class SharedProposal: ProposalStore, ObservableObject {
     public func onInitialize() async {
         
         do {
-            self.proposals.value =  try await self.proposalAPI.fetch()
+            self.proposals.value = try await self.proposalAPI.fetch()
         } catch {
             fatalError() // TODO:
         }

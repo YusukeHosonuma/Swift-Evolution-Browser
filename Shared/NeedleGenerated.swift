@@ -20,9 +20,6 @@ public func registerProviderFactories() {
     __DependencyProviderRegistry.instance.registerDependencyProviderFactory(for: "^->RootComponent") { component in
         return EmptyDependencyProvider(component: component)
     }
-    __DependencyProviderRegistry.instance.registerDependencyProviderFactory(for: "^->RootComponent->LoginComponent") { component in
-        return EmptyDependencyProvider(component: component)
-    }
     
 }
 

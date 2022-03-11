@@ -20,6 +20,40 @@ public struct RootView: View {
     }
 
     public var body: some View {
+        content
+            .environment(\.authState, _component.authState)
+            .environment(\.proposalStore, _component.proposalComponent.proposalStore)
+            .task {
+                await _component.onInitialize()
+            }
+            .onOpenURL { url in
+                #if os(iOS)
+                GIDSignIn.sharedInstance.handle(url)
+                #endif
+            }
+    }
+    
+    var content: some View {
+        #if os(macOS)
+        NavigationView {
+            List {
+                NavigationLink(destination: AllProposalListView()) {
+                    HStack {
+                        Image(systemSymbol: .listBullet)
+                        Text("All")
+                    }
+                }
+                NavigationLink(destination: StaredProposalListView()) {
+                    HStack {
+                        Image(systemSymbol: .starFill)
+                        Text("Stared")
+                    }
+                }
+            }
+            .listStyle(SidebarListStyle())
+            .appToolbar()
+        }
+        #else
         TabView {
             NavigationView {
                 AllProposalListView().appToolbar()
@@ -27,7 +61,6 @@ public struct RootView: View {
             .tabItem {
                 Image(systemSymbol: .listBullet)
             }
-            
             NavigationView {
                 StaredProposalListView().appToolbar()
             }
@@ -35,15 +68,6 @@ public struct RootView: View {
                 Image(systemSymbol: .starFill)
             }
         }
-        .environment(\.authState, _component.authState)
-        .environment(\.proposalStore, _component.proposalComponent.proposalStore)
-        .task {
-            await _component.onInitialize()
-        }
-        .onOpenURL { url in
-            #if os(iOS)
-            GIDSignIn.sharedInstance.handle(url)
-            #endif
-        }
+        #endif
     }
 }

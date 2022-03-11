@@ -31,7 +31,8 @@ struct ProposalRowView: View {
             }
             Spacer()
             HStack(alignment: .bottom) {
-                Text(proposal.title).font(.subheadline)
+                Text(proposal.title)
+                    .font(.subheadline)
                 Spacer()
                 Image(systemSymbol: proposal.star ? .starFill : .star)
                     .foregroundColor(.yellow)
