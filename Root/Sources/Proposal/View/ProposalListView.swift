@@ -9,6 +9,7 @@ import SwiftUI
 import Combine
 import Core
 import Auth
+import Algorithms
 
 public struct ProposalListView: View {
     @ObservedObject var viewModel: ProposalListViewModel
@@ -103,7 +104,6 @@ final class ProposalListViewModel: ObservableObject {
         authState: AuthState,
         sharedProposal: ProposalStore
     ) async {
-        
         // DI
         self.authState = authState
         self.sharedProposal = sharedProposal
@@ -128,6 +128,7 @@ final class ProposalListViewModel: ObservableObject {
                         }
                     }
                     .uniqued()
+                    .asArray()
             }
             .assign(to: &$swiftVersions)
         
