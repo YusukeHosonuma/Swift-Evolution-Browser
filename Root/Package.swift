@@ -34,6 +34,7 @@ let package = Package(
         ]),
         .target(name: "Proposal", dependencies: [
             "Core",
+            "Auth",
             "SwiftEvolutionAPI",
             .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
             .product(name: "FirebaseFirestoreSwift-Beta", package: "firebase-ios-sdk"),

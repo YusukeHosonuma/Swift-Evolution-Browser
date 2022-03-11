@@ -8,21 +8,16 @@
 import SwiftUI
 import Combine
 import Core
+import Auth
 
-public struct ProposalListView<FirebaseAuthViewBuilder: FirebaseAuthViewBuildable>: View {
-    @ObservedObject var viewModel: ProposalListViewModel<FirebaseAuthViewBuilder>
+public struct ProposalListView: View {
+    @ObservedObject var viewModel: ProposalListViewModel
     
     @Environment(\.authState) var authState: AuthState!
     @Environment(\.proposalStore) var proposalStore: ProposalStore!
 
-    public init(
-        firebaseAuthViewBuilder: FirebaseAuthViewBuilder,
-        proposalFilter: @escaping (ProposalEntity) -> Bool
-    ) {
-        self.viewModel = ProposalListViewModel(
-            firebaseAuthViewBuilder: firebaseAuthViewBuilder,
-            proposalFilter: proposalFilter
-        )
+    public init(proposalFilter: @escaping (ProposalEntity) -> Bool) {
+        self.viewModel = ProposalListViewModel(proposalFilter: proposalFilter)
     }
     
     public var body: some View {
@@ -35,11 +30,10 @@ public struct ProposalListView<FirebaseAuthViewBuilder: FirebaseAuthViewBuildabl
                         await viewModel.onTapStar(proposal: proposal)
                     }
                 })
-
             }
         }
         .sheet(isPresented: $viewModel.isPresentAuthView) {
-            viewModel.firebaseAuthView(isPresent: $viewModel.isPresentAuthView)
+            LoginView()
         }
         .searchable(
             text: $viewModel.searchQuery,
@@ -74,7 +68,7 @@ public struct ProposalListView<FirebaseAuthViewBuilder: FirebaseAuthViewBuildabl
 }
 
 @MainActor
-final class ProposalListViewModel<FirebaseAuthViewBuilder: FirebaseAuthViewBuildable>: ObservableObject {
+final class ProposalListViewModel: ObservableObject {
     @Published var proposals: [ProposalEntity] = []
     @Published var searchQuery = ""
     @Published var isPresentAuthView: Bool = false
@@ -83,18 +77,11 @@ final class ProposalListViewModel<FirebaseAuthViewBuilder: FirebaseAuthViewBuild
     private var sharedProposal: ProposalStore!
     private var authState: AuthState!
     
-    private let firebaseAuthViewBuilder: FirebaseAuthViewBuilder
     private var proposalFilter: (ProposalEntity) -> Bool
     private var cancellable: [AnyCancellable] = []
     
-    nonisolated init(
-//        sharedProposal: ProposalStore,
-        firebaseAuthViewBuilder: FirebaseAuthViewBuilder,
-        proposalFilter: @escaping (ProposalEntity) -> Bool
-    ) {
-//        self.sharedProposal = sharedProposal
+    nonisolated init(proposalFilter: @escaping (ProposalEntity) -> Bool) {
         self.proposalFilter = proposalFilter
-        self.firebaseAuthViewBuilder = firebaseAuthViewBuilder
     }
     
     func onAppear(
@@ -125,7 +112,7 @@ final class ProposalListViewModel<FirebaseAuthViewBuilder: FirebaseAuthViewBuild
                             return nil
                         }
                     }
-                    .removingDuplicates()
+                    .uniqued()
             }
             .assign(to: &$swiftVersions)
         
@@ -141,15 +128,8 @@ final class ProposalListViewModel<FirebaseAuthViewBuilder: FirebaseAuthViewBuild
         }
     }
     
-    func firebaseAuthView(isPresent: Binding<Bool>) -> some View {
-        firebaseAuthViewBuilder.makeView(isPresent)
-    }
-    
     private func filteredProposals(query: String, proposals: [ProposalEntity]) -> [ProposalEntity] {
         guard !query.isEmpty else { return proposals }
-        
-        
-        
         return proposals.filter {
             var isVersionMatch = false
             if case .implemented(let version) = $0.status {
@@ -164,19 +144,5 @@ final class ProposalListViewModel<FirebaseAuthViewBuilder: FirebaseAuthViewBuild
                 || $0.status.label == query
                 || isVersionMatch
         }
-    }
-}
-
-extension Array where Element: Hashable {
-    func removingDuplicates() -> [Element] {
-        var addedDict = [Element: Bool]()
-
-        return filter {
-            addedDict.updateValue(true, forKey: $0) == nil
-        }
-    }
-
-    mutating func removeDuplicates() {
-        self = self.removingDuplicates()
     }
 }

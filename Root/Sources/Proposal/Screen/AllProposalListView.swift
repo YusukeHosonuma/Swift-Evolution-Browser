@@ -8,22 +8,12 @@
 import SwiftUI
 import Core
 
-public struct AllProposalListView<FirebaseAuthViewBuilder: FirebaseAuthViewBuildable>: View {
+public struct AllProposalListView: View {
     
-    private let _proposalStore: ProposalStore
-    private let _firebaseAuthViewBuilder: FirebaseAuthViewBuilder
-
-    public init(
-        proposalStore: ProposalStore,
-        firebaseAuthViewBuilder: FirebaseAuthViewBuilder
-    ) {
-        _proposalStore = proposalStore
-        _firebaseAuthViewBuilder = firebaseAuthViewBuilder
-    }
+    public init() {}
     
     public var body: some View {
         ProposalListView(
-            firebaseAuthViewBuilder: _firebaseAuthViewBuilder,
             proposalFilter: { _ in true }
         )
         .navigationTitle("All")

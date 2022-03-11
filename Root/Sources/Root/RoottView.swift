@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Proposal
+
 #if os(iOS)
 import GoogleSignIn
 #endif
@@ -20,14 +22,14 @@ public struct RootView: View {
     public var body: some View {
         TabView {
             NavigationView {
-                allProposalListView.appToolbar()
+                AllProposalListView().appToolbar()
             }
             .tabItem {
                 Image(systemSymbol: .listBullet)
             }
             
             NavigationView {
-                staredProposalListView.appToolbar()
+                StaredProposalListView().appToolbar()
             }
             .tabItem {
                 Image(systemSymbol: .starFill)
@@ -43,13 +45,5 @@ public struct RootView: View {
             GIDSignIn.sharedInstance.handle(url)
             #endif
         }
-    }
-    
-    private var allProposalListView: some View {
-        _component.proposalComponent.allProposalListView()
-    }
-    
-    private var staredProposalListView: some View {
-        _component.proposalComponent.staredProposalListView()
     }
 }
