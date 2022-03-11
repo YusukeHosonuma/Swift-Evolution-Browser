@@ -21,11 +21,9 @@ struct AppToolbar: ViewModifier {
                     Button(action: viewModel.onTapAccountButton) {
                         Image(systemSymbol: .personFill)
                     }
-                    .confirmationDialog("Confirm", isPresented: $viewModel.isPresentConfirmSheet) {
+                    .confirmationDialog("Are you logout?", isPresented: $viewModel.isPresentConfirmSheet) {
                         if viewModel.isLogin {
                             Button("Logout", action: viewModel.onTapLogout)
-                        } else {
-                            Button("Login", action: viewModel.onTapLogin)
                         }
                     }
                 }
@@ -56,13 +54,13 @@ final class AppToolbarViewModel: ObservableObject {
     // MARK: Action
     
     func onTapAccountButton() {
-        isPresentConfirmSheet = true
+        if authState.isLogin.value {
+            isPresentConfirmSheet = true
+        } else {
+            isPresentFirebaseAuthView = true
+        }
     }
-    
-    func onTapLogin() {
-        isPresentFirebaseAuthView = true
-    }
-    
+
     func onTapLogout() {
         authState.logout()
     }
