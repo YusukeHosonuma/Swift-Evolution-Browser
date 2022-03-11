@@ -16,8 +16,8 @@ public struct StaredProposalListView: View {
         ProposalListView(
             proposalFilter: { $0.star }
         )
-        .navigationTitle("Stared")
         #if os(iOS)
+        .navigationTitle("Stared")
         .navigationBarTitleDisplayMode(.inline)
         #endif
     }

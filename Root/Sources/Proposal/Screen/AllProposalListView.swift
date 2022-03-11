@@ -16,8 +16,8 @@ public struct AllProposalListView: View {
         ProposalListView(
             proposalFilter: { _ in true }
         )
-        .navigationTitle("All")
         #if os(iOS)
+        .navigationTitle("All")
         .navigationBarTitleDisplayMode(.inline)
         #endif
     }

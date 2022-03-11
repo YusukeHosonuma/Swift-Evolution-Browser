@@ -19,8 +19,55 @@ public struct ProposalListView: View {
     public init(proposalFilter: @escaping (ProposalEntity) -> Bool) {
         self.viewModel = ProposalListViewModel(proposalFilter: proposalFilter)
     }
-    
+
     public var body: some View {
+        content()
+            .listStyle(SidebarListStyle())
+            .sheet(isPresented: $viewModel.isPresentAuthView) {
+                LoginView()
+            }
+            .searchable(
+                text: $viewModel.searchQuery,
+                placement: .automatic,
+                prompt: Text("Search..."),
+                suggestions: {
+                    let statusLabels = ProposalEntity.Status.allCases.map(\.label)
+                    if viewModel.swiftVersions.contains(viewModel.searchQuery) || statusLabels.contains(viewModel.searchQuery) {
+                        EmptyView()
+                    } else {
+                        if viewModel.searchQuery.contains("Swift") {
+                            ForEach(viewModel.swiftVersions, id: \.self) { version in
+                                Text(version)
+                                    .searchCompletion(version)
+                            }
+                        } else {
+                            Text("Swift").searchCompletion("Swift ")
+                            ForEach(statusLabels, id: \.self) { label in
+                                Text(label).searchCompletion(label)
+                            }
+                        }
+                    }
+                }
+            )
+            .task {
+                await viewModel.onAppear(
+                    authState: authState,
+                    sharedProposal: proposalStore
+                )
+            }
+    }
+    
+    func content() -> some View {
+        #if os(macOS)
+        NavigationView {
+            proposalList()
+        }
+        #else
+        proposalList()
+        #endif
+    }
+    
+    func proposalList() -> some View {
         List(viewModel.proposals, id: \.id) { proposal in
             NavigationLink {
                 ProposalDetailView(url: proposal.proposalURL)
@@ -31,38 +78,6 @@ public struct ProposalListView: View {
                     }
                 })
             }
-        }
-        .sheet(isPresented: $viewModel.isPresentAuthView) {
-            LoginView()
-        }
-        .searchable(
-            text: $viewModel.searchQuery,
-            placement: .automatic,
-            prompt: Text("Search..."),
-            suggestions: {
-                let statusLabels = ProposalEntity.Status.allCases.map(\.label)
-                if viewModel.swiftVersions.contains(viewModel.searchQuery) || statusLabels.contains(viewModel.searchQuery) {
-                    EmptyView()
-                } else {
-                    if viewModel.searchQuery.contains("Swift") {
-                        ForEach(viewModel.swiftVersions, id: \.self) { version in
-                            Text(version)
-                                .searchCompletion(version)
-                        }
-                    } else {
-                        Text("Swift").searchCompletion("Swift ")
-                        ForEach(statusLabels, id: \.self) { label in
-                            Text(label).searchCompletion(label)
-                        }
-                    }
-                }
-            }
-        )
-        .task {
-            await viewModel.onAppear(
-                authState: authState,
-                sharedProposal: proposalStore
-            )
         }
     }
 }
