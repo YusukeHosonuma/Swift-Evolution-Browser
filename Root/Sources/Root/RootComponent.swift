@@ -24,42 +24,10 @@ public final class RootComponent: BootstrapComponent {
         shared { FirebaseAuthState() }
     }
     
-    // Builder provider
-        
-    public var firebaseAuthViewBuilderProvidable: FirebaseAuthViewBuilderProvidable {
-        shared { FirebaseAuthViewBuilderProvider() }
-    }
-    
     // MARK: Chiild components
     
     public var proposalComponent: ProposalComponent {
         shared { ProposalComponent.init(parent: self) }
-    }
-    
-    public var loginComponent: LoginComponent {
-        shared { LoginComponent.init(parent: self) }
-    }
-}
-
-public class FirebaseAuthViewBuilder: FirebaseAuthViewBuildable {
-    public func makeView(_ input: Binding<Bool>) -> some View {
-        LoginView()
-    }
-}
-
-public protocol FirebaseAuthViewBuilderProvidable {
-    var builder: FirebaseAuthViewBuilder { get }
-}
-
-public class FirebaseAuthViewBuilderProvider: FirebaseAuthViewBuilderProvidable {
-    public var builder: FirebaseAuthViewBuilder {
-        .init()
-    }
-}
-
-public final class LoginComponent: Component<EmptyDependency> {
-    public var firebaseAuthViewBuilder: FirebaseAuthViewBuilder {
-        .init()
     }
 }
 

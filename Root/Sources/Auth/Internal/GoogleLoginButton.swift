@@ -90,7 +90,7 @@ fileprivate final class GoogleLoginButtonViewModel {
                         break
                     }
                     
-                    continuation.resume(throwing: GoogleLoginError.cancel)
+                    continuation.resume(throwing: error)
                     return
                 }
                 

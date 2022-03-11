@@ -32,9 +32,6 @@ private class ProposalDependencyb6a3199fb61729d3a8eeBaseProvider: ProposalDepend
     var authState: AuthState {
         return rootComponent.authState
     }
-    var firebaseAuthViewBuilderProvidable: FirebaseAuthViewBuilderProvidable {
-        return rootComponent.firebaseAuthViewBuilderProvidable
-    }
     private let rootComponent: RootComponent
     init(rootComponent: RootComponent) {
         self.rootComponent = rootComponent
