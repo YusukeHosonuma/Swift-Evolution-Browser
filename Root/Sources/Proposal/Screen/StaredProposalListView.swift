@@ -13,12 +13,10 @@ public struct StaredProposalListView: View {
     public init() {}
     
     public var body: some View {
-        ProposalListView(
-            proposalFilter: { $0.star }
-        )
-        #if os(iOS)
-        .navigationTitle("Stared")
-        .navigationBarTitleDisplayMode(.inline)
-        #endif
+        ProposalListView<StaredFilter>()
+            #if os(iOS)
+            .navigationTitle("Stared")
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
     }
 }

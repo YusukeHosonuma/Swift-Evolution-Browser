@@ -11,15 +11,32 @@ import Core
 import Auth
 import Algorithms
 
-public struct ProposalListView: View {
-    @ObservedObject var viewModel: ProposalListViewModel
-    
+protocol ProposalFilter {
+    static func filter(entity: ProposalEntity) -> Bool
+}
+
+enum NoFilter: ProposalFilter {
+    static func filter(entity: ProposalEntity) -> Bool {
+        true
+    }
+}
+
+enum StaredFilter: ProposalFilter {
+    static func filter(entity: ProposalEntity) -> Bool {
+        entity.star
+    }
+}
+
+struct ProposalListView<Filter: ProposalFilter>: View {
     @Environment(\.authState) var authState: AuthState!
     @Environment(\.proposalStore) var proposalStore: ProposalStore!
+    
+    // ⚠️
+    // Bug: initialized each time on macOS. (But display delay is not due to it)
+    // ref: https://stackoverflow.com/questions/71345489/swiftui-macos-navigationview-onchangeof-bool-action-tried-to-update-multipl
+    @StateObject var viewModel: ProposalListViewModel = .init(proposalFilter: Filter.filter)
 
-    public init(proposalFilter: @escaping (ProposalEntity) -> Bool) {
-        self.viewModel = ProposalListViewModel(proposalFilter: proposalFilter)
-    }
+    public init() {}
 
     public var body: some View {
         content()
@@ -96,6 +113,8 @@ final class ProposalListViewModel: ObservableObject {
     private var proposalFilter: (ProposalEntity) -> Bool
     private var cancellable: [AnyCancellable] = []
     
+    private var initialized = false
+    
     nonisolated init(proposalFilter: @escaping (ProposalEntity) -> Bool) {
         self.proposalFilter = proposalFilter
     }
@@ -104,6 +123,9 @@ final class ProposalListViewModel: ObservableObject {
         authState: AuthState,
         sharedProposal: ProposalStore
     ) async {
+        defer { initialized = true }
+        guard !initialized else { return }
+        
         // DI
         self.authState = authState
         self.sharedProposal = sharedProposal

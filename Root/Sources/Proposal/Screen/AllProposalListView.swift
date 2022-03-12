@@ -9,16 +9,14 @@ import SwiftUI
 import Core
 
 public struct AllProposalListView: View {
-    
+
     public init() {}
     
     public var body: some View {
-        ProposalListView(
-            proposalFilter: { _ in true }
-        )
-        #if os(iOS)
-        .navigationTitle("All")
-        .navigationBarTitleDisplayMode(.inline)
-        #endif
+        ProposalListView<NoFilter>()
+            #if os(iOS)
+            .navigationTitle("All")
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
     }
 }
