@@ -13,18 +13,25 @@ import GoogleSignIn
 #endif
 
 public struct RootView: View {
-    private let _component: RootComponent
+    private let component: RootComponent
+
+    enum Item {
+        case all
+        case star
+    }
+
+    @State var selectedItem: Item? = .all
     
     public init(component: RootComponent) {
-        _component = component
+        self.component = component
     }
 
     public var body: some View {
         content
-            .environment(\.authState, _component.authState)
-            .environment(\.proposalStore, _component.proposalComponent.proposalStore)
+            .environment(\.authState, component.authState)
+            .environment(\.proposalStore, component.proposalComponent.proposalStore)
             .task {
-                await _component.onInitialize()
+                await component.onInitialize()
             }
             .onOpenURL { url in
                 #if os(iOS)
@@ -32,23 +39,25 @@ public struct RootView: View {
                 #endif
             }
     }
-    
+
     var content: some View {
         #if os(macOS)
         NavigationView {
-            List {
+            List(selection: $selectedItem) {
                 NavigationLink(destination: AllProposalListView()) {
                     HStack {
                         Image(systemSymbol: .listBullet)
                         Text("All")
                     }
                 }
+                .tag(Item.all)
                 NavigationLink(destination: StaredProposalListView()) {
                     HStack {
                         Image(systemSymbol: .starFill)
                         Text("Stared")
                     }
                 }
+                .tag(Item.star)
             }
             .listStyle(SidebarListStyle())
         }
@@ -61,12 +70,15 @@ public struct RootView: View {
             .tabItem {
                 Image(systemSymbol: .listBullet)
             }
+            .tag(Item.all)
+
             NavigationView {
                 StaredProposalListView().appToolbar()
             }
             .tabItem {
                 Image(systemSymbol: .starFill)
             }
+            .tag(Item.star)
         }
         #endif
     }
