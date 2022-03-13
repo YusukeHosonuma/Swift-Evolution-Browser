@@ -11,7 +11,7 @@ import Auth
 import Core
 
 struct AppToolbar: ViewModifier {
-    @ObservedObject var viewModel: AppToolbarViewModel = .init()
+    @StateObject var viewModel: AppToolbarViewModel = .init()
     @Environment(\.authState) var authState: AuthState!
     
     func body(content: Content) -> some View {
@@ -31,7 +31,7 @@ struct AppToolbar: ViewModifier {
             .sheet(isPresented: $viewModel.isPresentFirebaseAuthView) {
                 LoginView()
             }
-            .onAppear {
+            .task {
                 viewModel.onAppear(authState: authState)
             }
     }
