@@ -12,53 +12,64 @@ import Core
 
 @MainActor
 public protocol ProposalStore {
-    var proposals: CurrentValueSubject<[ProposalEntity], Never> { get }
+    var proposals: CurrentValueSubject<[ProposalEntity]?, Never> { get }
+    var swiftVersions: CurrentValueSubject<[String], Never> { get }
     func onInitialize() async
+    func refresh() async
     func onTapStar(proposal: ProposalEntity) async
 }
 
 
 @MainActor
 public class SharedProposal: ProposalStore, ObservableObject {
-    
+    public var proposals: CurrentValueSubject<[ProposalEntity]?, Never> = .init(nil)
+    public var swiftVersions: CurrentValueSubject<[String], Never> = .init([])
+
     private let proposalAPI: ProposalAPI
     private let userService: UserService
+    private var cancellables: Set<AnyCancellable> = []
 
     nonisolated public init(proposalAPI: ProposalAPI, authState: AuthState) {
         self.proposalAPI = proposalAPI
         self.userService = UserService(authState: authState)
     }
 
-    public var proposals: CurrentValueSubject<[ProposalEntity], Never> = .init([])
-    
-    @Published var proposals2: [ProposalEntity] = []
-    
-    private var _cancellables: Set<AnyCancellable> = []
-    
     public func onInitialize() async {
+        await refresh()
         
-        do {
-            self.proposals.value = try await self.proposalAPI.fetch()
-        } catch {
-            fatalError() // TODO:
-        }
-        
+        proposals
+            .map { proposals in
+                guard let proposals = proposals else { return [] }
+                return proposals
+                    .compactMap {
+                        if case .implemented(let version) = $0.status {
+                            return version.isEmpty ? nil : "Swift \(version)"
+                        } else {
+                            return nil
+                        }
+                    }
+                    .uniqued()
+                    .asArray()
+            }
+            .assign(to: \.value, on: swiftVersions)
+            .store(in: &cancellables)
+
         //
         // ⭐ `Combine` version:
         //
         userService.listenStars()
-            .map { [weak self] stars -> [ProposalEntity] in
-                guard let self = self else { return [] }
-                return self.proposals.value.map {
+            .map { [weak self] stars -> [ProposalEntity]? in
+                guard let proposals = self?.proposals.value else { return nil }
+                return proposals.map {
                     var proposal = $0
                     proposal.star = stars.contains($0.id)
                     return proposal
                 }
             }
-            .replaceError(with: [])  // replace error.
-            .assign(to: \.value, on: proposals) // connect `@Published`.
-            .store(in: &_cancellables)
-        
+            .replaceError(with: nil)
+            .assign(to: \.value, on: proposals)
+            .store(in: &cancellables)
+
         //
         // ⭐ `for-await` version:
         //
@@ -99,6 +110,11 @@ public class SharedProposal: ProposalStore, ObservableObject {
 //            }
 //        }
 //        _cancellables.insert(.init { task.cancel() } )
+
+    }
+    
+    public func refresh() async {
+        self.proposals.value = try? await self.proposalAPI.fetch()
 
     }
     

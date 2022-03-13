@@ -39,50 +39,53 @@ struct ProposalListView<Filter: ProposalFilter>: View {
     public init() {}
 
     public var body: some View {
-        content()
-            .listStyle(SidebarListStyle())
-            .sheet(isPresented: $viewModel.isPresentAuthView) {
-                LoginView()
-            }
-            .searchable(
-                text: $viewModel.searchQuery,
-                placement: .automatic,
-                prompt: Text("Search..."),
-                suggestions: {
-                    let statusLabels = ProposalEntity.Status.allCases.map(\.label)
-                    if viewModel.swiftVersions.contains(viewModel.searchQuery) || statusLabels.contains(viewModel.searchQuery) {
-                        EmptyView()
-                    } else {
-                        if viewModel.searchQuery.contains("Swift") {
-                            ForEach(viewModel.swiftVersions, id: \.self) { version in
-                                Text(version)
-                                    .searchCompletion(version)
-                            }
-                        } else {
-                            Text("Swift").searchCompletion("Swift ")
-                            ForEach(statusLabels, id: \.self) { label in
-                                Text(label).searchCompletion(label)
-                            }
+        Group {
+            if viewModel.isError {
+                VStack {
+                    Text("Network error")
+                    Button("Retry") {
+                        Task {
+                            await viewModel.onTapRetry()
                         }
                     }
+                    .padding()
                 }
-            )
-            .task {
-                await viewModel.onAppear(
-                    authState: authState,
-                    sharedProposal: proposalStore
-                )
+            } else {
+                proposalList()
+                    .sheet(isPresented: $viewModel.isPresentAuthView) {
+                        LoginView()
+                    }
+                    .searchable(
+                        text: $viewModel.searchQuery,
+                        placement: .automatic,
+                        prompt: Text("Search..."),
+                        suggestions: {
+                            let statusLabels = ProposalEntity.Status.allCases.map(\.label)
+                            if viewModel.swiftVersions.contains(viewModel.searchQuery) || statusLabels.contains(viewModel.searchQuery) {
+                                EmptyView()
+                            } else {
+                                if viewModel.searchQuery.contains("Swift") {
+                                    ForEach(viewModel.swiftVersions, id: \.self) { version in
+                                        Text(version)
+                                            .searchCompletion(version)
+                                    }
+                                } else {
+                                    Text("Swift").searchCompletion("Swift ")
+                                    ForEach(statusLabels, id: \.self) { label in
+                                        Text(label).searchCompletion(label)
+                                    }
+                                }
+                            }
+                        }
+                    )
             }
-    }
-    
-    func content() -> some View {
-        #if os(macOS)
-        NavigationView {
-            proposalList()
         }
-        #else
-        proposalList()
-        #endif
+        .task {
+            await viewModel.onAppear(
+                authState: authState,
+                sharedProposal: proposalStore
+            )
+        }
     }
     
     func proposalList() -> some View {
@@ -97,6 +100,7 @@ struct ProposalListView<Filter: ProposalFilter>: View {
                 })
             }
         }
+        .listStyle(SidebarListStyle())
     }
 }
 
@@ -106,6 +110,7 @@ final class ProposalListViewModel: ObservableObject {
     @Published var searchQuery = ""
     @Published var isPresentAuthView: Bool = false
     @Published var swiftVersions: [String] = []
+    @Published var isError: Bool = true
     
     private var sharedProposal: ProposalStore!
     private var authState: AuthState!
@@ -119,43 +124,41 @@ final class ProposalListViewModel: ObservableObject {
         self.proposalFilter = proposalFilter
     }
     
+    // MARK: Lifecycle
+        
     func onAppear(
         authState: AuthState,
         sharedProposal: ProposalStore
     ) async {
-        defer { initialized = true }
-        guard !initialized else { return }
-        
-        // DI
         self.authState = authState
         self.sharedProposal = sharedProposal
-        
+
         sharedProposal.proposals
             .combineLatest($searchQuery)
-            .map { proposals, query in
-                let xs = self.filteredProposals(query: query, proposals: proposals)
-                let ys = xs.filter(self.proposalFilter)
-                return ys
+            .sink { [weak self] proposals, query in
+                guard let self = self else { return }
+                
+                if let proposals = proposals {
+                    self.isError = false
+                    self.proposals = self.filteredProposals(query: query, proposals: proposals)
+                        .filter(self.proposalFilter)
+                } else {
+                    self.isError = true
+                }
             }
-            .assign(to: &$proposals)
+            .store(in: &cancellable)
         
-        sharedProposal.proposals
-            .map { proposals in
-                proposals
-                    .compactMap {
-                        if case .implemented(let version) = $0.status {
-                            return version.isEmpty ? nil : "Swift \(version)"
-                        } else {
-                            return nil
-                        }
-                    }
-                    .uniqued()
-                    .asArray()
-            }
+        sharedProposal.swiftVersions
             .assign(to: &$swiftVersions)
         
         // Fire
         searchQuery = ""
+    }
+    
+    // MARK: Actions
+    
+    func onTapRetry() async {
+        await sharedProposal.refresh()
     }
     
     func onTapStar(proposal: ProposalEntity) async {
@@ -165,6 +168,8 @@ final class ProposalListViewModel: ObservableObject {
             self.isPresentAuthView = true
         }
     }
+    
+    // MARK: Private
     
     private func filteredProposals(query: String, proposals: [ProposalEntity]) -> [ProposalEntity] {
         guard !query.isEmpty else { return proposals }
