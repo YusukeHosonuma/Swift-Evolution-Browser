@@ -12,16 +12,17 @@ struct ProposalStatusView: View {
     var status: ProposalEntity.Status
     
     var body: some View {
-        let label = status.label
+        let v = statusLabelView
+        
         switch status {
         case .accepted:
-            view(label: label, color: .green)
+            v(.green)
         case .activeReview:
-            view(label: label, color: .orange)
+            v(.orange)
         case .awaitingReview:
-            view(label: label, color: .orange)
+            v(.orange)
         case .deferred:
-            view(label: label, color: .indigo)
+            v(.indigo)
         case .implemented(version: let version):
             Text("Swift \(version)")
                 .font(.caption)
@@ -33,18 +34,20 @@ struct ProposalStatusView: View {
                 )
                 .opacity(0.8)
         case .previewing:
-            view(label: label, color: .cyan)
+            v(.cyan)
         case .rejected:
-            view(label: label, color: .red)
+            v(.red)
         case .returnedForRevision:
-            view(label: label, color: .purple)
+            v(.purple)
         case .withdrawn:
-            view(label: label, color: .red)
+            v(.red)
+        case .scheduledForReview:
+            v(.orange)
         }
     }
     
-    func view(label: String, color: Color) -> some View {
-        Text(label)
+    func statusLabelView(color: Color) -> some View {
+        Text(status.label)
             .font(.caption)
             .padding(4)
             .foregroundColor(color)

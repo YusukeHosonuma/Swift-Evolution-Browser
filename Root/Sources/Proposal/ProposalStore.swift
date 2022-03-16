@@ -12,94 +12,49 @@ import Core
 
 @MainActor
 public protocol ProposalStore {
-    var proposals: CurrentValueSubject<[ProposalEntity], Never> { get }
+    // TODO: Refactor
+    var proposals: CurrentValueSubject<[ProposalEntity]?, Never> { get }
     func onInitialize() async
+    func refresh() async
     func onTapStar(proposal: ProposalEntity) async
 }
 
-
 @MainActor
 public class SharedProposal: ProposalStore, ObservableObject {
-    
+    public var proposals: CurrentValueSubject<[ProposalEntity]?, Never> = .init([])
+
     private let proposalAPI: ProposalAPI
     private let userService: UserService
+    private var cancellables: Set<AnyCancellable> = []
 
     nonisolated public init(proposalAPI: ProposalAPI, authState: AuthState) {
         self.proposalAPI = proposalAPI
         self.userService = UserService(authState: authState)
     }
 
-    public var proposals: CurrentValueSubject<[ProposalEntity], Never> = .init([])
-    
-    @Published var proposals2: [ProposalEntity] = []
-    
-    private var _cancellables: Set<AnyCancellable> = []
-    
     public func onInitialize() async {
-        
-        do {
-            self.proposals.value = try await self.proposalAPI.fetch()
-        } catch {
-            fatalError() // TODO:
-        }
-        
-        //
-        // ⭐ `Combine` version:
-        //
+        await refresh()
+
         userService.listenStars()
-            .map { [weak self] stars -> [ProposalEntity] in
-                guard let self = self else { return [] }
-                return self.proposals.value.map {
+            .map { [weak proposals] stars -> [ProposalEntity]? in
+                guard let proposals = proposals?.value else { return nil }
+                return proposals.map {
                     var proposal = $0
                     proposal.star = stars.contains($0.id)
                     return proposal
                 }
             }
-            .replaceError(with: [])  // replace error.
-            .assign(to: \.value, on: proposals) // connect `@Published`.
-            .store(in: &_cancellables)
-        
-        //
-        // ⭐ `for-await` version:
-        //
-//        let s = userService.listenStars().asAsyncStream()
-//        Task {
-//            do {
-//                for try await stars in userService.listenStars().asAsyncStream() {
-//                    self.proposals = self.proposals.map { // assign directory.
-//                        var proposal = $0
-//                        proposal.star = stars.contains($0.id)
-//                        return proposal
-//                    }
-//                }
-//                print("⭐ finish!")
-//            } catch {
-//                self.proposals = [] // assign directory.
-//            }
-//        }
-//
-//        Task {
-//            try! await Task.sleep(nanoseconds: 1_000_000_0000)
-//            s.cancel()
-//        }
-        
-//        let task = Task { [weak self] in
-//            do {
-//                for try await stars in userService.listenStars().values {
-//                    guard let self = self else { return }
-//                    self.proposals = self.proposals.map { // assign directory.
-//                        var proposal = $0
-//                        proposal.star = stars.contains($0.id)
-//                        return proposal
-//                    }
-//                }
-//            } catch {
-//                guard let self = self else { return }
-//                self.proposals = [] // assign directory.
-//            }
-//        }
-//        _cancellables.insert(.init { task.cancel() } )
-
+            .replaceError(with: nil)
+            .assign(to: \.value, on: proposals)
+            .store(in: &cancellables)
+    }
+    
+    public func refresh() async {
+        do {
+            self.proposals.value = try await self.proposalAPI.fetch()
+        } catch {
+            self.proposals.value = nil
+        }
     }
     
     public func onTapStar(proposal: ProposalEntity) async {

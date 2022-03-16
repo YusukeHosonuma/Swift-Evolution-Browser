@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ProposalEntity {
+public struct ProposalEntity: Equatable {
     var id: String
     var title: String
     var star: Bool
@@ -25,6 +25,7 @@ public struct ProposalEntity {
             .rejected,
             .returnedForRevision,
             .withdrawn,
+            .scheduledForReview,
         ]
         
         case accepted
@@ -36,6 +37,7 @@ public struct ProposalEntity {
         case rejected
         case returnedForRevision
         case withdrawn
+        case scheduledForReview
         
         public var label: String {
             switch self {
@@ -57,6 +59,8 @@ public struct ProposalEntity {
                 return "Returned"
             case .withdrawn:
                 return "Withdrawn"
+            case .scheduledForReview:
+                return "Scheduled for Review"
             }
         }
     }

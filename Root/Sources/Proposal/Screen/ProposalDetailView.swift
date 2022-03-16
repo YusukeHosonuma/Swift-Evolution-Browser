@@ -17,7 +17,7 @@ struct ProposalDetailView: View {
         WebView(url: url)
         #else
         WebView(url: url)
-            .navigationBarHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
         #endif
     }
 }

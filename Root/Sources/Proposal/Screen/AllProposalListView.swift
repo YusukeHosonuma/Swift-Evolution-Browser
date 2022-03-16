@@ -14,9 +14,5 @@ public struct AllProposalListView: View {
     
     public var body: some View {
         ProposalListView<NoFilter>()
-            #if os(iOS)
-            .navigationTitle("All")
-            .navigationBarTitleDisplayMode(.inline)
-            #endif
     }
 }

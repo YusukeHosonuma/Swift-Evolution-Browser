@@ -14,9 +14,5 @@ public struct StaredProposalListView: View {
     
     public var body: some View {
         ProposalListView<StaredFilter>()
-            #if os(iOS)
-            .navigationTitle("Stared")
-            .navigationBarTitleDisplayMode(.inline)
-            #endif
     }
 }

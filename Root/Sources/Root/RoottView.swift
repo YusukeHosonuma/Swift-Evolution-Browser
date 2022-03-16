@@ -7,27 +7,34 @@
 
 import SwiftUI
 import Proposal
+import SFSafeSymbols
 
 #if os(iOS)
 import GoogleSignIn
 #endif
 
+fileprivate enum Item {
+    case all
+    case star
+}
+
+fileprivate extension View {
+    func itemTag(_ tag: Item) -> some View {
+        self.tag(tag)
+    }
+}
+
 public struct RootView: View {
     private let component: RootComponent
 
-    enum Item {
-        case all
-        case star
-    }
-
-    @State var selectedItem: Item? = .all
+    @State private var selectedItem: Item? = .all
     
     public init(component: RootComponent) {
         self.component = component
     }
 
     public var body: some View {
-        content
+        content()
             .environment(\.authState, component.authState)
             .environment(\.proposalStore, component.proposalComponent.proposalStore)
             .task {
@@ -39,23 +46,26 @@ public struct RootView: View {
                 #endif
             }
     }
-
-    var content: some View {
+    
+    func content() -> some View {
         #if os(macOS)
         NavigationView {
             List(selection: $selectedItem) {
-                NavigationLink(destination: AllProposalListView()) {
-                    HStack {
-                        Image(systemSymbol: .listBullet)
-                        Text("All")
+                NavigationLink {
+                    NavigationView {
+                        AllProposalListView()
                     }
+                } label: {
+                    menuItemAll()
                 }
                 .tag(Item.all)
-                NavigationLink(destination: StaredProposalListView()) {
-                    HStack {
-                        Image(systemSymbol: .starFill)
-                        Text("Stared")
+
+                NavigationLink {
+                    NavigationView {
+                        StaredProposalListView()
                     }
+                } label: {
+                    menuItemStared()
                 }
                 .tag(Item.star)
             }
@@ -65,21 +75,45 @@ public struct RootView: View {
         #else
         TabView {
             NavigationView {
-                AllProposalListView().appToolbar()
+                AllProposalListView()
+                    .navigationTitle("All Proposals")
+                    .appToolbar()
+
+                // Note: show when no selected.
+                Text("Please select proposal from sidebar.")
             }
             .tabItem {
-                Image(systemSymbol: .listBullet)
+                menuItemAll()
             }
-            .tag(Item.all)
+            .itemTag(.all)
 
             NavigationView {
-                StaredProposalListView().appToolbar()
+                StaredProposalListView()
+                    .navigationTitle("Stared")
+                    .appToolbar()
             }
             .tabItem {
-                Image(systemSymbol: .starFill)
+                menuItemStared()
             }
-            .tag(Item.star)
+            .itemTag(.star)
         }
         #endif
+    }
+    
+    func menuItemAll() -> some View {
+        Label {
+            Text("All")
+        } icon: {
+            Image(systemSymbol: .listBullet)
+        }
+    }
+    
+    func menuItemStared() -> some View {
+        Label {
+            Text("Stared")
+        } icon: {
+            Image(systemSymbol: .starFill)
+                .foregroundColor(.yellow)
+        }
     }
 }

@@ -50,6 +50,8 @@ public final class ProposalAPIClient: ProposalAPI {
             return .returnedForRevision
         case .withdrawn:
             return .withdrawn
+        case .scheduledForReview:
+            return .scheduledForReview
         }
     }
 }
