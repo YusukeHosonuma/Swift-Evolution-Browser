@@ -36,11 +36,12 @@ struct ProposalListView<Filter: ProposalFilter>: View {
     // ref: https://stackoverflow.com/questions/71345489/swiftui-macos-navigationview-onchangeof-bool-action-tried-to-update-multipl
     @StateObject var viewModel: ProposalListViewModel = .init(proposalFilter: Filter.filter)
 
-    public init() {}
-
     public var body: some View {
         Group {
-            if viewModel.isError {
+            switch viewModel.state {
+            case .loading:
+                ProgressView()
+            case .error:
                 VStack {
                     Text("Network error")
                     Button("Retry") {
@@ -50,34 +51,8 @@ struct ProposalListView<Filter: ProposalFilter>: View {
                     }
                     .padding()
                 }
-            } else {
-                proposalList()
-                    .sheet(isPresented: $viewModel.isPresentAuthView) {
-                        LoginView()
-                    }
-                    .searchable(
-                        text: $viewModel.searchQuery,
-                        placement: .automatic,
-                        prompt: Text("Search..."),
-                        suggestions: {
-                            let statusLabels = ProposalEntity.Status.allCases.map(\.label)
-                            if viewModel.swiftVersions.contains(viewModel.searchQuery) || statusLabels.contains(viewModel.searchQuery) {
-                                EmptyView()
-                            } else {
-                                if viewModel.searchQuery.contains("Swift") {
-                                    ForEach(viewModel.swiftVersions, id: \.self) { version in
-                                        Text(version)
-                                            .searchCompletion(version)
-                                    }
-                                } else {
-                                    Text("Swift").searchCompletion("Swift ")
-                                    ForEach(statusLabels, id: \.self) { label in
-                                        Text(label).searchCompletion(label)
-                                    }
-                                }
-                            }
-                        }
-                    )
+            case .success(let content):
+                contentView(contentBinding: .init(get: { content }, set: { viewModel.state = .success($0) }))
             }
         }
         .task {
@@ -87,9 +62,40 @@ struct ProposalListView<Filter: ProposalFilter>: View {
             )
         }
     }
+
+    func contentView(contentBinding: Binding<ProposalListViewModel.Content>) -> some View {
+        let content = contentBinding.wrappedValue
+        return proposalList(content.proposals)
+            .sheet(isPresented: contentBinding.isPresentAuthView) {
+                LoginView()
+            }
+            .searchable(
+                text: Binding(get: { content.searchQuery }, set: { viewModel.onChangeQuery($0) }),
+                placement: .automatic,
+                prompt: Text("Search..."),
+                suggestions: {
+                    let statusLabels = ProposalEntity.Status.allCases.map(\.label)
+                    if content.swiftVersions.contains(content.searchQuery) || statusLabels.contains(content.searchQuery) {
+                        EmptyView()
+                    } else {
+                        if content.searchQuery.contains("Swift") {
+                            ForEach(content.swiftVersions, id: \.self) { version in
+                                Text(version)
+                                    .searchCompletion(version)
+                            }
+                        } else {
+                            Text("Swift").searchCompletion("Swift ")
+                            ForEach(statusLabels, id: \.self) { label in
+                                Text(label).searchCompletion(label)
+                            }
+                        }
+                    }
+                }
+            )
+    }
     
-    func proposalList() -> some View {
-        List(viewModel.proposals, id: \.id) { proposal in
+    func proposalList(_ proposals: [ProposalEntity]) -> some View {
+        List(proposals, id: \.id) { proposal in
             NavigationLink {
                 ProposalDetailView(url: proposal.proposalURL)
             } label: {
@@ -100,17 +106,38 @@ struct ProposalListView<Filter: ProposalFilter>: View {
                 })
             }
         }
-        .listStyle(SidebarListStyle())
     }
 }
 
 @MainActor
 final class ProposalListViewModel: ObservableObject {
-    @Published var proposals: [ProposalEntity] = []
-    @Published var searchQuery = ""
-    @Published var isPresentAuthView: Bool = false
-    @Published var swiftVersions: [String] = []
-    @Published var isError: Bool = true
+    
+    @Published var state: State = .loading
+
+    enum State: Equatable {
+        case loading
+        case error
+        case success(Content)
+    }
+    
+    struct Content: Equatable {
+        var proposals: [ProposalEntity]
+        var searchQuery: String
+        var isPresentAuthView: Bool
+        let swiftVersions: [String]
+        
+        internal init(
+            proposals: [ProposalEntity],
+            swiftVersions: [String],
+            searchQuery: String = "",
+            isPresentAuthView: Bool = false
+        ) {
+            self.proposals = proposals
+            self.searchQuery = searchQuery
+            self.isPresentAuthView = isPresentAuthView
+            self.swiftVersions = swiftVersions
+        }
+    }
     
     private var sharedProposal: ProposalStore!
     private var authState: AuthState!
@@ -126,6 +153,13 @@ final class ProposalListViewModel: ObservableObject {
     
     // MARK: Lifecycle
         
+    func onChangeQuery(_ query: String) {
+        guard case .success(var content) = self.state else { return }
+        content.searchQuery = query
+        content.proposals = self.filteredProposals(query: query, proposals: sharedProposal.proposals.value!).filter(self.proposalFilter)
+        self.state = .success(content)
+    }
+    
     func onAppear(
         authState: AuthState,
         sharedProposal: ProposalStore
@@ -134,25 +168,27 @@ final class ProposalListViewModel: ObservableObject {
         self.sharedProposal = sharedProposal
 
         sharedProposal.proposals
-            .combineLatest($searchQuery)
-            .sink { [weak self] proposals, query in
+            .sink { [weak self] proposals in
                 guard let self = self else { return }
+
+                guard let proposals = proposals else {
+                    self.state = .error
+                    return
+                }
                 
-                if let proposals = proposals {
-                    self.isError = false
-                    self.proposals = self.filteredProposals(query: query, proposals: proposals)
-                        .filter(self.proposalFilter)
+                if proposals.isEmpty {
+                    self.state = .loading
                 } else {
-                    self.isError = true
+                    let proposals = self.filteredProposals(query: "", proposals: proposals).filter(self.proposalFilter)
+                    self.state = .success(
+                        Content(
+                            proposals: proposals,
+                            swiftVersions: proposals.swiftVersions()
+                        )
+                    )
                 }
             }
             .store(in: &cancellable)
-        
-        sharedProposal.swiftVersions
-            .assign(to: &$swiftVersions)
-        
-        // Fire
-        searchQuery = ""
     }
     
     // MARK: Actions
@@ -165,7 +201,19 @@ final class ProposalListViewModel: ObservableObject {
         if let _ = authState.user.value {
             await sharedProposal.onTapStar(proposal: proposal)
         } else {
-            self.isPresentAuthView = true
+            self.state = self.onTapStarReduce(self.state)
+        }
+    }
+    
+    // Reducer のスーパー劣化版！
+    func onTapStarReduce(_ current: State) -> State {
+        switch current {
+        case .loading, .error:
+            return current
+            
+        case .success(var content):
+            content.isPresentAuthView = true
+            return .success(content)
         }
     }
     
@@ -187,5 +235,20 @@ final class ProposalListViewModel: ObservableObject {
                 || $0.status.label == query
                 || isVersionMatch
         }
+    }
+}
+
+private extension Array where Element == ProposalEntity {
+    func swiftVersions() -> [String] {
+        self
+            .compactMap {
+                if case .implemented(let version) = $0.status {
+                    return version.isEmpty ? nil : "Swift \(version)"
+                } else {
+                    return nil
+                }
+            }
+            .uniqued()
+            .asArray()
     }
 }
