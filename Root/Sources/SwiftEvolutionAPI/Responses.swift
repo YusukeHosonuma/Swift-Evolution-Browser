@@ -158,6 +158,7 @@ public enum State: String, Codable, Equatable {
     case rejected = ".rejected"
     case returnedForRevision = ".returnedForRevision"
     case withdrawn = ".withdrawn"
+    case scheduledForReview = ".scheduledForReview"
 }
 
 //
