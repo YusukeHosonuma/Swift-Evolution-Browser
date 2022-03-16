@@ -13,11 +13,6 @@ struct ProposalDetailView: View {
     let url: URL
     
     var body: some View {
-        #if os(macOS)
         WebView(url: url)
-        #else
-        WebView(url: url)
-            .navigationBarHidden(true)
-        #endif
     }
 }
