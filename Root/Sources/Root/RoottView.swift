@@ -75,7 +75,12 @@ public struct RootView: View {
         #else
         TabView {
             NavigationView {
-                AllProposalListView().appToolbar()
+                AllProposalListView()
+                    .navigationTitle("All Proposals")
+                    .appToolbar()
+
+                // Note: show when no selected.
+                Text("Please select proposal from sidebar.")
             }
             .tabItem {
                 menuItemAll()
@@ -83,7 +88,9 @@ public struct RootView: View {
             .itemTag(.all)
 
             NavigationView {
-                StaredProposalListView().appToolbar()
+                StaredProposalListView()
+                    .navigationTitle("Stared")
+                    .appToolbar()
             }
             .tabItem {
                 menuItemStared()

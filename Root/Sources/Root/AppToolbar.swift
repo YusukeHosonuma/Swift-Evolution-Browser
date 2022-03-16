@@ -14,6 +14,8 @@ struct AppToolbar: ViewModifier {
     @StateObject var viewModel: AppToolbarViewModel = .init()
     @Environment(\.authState) var authState: AuthState!
     
+    init() {}
+    
     func body(content: Content) -> some View {
         content
             .toolbar {
