@@ -10,9 +10,13 @@ import Core
 
 public struct AllProposalListView: View {
 
-    public init() {}
+    private let scrollToTopID: String
+    
+    public init(scrollToTopID: String) {
+        self.scrollToTopID = scrollToTopID
+    }
     
     public var body: some View {
-        ProposalListView<NoFilter>()
+        ProposalListView<NoFilter>(scrollToTopID: scrollToTopID)
     }
 }
