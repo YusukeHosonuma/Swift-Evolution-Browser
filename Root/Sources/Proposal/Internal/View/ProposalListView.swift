@@ -29,7 +29,6 @@ enum StaredFilter: ProposalFilter {
 
 struct ProposalListView<Filter: ProposalFilter>: View {
     @EnvironmentObject var authState: AuthState
-//    @Environment(\.authState) var authState: AuthState!
     @Environment(\.proposalStore) var proposalStore: ProposalStore!
     
     // ⚠️
@@ -37,6 +36,12 @@ struct ProposalListView<Filter: ProposalFilter>: View {
     // ref: https://stackoverflow.com/questions/71345489/swiftui-macos-navigationview-onchangeof-bool-action-tried-to-update-multipl
     @StateObject var viewModel: ProposalListViewModel = .init(proposalFilter: Filter.filter)
 
+    private let scrollToTopID: String
+    
+    init(scrollToTopID: String) {
+        self.scrollToTopID = scrollToTopID
+    }
+    
     public var body: some View {
         Group {
             switch viewModel.state {
@@ -96,16 +101,19 @@ struct ProposalListView<Filter: ProposalFilter>: View {
     }
     
     func proposalList(_ proposals: [ProposalEntity]) -> some View {
-        List(proposals, id: \.id) { proposal in
-            NavigationLink {
-                ProposalDetailView(url: proposal.proposalURL)
-            } label: {
-                ProposalRowView(proposal: proposal, starTapped: {
-                    Task {
-                        await viewModel.onTapStar(proposal: proposal)
-                    }
-                })
+        List {
+            ForEach(proposals, id: \.id) { proposal in
+                NavigationLink {
+                    ProposalDetailView(url: proposal.proposalURL)
+                } label: {
+                    ProposalRowView(proposal: proposal, starTapped: {
+                        Task {
+                            await viewModel.onTapStar(proposal: proposal)
+                        }
+                    })
+                }
             }
+            .id(scrollToTopID)
         }
     }
 }
