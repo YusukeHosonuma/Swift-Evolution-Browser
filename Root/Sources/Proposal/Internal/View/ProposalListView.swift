@@ -112,6 +112,9 @@ struct ProposalListView<Filter: ProposalFilter>: View {
                         }
                     })
                 }
+                .contextMenu {
+                    Link("Open in browser", destination: proposal.proposalURL)
+                }
             }
             .id(scrollToTopID)
         }
