@@ -10,51 +10,44 @@ import SwiftUI
 import Auth
 import Core
 
-
-    struct AppToolbar: ViewModifier {
-        
-        // ✅ Reference to Model. (ViewModel is redundant in this case)
-        @EnvironmentObject var authState: AuthState
-
-        @State var isPresentConfirmSheet = false
-        @State var isPresentAuthView = false
-
-        func body(content: Content) -> some View {
-            content
-                .toolbar {
-                    ToolbarItem {
-                        Button(action: onTapAccountButton) {
-                            Image(systemSymbol: .personFill)
-                        }
-                        .confirmationDialog("Are you logout?", isPresented: $isPresentConfirmSheet) {
-                            if authState.isLogin {
-                                Button("Logout", action: onTapLogout)
-                            }
+struct AppToolbar: ViewModifier {
+    
+    @EnvironmentObject private var authState: AuthState
+    
+    @State private var isPresentConfirmSheet = false
+    @State private var isPresentAuthView = false
+    
+    func body(content: Content) -> some View {
+        content
+            .toolbar {
+                ToolbarItem {
+                    Button(action: onTapAccountButton) {
+                        Image(systemSymbol: .personFill)
+                    }
+                    .confirmationDialog("Are you logout?", isPresented: $isPresentConfirmSheet) {
+                        if authState.isLogin {
+                            Button("Logout", action: onTapLogout)
                         }
                     }
                 }
-                .sheet(isPresented: $isPresentAuthView) {
-                    LoginView()
-                }
-        }
-        
-        // ✅ Define events in self.
-        
-        private func onTapLogout() {
-            authState.logout()
-        }
-        
-        private func onTapAccountButton() {
-            if authState.isLogin {
-                isPresentConfirmSheet = true
-            } else {
-                isPresentAuthView = true
             }
+            .sheet(isPresented: $isPresentAuthView) {
+                LoginView()
+            }
+    }
+    
+    private func onTapLogout() {
+        authState.logout()
+    }
+    
+    private func onTapAccountButton() {
+        if authState.isLogin {
+            isPresentConfirmSheet = true
+        } else {
+            isPresentAuthView = true
         }
     }
-
-
-
+}
 
 extension View {
     func appToolbar() -> some View {
