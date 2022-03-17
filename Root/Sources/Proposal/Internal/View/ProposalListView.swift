@@ -118,6 +118,7 @@ struct ProposalListView<Filter: ProposalFilter>: View {
             }
             .id(scrollToTopID)
         }
+        .listStyle(.sidebar)
     }
 }
 
