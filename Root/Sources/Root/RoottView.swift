@@ -8,6 +8,7 @@
 import SwiftUI
 import Proposal
 import SFSafeSymbols
+import Auth
 
 #if os(iOS)
 import GoogleSignIn
@@ -24,21 +25,23 @@ fileprivate extension View {
     }
 }
 
-public struct RootView: View {
-    private let component: RootComponent
+// Global Objects
 
+private let authState = AuthState()
+private let proposalStore: ProposalStore = SharedProposal(
+    proposalAPI: ProposalAPIClient(),
+    authState: authState
+)
+
+public struct RootView: View {
     @State private var selectedItem: Item? = .all
-    
-    public init(component: RootComponent) {
-        self.component = component
-    }
 
     public var body: some View {
         content()
-            .environment(\.authState, component.authState)
-            .environment(\.proposalStore, component.proposalComponent.proposalStore)
+            .environmentObject(authState)
+            .environment(\.proposalStore, proposalStore)
             .task {
-                await component.onInitialize()
+                await proposalStore.onInitialize()
             }
             .onOpenURL { url in
                 #if os(iOS)

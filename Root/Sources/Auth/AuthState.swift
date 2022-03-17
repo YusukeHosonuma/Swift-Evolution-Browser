@@ -10,23 +10,22 @@ import Combine
 import FirebaseAuth
 import Core
 
-public final class FirebaseAuthState: AuthState, ObservableObject {
-    public var user: CurrentValueSubject<Account?, Never> = .init(nil)
-    public var isLogin: CurrentValueSubject<Bool, Never> = .init(false)
+public final class AuthState: ObservableObject {
+    
+    @Published public var user: Account? = nil
+    @Published public var isLogin: Bool = false
 
-    private var _handle: AuthStateDidChangeListenerHandle!
+    private var handle: AuthStateDidChangeListenerHandle!
     
     public init() {
-        _handle = Auth.auth().addStateDidChangeListener { _, user in
-            self.user.send(
-                user.map { Account(uid: $0.uid, name: $0.displayName ?? "") }
-            )
-            self.isLogin.send(user != nil)
+        handle = Auth.auth().addStateDidChangeListener { _, user in
+            self.user = user.map { Account(uid: $0.uid, name: $0.displayName ?? "") }
+            self.isLogin = user != nil
         }
     }
     
     deinit {
-        Auth.auth().removeStateDidChangeListener(_handle)
+        Auth.auth().removeStateDidChangeListener(handle)
     }
     
     public func logout() {
@@ -41,7 +40,7 @@ public final class FirebaseAuthState: AuthState, ObservableObject {
         _ innerPublisher: @escaping (Account) -> AnyPublisher<Output, Error>,
         defaultValue: Output
     ) -> AnyPublisher<Output, Error> {
-        user
+        $user
             .flatMap { user -> AnyPublisher<Output, Error> in
                 if let user = user {
                     return innerPublisher(user)

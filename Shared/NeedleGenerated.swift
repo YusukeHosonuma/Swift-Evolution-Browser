@@ -26,17 +26,15 @@ public func registerProviderFactories() {
 // MARK: - Providers
 
 private class ProposalDependencyb6a3199fb61729d3a8eeBaseProvider: ProposalDependency {
-    var authState: AuthState {
-        return rootComponent.authState
-    }
-    private let rootComponent: RootComponent
-    init(rootComponent: RootComponent) {
-        self.rootComponent = rootComponent
+
+
+    init() {
+
     }
 }
 /// ^->RootComponent->ProposalComponent
 private class ProposalDependencyb6a3199fb61729d3a8eeProvider: ProposalDependencyb6a3199fb61729d3a8eeBaseProvider {
     init(component: NeedleFoundation.Scope) {
-        super.init(rootComponent: component.parent as! RootComponent)
+        super.init()
     }
 }
