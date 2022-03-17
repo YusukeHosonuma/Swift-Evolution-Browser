@@ -29,7 +29,7 @@ fileprivate enum Item: Hashable {
 }
 
 fileprivate extension View {
-    func itemTag(_ tag: Item) -> some View {
+    func itemTag(_ tag: Item?) -> some View {
         self.tag(tag)
     }
 }
@@ -43,10 +43,10 @@ private let proposalStore: ProposalStore = SharedProposal(
 )
 
 public struct RootView: View {
-    @State private var selection: Item = .all
+    @State private var selection: Item? = .all
     @State private var tappedTwice: Bool = false
     
-    private var selectionHandler: Binding<Item> { Binding(
+    private var selectionHandler: Binding<Item?> { Binding(
         get: { self.selection },
         set: {
             if $0 == self.selection {
@@ -69,14 +69,14 @@ public struct RootView: View {
                 #endif
             }
     }
-
+    
     func content() -> some View {
         #if os(macOS)
         NavigationView {
             List(selection: $selection) {
                 NavigationLink {
                     NavigationView {
-                        AllProposalListView()
+                        AllProposalListView(scrollToTopID: "")
                     }
                 } label: {
                     menuItemAll()
@@ -85,12 +85,13 @@ public struct RootView: View {
 
                 NavigationLink {
                     NavigationView {
-                        StaredProposalListView()
+                        StaredProposalListView(scrollToTopID: "")
                     }
                 } label: {
                     menuItemStared()
                 }
                 .tag(Item.star)
+                
             }
             .listStyle(SidebarListStyle())
         }
@@ -127,9 +128,9 @@ public struct RootView: View {
                 .itemTag(.star)
             }
             .onChange(of: tappedTwice, perform: { tapped in
-                if tapped {
+                if let selection = self.selection, tapped {
                     withAnimation {
-                        proxy.scrollTo(self.selection.scrollToTopID)
+                        proxy.scrollTo(selection.scrollToTopID)
                     }
                     tappedTwice = false
                 }
