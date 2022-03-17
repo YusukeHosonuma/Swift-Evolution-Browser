@@ -18,6 +18,13 @@ struct ProposalDetailView: View {
         #else
         WebView(url: url)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem {
+                    Link(destination: url) {
+                        Image(systemName: "globe")
+                    }
+                }
+            }
         #endif
     }
 }
