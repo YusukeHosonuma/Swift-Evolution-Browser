@@ -12,19 +12,26 @@ import Core
 struct ProposalDetailView: View {
     let url: URL
     
+    @State private var isLoading: Bool = true
+    
     var body: some View {
-        #if os(macOS)
-        WebView(url: url)
-        #else
-        WebView(url: url)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem {
-                    Link(destination: url) {
-                        Image(systemName: "globe")
+        ZStack {
+            #if os(macOS)
+            WebView(url: url, isLoading: $isLoading)
+            #else
+            WebView(url: url, isLoading: $isLoading)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem {
+                        Link(destination: url) {
+                            Image(systemName: "globe")
+                        }
                     }
                 }
+            #endif
+            if isLoading {
+                ProgressView()
             }
-        #endif
+        }
     }
 }
