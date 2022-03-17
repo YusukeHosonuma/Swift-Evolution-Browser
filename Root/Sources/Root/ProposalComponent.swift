@@ -12,20 +12,20 @@ import Core
 import Proposal
 
 public protocol ProposalDependency: Dependency {
-    var authState: AuthState { get }
+//    var authState: AuthState { get }
 }
 
 public final class ProposalComponent: Component<ProposalDependency> {
     
-    public var proposalStore: ProposalStore {
-        shared {
-            SharedProposal(
-                proposalAPI: proposalAPI,
-                authState: dependency.authState
-            )
-        }
-    }
-    
+//    public var proposalStore: ProposalStore {
+//        shared {
+//            SharedProposal(
+//                proposalAPI: proposalAPI,
+//                authState: dependency.authState
+//            )
+//        }
+//    }
+//
     private var proposalAPI: ProposalAPI {
         shared { ProposalAPIClient() }
     }
@@ -33,6 +33,6 @@ public final class ProposalComponent: Component<ProposalDependency> {
 
 extension ProposalComponent {
     public func onInitialize() async {
-        await proposalStore.onInitialize()
+//        await proposalStore.onInitialize()
     }
 }

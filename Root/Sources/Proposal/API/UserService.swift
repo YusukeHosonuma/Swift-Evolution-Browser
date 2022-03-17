@@ -11,6 +11,7 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import FirebaseFirestoreCombineSwift
 import Core
+import Auth
 
 struct UserDocument: Codable {
     @DocumentID var id: String?
@@ -38,7 +39,7 @@ final class UserService {
     }
     
     func addStar(proposalID: String) async throws {
-        guard let user = _authState.user.value else { throw NotLoginedError() }
+        guard let user = _authState.user else { throw NotLoginedError() }
 
         try await _userDocumentRef(user: user).updateDocument { (document: inout UserDocument) in
             document.stars.append(proposalID)
@@ -46,7 +47,7 @@ final class UserService {
     }
     
     func removeStar(proposalID: String) async throws {
-        guard let user = _authState.user.value else { throw NotLoginedError() }
+        guard let user = _authState.user else { throw NotLoginedError() }
         
         try await _userDocumentRef(user: user).updateDocument { (document: inout UserDocument) in
             document.stars = document.stars.filter { $0 != proposalID }

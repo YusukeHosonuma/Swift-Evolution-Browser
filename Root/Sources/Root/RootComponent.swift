@@ -15,14 +15,14 @@ import Proposal
 public final class RootComponent: BootstrapComponent {
 
     public func makeView() -> some View {
-        RootView(component: self)
+        RootView()
     }
 
     // Global objects
     
-    public var authState: AuthState {
-        shared { FirebaseAuthState() }
-    }
+//    public var authState: AuthState {
+//        shared { FirebaseAuthState() }
+//    }
     
     // MARK: Chiild components
     

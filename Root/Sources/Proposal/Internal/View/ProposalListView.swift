@@ -28,7 +28,8 @@ enum StaredFilter: ProposalFilter {
 }
 
 struct ProposalListView<Filter: ProposalFilter>: View {
-    @Environment(\.authState) var authState: AuthState!
+    @EnvironmentObject var authState: AuthState
+//    @Environment(\.authState) var authState: AuthState!
     @Environment(\.proposalStore) var proposalStore: ProposalStore!
     
     // ⚠️
@@ -198,7 +199,7 @@ final class ProposalListViewModel: ObservableObject {
     }
     
     func onTapStar(proposal: ProposalEntity) async {
-        if let _ = authState.user.value {
+        if let _ = authState.user {
             await sharedProposal.onTapStar(proposal: proposal)
         } else {
             self.state = self.onTapStarReduce(self.state)
