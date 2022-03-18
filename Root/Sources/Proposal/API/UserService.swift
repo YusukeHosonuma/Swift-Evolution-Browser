@@ -21,42 +21,54 @@ struct UserDocument: Codable {
 struct NotLoginedError: Error {}
 
 final class UserService {
-    private let _authState: AuthState
-    
+    private let authState: AuthState
+
     init(authState: AuthState) {
-        _authState = authState
+        self.authState = authState
     }
     
-    func listenStars() -> AnyPublisher<[String], Error> {
-        _authState.authedPublisher({ user in
-            self._userDocumentRef(user: user).snapshotPublisher()
-                .tryMap { snapshot -> [String] in
-                    let document = try snapshot.data(as: UserDocument.self)
-                    return document.stars
+    func listenStars() -> AnyPublisher<[String], Never> {
+        authState.authedPublisher({ user in
+            return self.userDocumentRef(user: user)
+                .snapshotPublisher()
+                .map { snapshot -> [String] in
+                    do {
+                        // Create user if need.
+                        guard snapshot.exists else {
+                            let data = try Firestore.Encoder().encode(UserDocument(stars: []))
+                            snapshot.reference.setData(data) { _ in }
+                            return []
+                        }
+                        
+                        let document = try snapshot.data(as: UserDocument.self)
+                        return document.stars
+                    } catch {
+                        preconditionFailure("\(error)")
+                    }
                 }
                 .eraseToAnyPublisher()
         }, defaultValue: [])
     }
     
     func addStar(proposalID: String) async throws {
-        guard let user = _authState.user else { throw NotLoginedError() }
+        guard let user = authState.user else { throw NotLoginedError() }
 
-        try await _userDocumentRef(user: user).updateDocument { (document: inout UserDocument) in
+        try await userDocumentRef(user: user).updateDocument { (document: inout UserDocument) in
             document.stars.append(proposalID)
         }
     }
     
     func removeStar(proposalID: String) async throws {
-        guard let user = _authState.user else { throw NotLoginedError() }
+        guard let user = authState.user else { throw NotLoginedError() }
         
-        try await _userDocumentRef(user: user).updateDocument { (document: inout UserDocument) in
+        try await userDocumentRef(user: user).updateDocument { (document: inout UserDocument) in
             document.stars = document.stars.filter { $0 != proposalID }
         }
     }
     
     // MARK: Private
     
-    private func _userDocumentRef(user: Account) -> DocumentReference {
+    private func userDocumentRef(user: Account) -> DocumentReference {
         Firestore.firestore().collection("users").document(user.uid)
     }
 }
