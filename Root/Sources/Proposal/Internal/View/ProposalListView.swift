@@ -34,7 +34,7 @@ struct ProposalListView<Filter: ProposalFilter>: View {
     // ⚠️
     // Bug: initialized each time on macOS. (But display delay is not due to it)
     // ref: https://stackoverflow.com/questions/71345489/swiftui-macos-navigationview-onchangeof-bool-action-tried-to-update-multipl
-    @StateObject var viewModel: ProposalListViewModel = .init(proposalFilter: Filter.filter)
+    @StateObject var viewModel: ProposalListViewModel = .init(globalFilter: Filter.filter)
 
     private let scrollToTopID: String
     
@@ -159,14 +159,11 @@ final class ProposalListViewModel: ObservableObject {
     
     private var sharedProposal: ProposalStore!
     private var authState: AuthState!
-    
-    private var proposalFilter: (Proposal) -> Bool
-    private var cancellable: [AnyCancellable] = []
-    
-    private var initialized = false
-    
-    nonisolated init(proposalFilter: @escaping (Proposal) -> Bool) {
-        self.proposalFilter = proposalFilter
+    private var globalFilter: (Proposal) -> Bool
+    private var cancellable: Set<AnyCancellable> = []
+
+    nonisolated init(globalFilter: @escaping (Proposal) -> Bool) {
+        self.globalFilter = globalFilter
     }
     
     lazy var initialize: () = {
@@ -185,7 +182,7 @@ final class ProposalListViewModel: ObservableObject {
                 } else {
                     self.state = .success(
                         Content(
-                            proposals: proposals.apply(query: "").filter(self.proposalFilter),
+                            proposals: proposals.apply(query: "").filter(self.globalFilter),
                             swiftVersions: proposals.swiftVersions()
                         )
                     )
@@ -201,7 +198,7 @@ final class ProposalListViewModel: ObservableObject {
         
         // FIXME: キーボードでエンターして確定するとキーワードが消えちゃう
         content.searchQuery = query
-        content.proposals = sharedProposal.proposals.value!.apply(query: query).filter(proposalFilter)
+        content.proposals = sharedProposal.proposals.value!.apply(query: query).filter(globalFilter)
         state = .success(content)
     }
 
