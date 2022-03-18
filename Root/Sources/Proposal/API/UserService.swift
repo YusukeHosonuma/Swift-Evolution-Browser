@@ -30,8 +30,8 @@ final class UserService {
     func listenStars() -> AnyPublisher<[String], Error> {
         _authState.authedPublisher({ user in
             self._userDocumentRef(user: user).snapshotPublisher()
-                .map { snapshot -> [String] in
-                    let document = try! snapshot.data(as: UserDocument.self)
+                .tryMap { snapshot -> [String] in
+                    let document = try snapshot.data(as: UserDocument.self)
                     return document.stars
                 }
                 .eraseToAnyPublisher()
@@ -57,7 +57,7 @@ final class UserService {
     // MARK: Private
     
     private func _userDocumentRef(user: Account) -> DocumentReference {
-        Firestore.firestore().collection("user").document(user.uid)
+        Firestore.firestore().collection("users").document(user.uid)
     }
 }
 
