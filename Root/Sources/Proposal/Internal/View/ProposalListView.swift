@@ -226,7 +226,11 @@ final class ProposalListViewModel: ObservableObject {
 
     func onRefresh() async {
         do {
-            try await sharedProposal.refresh()
+            // Note:
+            // Wait at least 1 seconds. (for UX)
+            async let _wait1 = try Task.sleep(seconds: 1)
+            async let _wait2 = try sharedProposal.refresh()
+            let _ = try await (_wait1, _wait2)
         } catch {
             self.isPresentNetworkErrorAlert = true
         }
