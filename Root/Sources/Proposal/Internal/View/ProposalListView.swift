@@ -57,22 +57,18 @@ struct ProposalListView<Filter: ProposalFilter>: View {
                     .padding()
                 }
             case .success(let content):
-                contentView(contentBinding: .init(get: { content }, set: { viewModel.state = .success($0) }))
+                contentView(content)
             }
         }
         .alert("Network Error", isPresented: $viewModel.isPresentNetworkErrorAlert) {}
         .task {
-            await viewModel.onAppear(
-                authState: authState,
-                sharedProposal: proposalStore
-            )
+            await viewModel.onAppear(authState: authState, sharedProposal: proposalStore)
         }
     }
 
-    func contentView(contentBinding: Binding<ProposalListViewModel.Content>) -> some View {
-        let content = contentBinding.wrappedValue
-        return proposalList(content.proposals)
-            .sheet(isPresented: contentBinding.isPresentAuthView) {
+    func contentView(_ content: ProposalListViewModel.Content) -> some View {
+        proposalList(content.proposals)
+            .sheet(isPresented: $viewModel.isPresentAuthView) {
                 LoginView()
             }
             .searchable(
@@ -130,6 +126,7 @@ final class ProposalListViewModel: ObservableObject {
     
     @Published var state: State = .loading
     @Published var isPresentNetworkErrorAlert = false
+    @Published var isPresentAuthView = false
     
     enum State: Equatable {
         case loading
@@ -139,27 +136,20 @@ final class ProposalListViewModel: ObservableObject {
     
     struct Content: Equatable {
         var proposals: [Proposal]
-        var searchQuery: String
-        var isPresentAuthView: Bool
+        var searchQuery: String = ""
 
         let allProposals: [Proposal]
         var swiftVersions: [String] { allProposals.swiftVersions() }
         
-        internal init(
-            proposals: [Proposal],
-            searchQuery: String = "",
-            isPresentAuthView: Bool = false
-        ) {
+        internal init(proposals: [Proposal]) {
             self.proposals = proposals
             self.allProposals = proposals
-            self.searchQuery = searchQuery
-            self.isPresentAuthView = isPresentAuthView
         }
     }
-    
+
+    private let globalFilter: (Proposal) -> Bool
     private var sharedProposal: ProposalStore!
     private var authState: AuthState!
-    private var globalFilter: (Proposal) -> Bool
     private var cancellable: Set<AnyCancellable> = []
 
     nonisolated init(globalFilter: @escaping (Proposal) -> Bool) {
@@ -237,19 +227,7 @@ final class ProposalListViewModel: ObservableObject {
         if let _ = authState.user {
             await sharedProposal.onTapStar(proposal: proposal)
         } else {
-            self.state = self.onTapStarReduce(self.state)
-        }
-    }
-    
-    // Reducer のスーパー劣化版！
-    func onTapStarReduce(_ current: State) -> State {
-        switch current {
-        case .loading, .error:
-            return current
-            
-        case .success(var content):
-            content.isPresentAuthView = true
-            return .success(content)
+            isPresentAuthView = true
         }
     }
 }
