@@ -12,17 +12,17 @@ import Auth
 import Algorithms
 
 protocol ProposalFilter {
-    static func filter(entity: ProposalEntity) -> Bool
+    static func filter(entity: Proposal) -> Bool
 }
 
 enum NoFilter: ProposalFilter {
-    static func filter(entity: ProposalEntity) -> Bool {
+    static func filter(entity: Proposal) -> Bool {
         true
     }
 }
 
 enum StaredFilter: ProposalFilter {
-    static func filter(entity: ProposalEntity) -> Bool {
+    static func filter(entity: Proposal) -> Bool {
         entity.star
     }
 }
@@ -81,7 +81,7 @@ struct ProposalListView<Filter: ProposalFilter>: View {
                 placement: .automatic,
                 prompt: Text("Search..."),
                 suggestions: {
-                    let statusLabels = ProposalEntity.Status.allCases.map(\.label)
+                    let statusLabels = Proposal.Status.allCases.map(\.label)
                     if content.swiftVersions.contains(content.searchQuery) || statusLabels.contains(content.searchQuery) {
                         EmptyView()
                     } else {
@@ -101,7 +101,7 @@ struct ProposalListView<Filter: ProposalFilter>: View {
             )
     }
     
-    func proposalList(_ proposals: [ProposalEntity]) -> some View {
+    func proposalList(_ proposals: [Proposal]) -> some View {
         List {
             ForEach(proposals, id: \.id) { proposal in
                 NavigationLink {
@@ -139,13 +139,13 @@ final class ProposalListViewModel: ObservableObject {
     }
     
     struct Content: Equatable {
-        var proposals: [ProposalEntity]
+        var proposals: [Proposal]
         var searchQuery: String
         var isPresentAuthView: Bool
         let swiftVersions: [String]
         
         internal init(
-            proposals: [ProposalEntity],
+            proposals: [Proposal],
             swiftVersions: [String],
             searchQuery: String = "",
             isPresentAuthView: Bool = false
@@ -160,12 +160,12 @@ final class ProposalListViewModel: ObservableObject {
     private var sharedProposal: ProposalStore!
     private var authState: AuthState!
     
-    private var proposalFilter: (ProposalEntity) -> Bool
+    private var proposalFilter: (Proposal) -> Bool
     private var cancellable: [AnyCancellable] = []
     
     private var initialized = false
     
-    nonisolated init(proposalFilter: @escaping (ProposalEntity) -> Bool) {
+    nonisolated init(proposalFilter: @escaping (Proposal) -> Bool) {
         self.proposalFilter = proposalFilter
     }
     
@@ -236,7 +236,7 @@ final class ProposalListViewModel: ObservableObject {
         }
     }
     
-    func onTapStar(proposal: ProposalEntity) async {
+    func onTapStar(proposal: Proposal) async {
         if let _ = authState.user {
             await sharedProposal.onTapStar(proposal: proposal)
         } else {
@@ -258,7 +258,7 @@ final class ProposalListViewModel: ObservableObject {
     
     // MARK: Private
     
-    private func filteredProposals(query: String, proposals: [ProposalEntity]) -> [ProposalEntity] {
+    private func filteredProposals(query: String, proposals: [Proposal]) -> [Proposal] {
         guard !query.isEmpty else { return proposals }
         return proposals.filter {
             var isVersionMatch = false
@@ -277,7 +277,7 @@ final class ProposalListViewModel: ObservableObject {
     }
 }
 
-private extension Array where Element == ProposalEntity {
+private extension Array where Element == Proposal {
     func swiftVersions() -> [String] {
         self
             .compactMap {

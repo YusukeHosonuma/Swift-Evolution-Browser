@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct ProposalStatusView: View {
-    var status: ProposalEntity.Status
+    var status: Proposal.Status
     
     var body: some View {
         let v = statusLabelView

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ProposalEntity: Equatable {
+public struct Proposal: Equatable {
     var id: String
     var title: String
     var star: Bool
@@ -15,7 +15,7 @@ public struct ProposalEntity: Equatable {
     var status: Status
 
     public enum Status: Codable, Equatable, CaseIterable {
-        public static var allCases: [ProposalEntity.Status] = [
+        public static var allCases: [Proposal.Status] = [
             .accepted,
             .activeReview,
             .awaitingReview,
