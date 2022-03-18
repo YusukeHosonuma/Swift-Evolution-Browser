@@ -27,13 +27,19 @@ final class UserService {
         _authState = authState
     }
     
-    func listenStars() -> AnyPublisher<[String], Error> {
+    func listenStars() -> AnyPublisher<[String], Never> {
         _authState.authedPublisher({ user in
-            self._userDocumentRef(user: user).snapshotPublisher()
-                .tryMap { snapshot -> [String] in
-                    let document = try snapshot.data(as: UserDocument.self)
-                    return document.stars
+            self._userDocumentRef(user: user)
+                .snapshotPublisher()
+                .map { snapshot -> [String] in
+                    do {
+                        let document = try snapshot.data(as: UserDocument.self)
+                        return document.stars
+                    } catch {
+                        preconditionFailure("\(error)")
+                    }
                 }
+                .replaceError(with: [])
                 .eraseToAnyPublisher()
         }, defaultValue: [])
     }
