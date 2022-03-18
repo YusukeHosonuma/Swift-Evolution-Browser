@@ -33,6 +33,13 @@ final class UserService {
                 .snapshotPublisher()
                 .map { snapshot -> [String] in
                     do {
+                        // Create user if need.
+                        guard snapshot.exists else {
+                            let data = try Firestore.Encoder().encode(UserDocument(stars: []))
+                            snapshot.reference.setData(data) { _ in }
+                            return []
+                        }
+                        
                         let document = try snapshot.data(as: UserDocument.self)
                         return document.stars
                     } catch {
