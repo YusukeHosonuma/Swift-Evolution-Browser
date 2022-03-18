@@ -55,6 +55,8 @@ public struct RootView: View {
             self.selection = $0
         }
     )}
+        
+    public init() {}
     
     public var body: some View {
         content()

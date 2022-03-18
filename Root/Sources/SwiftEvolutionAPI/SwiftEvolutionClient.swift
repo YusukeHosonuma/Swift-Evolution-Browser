@@ -7,19 +7,25 @@
 
 import Foundation
 
-private let _proposalsURL = URL(string: "https://data.swift.org/swift-evolution/proposals")!
+private let proposalsURL = URL(string: "https://data.swift.org/swift-evolution/proposals")!
 
-private let _decoder: JSONDecoder = {
+private let decoder: JSONDecoder = {
     let jsonDecoder = JSONDecoder()
     return jsonDecoder
 }()
 
 public final class SwiftEvolutionProposalClient {
 
-    public init() {}
+    private let config: URLSessionConfiguration
+    
+    public init(config: URLSessionConfiguration = .default) {
+        self.config = config
+    }
     
     public func fetch() async throws -> [Proposal] {
-        let (data, _) = try await URLSession.shared.data(for: URLRequest(url: _proposalsURL))
-        return try _decoder.decode([Proposal].self, from: data)
+        let session = URLSession(configuration: config)
+        
+        let (data, _) = try await session.data(for: URLRequest(url: proposalsURL))
+        return try decoder.decode([Proposal].self, from: data)
     }
 }

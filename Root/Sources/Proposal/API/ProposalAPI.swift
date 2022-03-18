@@ -13,12 +13,12 @@ public protocol ProposalAPI {
 }
 
 public final class ProposalAPIClient: ProposalAPI {
-    private let _client = SwiftEvolutionProposalClient()
+    private let client = SwiftEvolutionProposalClient(config: .shared)
     
     public init() {}
     
     public func fetch() async throws -> [ProposalEntity] {
-        let proposals = try await _client.fetch()
+        let proposals = try await client.fetch()
         return proposals.map {
             ProposalEntity(
                 id: $0.id,

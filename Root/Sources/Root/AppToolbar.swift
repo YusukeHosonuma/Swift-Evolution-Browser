@@ -16,7 +16,7 @@ struct AppToolbar: ViewModifier {
     
     @State private var isPresentConfirmSheet = false
     @State private var isPresentAuthView = false
-    
+
     func body(content: Content) -> some View {
         content
             .toolbar {
@@ -36,6 +36,8 @@ struct AppToolbar: ViewModifier {
             }
     }
     
+    // MARK: Events
+    
     private func onTapLogout() {
         authState.logout()
     }
@@ -54,33 +56,3 @@ extension View {
         self.modifier(AppToolbar())
     }
 }
-
-//final class AppToolbarViewModel: ObservableObject {
-//    @Published var isPresentConfirmSheet = false
-//    @Published var isPresentFirebaseAuthView = false
-//    @Published var isLogin = false
-//
-//    private var authState: AuthState!
-//
-//    // MARK: Initialize
-//
-//    func onAppear(authState: AuthState) {
-//        self.authState = authState
-//        authState.isLogin.assign(to: &$isLogin)
-//    }
-//
-//    // MARK: Action
-//
-//    func onTapAccountButton() {
-//        if authState.isLogin.value {
-//            isPresentConfirmSheet = true
-//        } else {
-//            isPresentFirebaseAuthView = true
-//        }
-//    }
-//
-//    func onTapLogout() {
-//        authState.logout()
-//    }
-//}
-//
