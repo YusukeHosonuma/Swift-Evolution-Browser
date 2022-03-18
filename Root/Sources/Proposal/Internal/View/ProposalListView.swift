@@ -183,10 +183,9 @@ final class ProposalListViewModel: ObservableObject {
                 if proposals.isEmpty {
                     self.state = .loading
                 } else {
-                    let proposals = self.filteredProposals(query: "", proposals: proposals).filter(self.proposalFilter)
                     self.state = .success(
                         Content(
-                            proposals: proposals,
+                            proposals: proposals.apply(query: "").filter(self.proposalFilter),
                             swiftVersions: proposals.swiftVersions()
                         )
                     )
@@ -196,12 +195,14 @@ final class ProposalListViewModel: ObservableObject {
     }()
     
     // MARK: Lifecycle
-        
+    
     func onChangeQuery(_ query: String) {
-        guard case .success(var content) = self.state else { return }
+        guard case .success(var content) = state else { return }
+        
+        // FIXME: キーボードでエンターして確定するとキーワードが消えちゃう
         content.searchQuery = query
-        content.proposals = self.filteredProposals(query: query, proposals: sharedProposal.proposals.value!).filter(self.proposalFilter)
-        self.state = .success(content)
+        content.proposals = sharedProposal.proposals.value!.apply(query: query).filter(proposalFilter)
+        state = .success(content)
     }
 
     func onAppear(
@@ -255,26 +256,6 @@ final class ProposalListViewModel: ObservableObject {
             return .success(content)
         }
     }
-    
-    // MARK: Private
-    
-    private func filteredProposals(query: String, proposals: [Proposal]) -> [Proposal] {
-        guard !query.isEmpty else { return proposals }
-        return proposals.filter {
-            var isVersionMatch = false
-            if case .implemented(let version) = $0.status {
-                var versionString = query
-                if query.contains("Swift"), let last = query.split(separator: " ").last {
-                    versionString = String(last)
-                }
-                isVersionMatch = version == versionString
-            }
-            
-            return $0.title.contains(query)
-                || $0.status.label == query
-                || isVersionMatch
-        }
-    }
 }
 
 private extension Array where Element == Proposal {
@@ -289,5 +270,29 @@ private extension Array where Element == Proposal {
             }
             .uniqued()
             .asArray()
+    }
+    
+    func apply(query: String) -> [Proposal] {
+        let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        func isVersionMatch(_ proposal: Proposal) -> Bool {
+            guard case .implemented(let version) = proposal.status else { return false }
+            
+            var versionString = query
+            if query.contains("Swift"), let last = query.split(separator: " ").last {
+                versionString = String(last)
+            }
+            return version == versionString
+        }
+        
+        if query.isEmpty {
+            return self
+        } else {
+            return filter {
+                $0.title.contains(query) ||
+                $0.status.label == query ||
+                isVersionMatch($0)
+            }
+        }
     }
 }
