@@ -12,19 +12,21 @@ import Auth
 
 @MainActor
 public protocol ProposalStore {
-    // TODO: Refactor
     var proposals: CurrentValueSubject<[ProposalEntity]?, Never> { get }
     func onInitialize() async
-    func refresh() async
+    func refresh() async throws
     func onTapStar(proposal: ProposalEntity) async
 }
 
 @MainActor
 public class SharedProposal: ProposalStore, ObservableObject {
+    
+    // Note: `nil` is represent error.
     public var proposals: CurrentValueSubject<[ProposalEntity]?, Never> = .init([])
 
     private let proposalAPI: ProposalAPI
     private let userService: UserService
+    private let latestProposals: PassthroughSubject<[ProposalEntity]?, Never> = .init()
     private var cancellables: Set<AnyCancellable> = []
 
     nonisolated public init(proposalAPI: ProposalAPI, authState: AuthState) {
@@ -33,28 +35,29 @@ public class SharedProposal: ProposalStore, ObservableObject {
     }
 
     public func onInitialize() async {
-        await refresh()
-
-        userService.listenStars()
-            .map { [weak proposals] stars -> [ProposalEntity]? in
-                guard let proposals = proposals?.value else { return nil }
+        self.latestProposals
+            .combineLatest(userService.listenStars().replaceError(with: []))
+            .map { proposals, stars in
+                guard let proposals = proposals else { return nil }
                 return proposals.map {
                     var proposal = $0
                     proposal.star = stars.contains($0.id)
                     return proposal
                 }
             }
-            .replaceError(with: nil)
             .assign(to: \.value, on: proposals)
             .store(in: &cancellables)
+        
+        do {
+            try await self.refresh()
+        } catch {
+            latestProposals.send(nil)
+        }
     }
     
-    public func refresh() async {
-        do {
-            self.proposals.value = try await self.proposalAPI.fetch()
-        } catch {
-            self.proposals.value = nil
-        }
+    public func refresh() async throws {
+        let proposals = try await self.proposalAPI.fetch()
+        latestProposals.send(proposals)
     }
     
     public func onTapStar(proposal: ProposalEntity) async {
@@ -65,7 +68,7 @@ public class SharedProposal: ProposalStore, ObservableObject {
                 try await userService.addStar(proposalID: proposal.id)
             }
         } catch {
-            print("Not logined!!") // TODO:
+            preconditionFailure("\(error)")
         }
     }
 }

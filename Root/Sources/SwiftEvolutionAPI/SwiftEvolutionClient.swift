@@ -19,7 +19,20 @@ public final class SwiftEvolutionProposalClient {
     public init() {}
     
     public func fetch() async throws -> [Proposal] {
-        let (data, _) = try await URLSession.shared.data(for: URLRequest(url: _proposalsURL))
+        
+        let config = URLSessionConfiguration.default
+        
+        // Note:
+        // Always fetch latest json.
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+
+        // 🪲 For debug:
+        // config.waitsForConnectivity = false
+        // config.timeoutIntervalForRequest = 3
+
+        let session = URLSession(configuration: config)
+        
+        let (data, _) = try await session.data(for: URLRequest(url: _proposalsURL))
         return try _decoder.decode([Proposal].self, from: data)
     }
 }

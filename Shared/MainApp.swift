@@ -27,7 +27,7 @@ struct MainApp: App {
     
     var body: some Scene {
         WindowGroup {
-            _component.makeView()
+            RootView()
         }
     }
 }

@@ -61,6 +61,7 @@ struct ProposalListView<Filter: ProposalFilter>: View {
                 contentView(contentBinding: .init(get: { content }, set: { viewModel.state = .success($0) }))
             }
         }
+        .alert("Network Error", isPresented: $viewModel.isPresentNetworkErrorAlert) {}
         .task {
             await viewModel.onAppear(
                 authState: authState,
@@ -119,6 +120,9 @@ struct ProposalListView<Filter: ProposalFilter>: View {
             .id(scrollToTopID)
         }
         .listStyle(.sidebar)
+        .refreshable {
+            await viewModel.onRefresh()
+        }
     }
 }
 
@@ -126,7 +130,8 @@ struct ProposalListView<Filter: ProposalFilter>: View {
 final class ProposalListViewModel: ObservableObject {
     
     @Published var state: State = .loading
-
+    @Published var isPresentNetworkErrorAlert = false
+    
     enum State: Equatable {
         case loading
         case error
@@ -164,23 +169,9 @@ final class ProposalListViewModel: ObservableObject {
         self.proposalFilter = proposalFilter
     }
     
-    // MARK: Lifecycle
-        
-    func onChangeQuery(_ query: String) {
-        guard case .success(var content) = self.state else { return }
-        content.searchQuery = query
-        content.proposals = self.filteredProposals(query: query, proposals: sharedProposal.proposals.value!).filter(self.proposalFilter)
-        self.state = .success(content)
-    }
-    
-    func onAppear(
-        authState: AuthState,
-        sharedProposal: ProposalStore
-    ) async {
-        self.authState = authState
-        self.sharedProposal = sharedProposal
-
+    lazy var initialize: () = {
         sharedProposal.proposals
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] proposals in
                 guard let self = self else { return }
 
@@ -202,12 +193,43 @@ final class ProposalListViewModel: ObservableObject {
                 }
             }
             .store(in: &cancellable)
+    }()
+    
+    // MARK: Lifecycle
+        
+    func onChangeQuery(_ query: String) {
+        guard case .success(var content) = self.state else { return }
+        content.searchQuery = query
+        content.proposals = self.filteredProposals(query: query, proposals: sharedProposal.proposals.value!).filter(self.proposalFilter)
+        self.state = .success(content)
+    }
+
+    func onAppear(
+        authState: AuthState,
+        sharedProposal: ProposalStore
+    ) async {
+        self.authState = authState
+        self.sharedProposal = sharedProposal
+        _ = self.initialize
     }
     
     // MARK: Actions
     
     func onTapRetry() async {
-        await sharedProposal.refresh()
+        self.state = .loading
+        do {
+            try await sharedProposal.refresh()
+        } catch {
+            self.state = .error
+        }
+    }
+
+    func onRefresh() async {
+        do {
+            try await sharedProposal.refresh()
+        } catch {
+            self.isPresentNetworkErrorAlert = true
+        }
     }
     
     func onTapStar(proposal: ProposalEntity) async {
