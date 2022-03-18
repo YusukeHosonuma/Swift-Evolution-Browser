@@ -14,7 +14,7 @@ private let decoder: JSONDecoder = {
     return jsonDecoder
 }()
 
-public final class SwiftEvolutionProposalClient {
+public final class ProposalClient {
 
     private let config: URLSessionConfiguration
     

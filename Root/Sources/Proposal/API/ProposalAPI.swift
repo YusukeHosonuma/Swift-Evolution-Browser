@@ -7,7 +7,7 @@
 
 import Foundation
 
-import class  SwiftEvolutionAPI.SwiftEvolutionProposalClient
+import class  SwiftEvolutionAPI.ProposalClient
 import struct SwiftEvolutionAPI.StatusClass
 
 public protocol ProposalAPI {
@@ -15,21 +15,21 @@ public protocol ProposalAPI {
 }
 
 public final class ProposalAPIClient: ProposalAPI {
-    private let client = SwiftEvolutionProposalClient(config: .shared)
+    private let client = ProposalClient(config: .shared)
     
     public init() {}
     
     public func fetch() async throws -> [Proposal] {
-        let proposals = try await client.fetch()
-        return proposals.map {
-            Proposal(
-                id: $0.id,
-                title: $0.title.trimmingCharacters(in: .whitespaces),
-                star: false,
-                proposalURL: URL(string: "https://github.com/apple/swift-evolution/blob/main/proposals/\($0.link)")!,
-                status: convertStatus(status: $0.status)
-            )
-        }.reversed()
+        try await client.fetch()
+            .map {
+                Proposal(
+                    id: $0.id,
+                    title: $0.title.trimmingCharacters(in: .whitespaces),
+                    star: false,
+                    proposalURL: URL(string: "https://github.com/apple/swift-evolution/blob/main/proposals/\($0.link)")!,
+                    status: convertStatus(status: $0.status)
+                )
+            }.reversed()
     }
     
     // Note:
