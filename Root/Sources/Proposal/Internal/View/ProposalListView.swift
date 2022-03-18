@@ -141,18 +141,19 @@ final class ProposalListViewModel: ObservableObject {
         var proposals: [Proposal]
         var searchQuery: String
         var isPresentAuthView: Bool
-        let swiftVersions: [String]
+
+        let allProposals: [Proposal]
+        var swiftVersions: [String] { allProposals.swiftVersions() }
         
         internal init(
             proposals: [Proposal],
-            swiftVersions: [String],
             searchQuery: String = "",
             isPresentAuthView: Bool = false
         ) {
             self.proposals = proposals
+            self.allProposals = proposals
             self.searchQuery = searchQuery
             self.isPresentAuthView = isPresentAuthView
-            self.swiftVersions = swiftVersions
         }
     }
     
@@ -181,8 +182,7 @@ final class ProposalListViewModel: ObservableObject {
                 } else {
                     self.state = .success(
                         Content(
-                            proposals: proposals.apply(query: "").filter(self.globalFilter),
-                            swiftVersions: proposals.swiftVersions()
+                            proposals: proposals.apply(query: "").filter(self.globalFilter)
                         )
                     )
                 }
@@ -197,7 +197,7 @@ final class ProposalListViewModel: ObservableObject {
         
         // FIXME: キーボードでエンターして確定するとキーワードが消えちゃう
         content.searchQuery = query
-        content.proposals = sharedProposal.proposals.value!.apply(query: query).filter(globalFilter)
+        content.proposals = content.allProposals.apply(query: query).filter(globalFilter)
         state = .success(content)
     }
 
