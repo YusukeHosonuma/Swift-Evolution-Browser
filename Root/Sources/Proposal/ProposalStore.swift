@@ -36,7 +36,7 @@ public class SharedProposal: ProposalStore, ObservableObject {
 
     public func onInitialize() async {
         self.latestProposals
-            .combineLatest(userService.listenStars().replaceError(with: []))
+            .combineLatest(userService.listenStars())
             .map { proposals, stars in
                 guard let proposals = proposals else { return nil }
                 return proposals.map {

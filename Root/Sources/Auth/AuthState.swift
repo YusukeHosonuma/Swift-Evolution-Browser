@@ -32,20 +32,20 @@ public final class AuthState: ObservableObject {
         do {
             try Auth.auth().signOut()
         } catch {
-            fatalError("\(error)") // TODO:
+            preconditionFailure("\(error)")
         }
     }
     
     public func authedPublisher<Output>(
-        _ innerPublisher: @escaping (Account) -> AnyPublisher<Output, Error>,
+        _ innerPublisher: @escaping (Account) -> AnyPublisher<Output, Never>,
         defaultValue: Output
-    ) -> AnyPublisher<Output, Error> {
+    ) -> AnyPublisher<Output, Never> {
         $user
-            .flatMap { user -> AnyPublisher<Output, Error> in
+            .flatMap { user -> AnyPublisher<Output, Never> in
                 if let user = user {
                     return innerPublisher(user)
                 } else {
-                    return Just(defaultValue).setFailureType(to: Error.self).eraseToAnyPublisher()
+                    return Just(defaultValue).eraseToAnyPublisher()
                 }
             }
             .eraseToAnyPublisher()

@@ -27,13 +27,19 @@ final class UserService {
         _authState = authState
     }
     
-    func listenStars() -> AnyPublisher<[String], Error> {
+    func listenStars() -> AnyPublisher<[String], Never> {
         _authState.authedPublisher({ user in
-            self._userDocumentRef(user: user).snapshotPublisher()
+            self._userDocumentRef(user: user)
+                .snapshotPublisher()
                 .map { snapshot -> [String] in
-                    let document = try! snapshot.data(as: UserDocument.self)
-                    return document.stars
+                    do {
+                        let document = try snapshot.data(as: UserDocument.self)
+                        return document.stars
+                    } catch {
+                        preconditionFailure("\(error)")
+                    }
                 }
+                .replaceError(with: [])
                 .eraseToAnyPublisher()
         }, defaultValue: [])
     }
@@ -57,7 +63,7 @@ final class UserService {
     // MARK: Private
     
     private func _userDocumentRef(user: Account) -> DocumentReference {
-        Firestore.firestore().collection("user").document(user.uid)
+        Firestore.firestore().collection("users").document(user.uid)
     }
 }
 
