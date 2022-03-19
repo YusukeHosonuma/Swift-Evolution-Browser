@@ -22,7 +22,7 @@ struct AppToolbar: ViewModifier {
             .toolbar {
                 ToolbarItem {
                     Button(action: onTapAccountButton) {
-                        Image(systemSymbol: .personFill)
+                        Image(systemName: "person.fill")
                     }
                     .confirmationDialog("Are you logout?", isPresented: $isPresentConfirmSheet) {
                         if authState.isLogin {
