@@ -15,7 +15,7 @@ public struct ScrollToTopID: EnvironmentKey {
 public extension EnvironmentValues {
     var scrollToTopID: String {
         get {
-            return self[ScrollToTopID.self]
+            self[ScrollToTopID.self]
         }
         set {
             self[ScrollToTopID.self] = newValue
