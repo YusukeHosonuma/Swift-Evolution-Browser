@@ -212,7 +212,7 @@ final class ProposalListViewModel: ObservableObject {
         guard case .success(var content) = state else { return }
         
         content.searchQuery = query
-        content.filteredProposals = content.allProposals.apply(query: query).filter(globalFilter)
+        content.filteredProposals = content.allProposals.search(by: query).filter(globalFilter)
         state = .success(content)
     }
 

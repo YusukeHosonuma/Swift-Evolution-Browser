@@ -22,7 +22,7 @@ extension Array where Element == Proposal {
         .asArray()
     }
     
-    func apply(query: String) -> [Proposal] {
+    func search(by query: String) -> [Proposal] {
         let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
         
         func isVersionMatch(_ proposal: Proposal) -> Bool {
@@ -65,7 +65,7 @@ extension Array where Element == Proposal {
     
     // MARK: Private
     
-    func statusLabels() -> [String] {
+    private func statusLabels() -> [String] {
         map(\.status.label).uniqued().sorted()
     }
 }
