@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ProposalRowView: View {
-    var proposal: Proposal
-    var onTapStar: () -> ()
+    let proposal: Proposal
+    let onTapStar: () -> ()
     
     init(
         proposal: Proposal,

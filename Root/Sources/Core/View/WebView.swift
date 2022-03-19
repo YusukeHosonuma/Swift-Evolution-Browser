@@ -12,7 +12,7 @@ import WebKit
 public class WebViewCoordinator: NSObject, WKNavigationDelegate {
     let isLoading: Binding<Bool>
     
-    public init(isLoading: Binding<Bool>) {
+    init(isLoading: Binding<Bool>) {
         self.isLoading = isLoading
     }
     

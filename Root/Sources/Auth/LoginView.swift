@@ -7,14 +7,13 @@
 
 import Foundation
 import SwiftUI
-import Core
 
 public struct LoginView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) private var colorScheme
     
-    @State var inProgress: Bool = false
-    @State var isPresentedLoginFailedAlert: Bool = false
+    @State private var inProgress: Bool = false
+    @State private var isPresentedLoginFailedAlert: Bool = false
 
     public init() {}
     
@@ -53,7 +52,7 @@ public struct LoginView: View {
         #endif
     }
     
-    func appleLoginButton() -> some View {
+    private func appleLoginButton() -> some View {
         AppleLoginButton(inProgress: $inProgress) { error in
             if let _ = error {
                 isPresentedLoginFailedAlert = true
@@ -68,7 +67,7 @@ public struct LoginView: View {
         }
     }
     
-    func googleLoginButton() -> some View {
+    private func googleLoginButton() -> some View {
         // FIXME: macOS は GoogleSignIn-iOS v6.2.0 のリリース待ち
         // https://github.com/google/GoogleSignIn-iOS
         #if os(macOS)

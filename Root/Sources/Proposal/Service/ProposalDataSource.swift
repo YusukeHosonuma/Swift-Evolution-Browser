@@ -11,15 +11,16 @@ import Core
 import Auth
 
 @MainActor
-public protocol ProposalStore {
+public protocol ProposalDataSource {
     var proposals: CurrentValueSubject<[Proposal]?, Never> { get }
+
     func onInitialize() async
     func refresh() async throws
-    func onTapStar(proposal: Proposal) async
+    func toggleStar(proposal: Proposal) async
 }
 
 @MainActor
-public class SharedProposal: ProposalStore, ObservableObject {
+public class ProposalDataSourceImpl: ProposalDataSource, ObservableObject {
     
     // Note: `nil` is represent error.
     public var proposals: CurrentValueSubject<[Proposal]?, Never> = .init([])
@@ -29,9 +30,9 @@ public class SharedProposal: ProposalStore, ObservableObject {
     private let latestProposals: PassthroughSubject<[Proposal]?, Never> = .init()
     private var cancellables: Set<AnyCancellable> = []
 
-    nonisolated public init(proposalAPI: ProposalAPI, authState: AuthState) {
+    nonisolated public init(proposalAPI: ProposalAPI, userService: UserService) {
         self.proposalAPI = proposalAPI
-        self.userService = UserService(authState: authState)
+        self.userService = userService
     }
 
     public func onInitialize() async {
@@ -60,7 +61,7 @@ public class SharedProposal: ProposalStore, ObservableObject {
         latestProposals.send(proposals)
     }
     
-    public func onTapStar(proposal: Proposal) async {
+    public func toggleStar(proposal: Proposal) async {
         do {
             if proposal.star {
                 try await userService.removeStar(proposalID: proposal.id)

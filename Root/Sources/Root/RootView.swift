@@ -39,9 +39,11 @@ fileprivate extension View {
 
 private let authState = AuthState()
 
-private let proposalStore: ProposalStore = SharedProposal(
+private let userService: UserService = UserServiceFirestore(authState: authState)
+
+private let proposalDataSource: ProposalDataSource = ProposalDataSourceImpl(
     proposalAPI: ProposalAPIClient(),
-    authState: authState
+    userService: userService
 )
 
 // 💡 Note:
@@ -50,14 +52,18 @@ private let proposalStore: ProposalStore = SharedProposal(
 private let proposalListViewModelAll = ProposalListViewModel(
     globalFilter: { _ in true },
     authState: authState,
-    sharedProposal: proposalStore
+    dataSource: proposalDataSource
 )
 
 private let proposalListViewModelStared = ProposalListViewModel(
     globalFilter: { $0.star },
     authState: authState,
-    sharedProposal: proposalStore
+    dataSource: proposalDataSource
 )
+
+//
+// 💻 Root
+//
 
 public struct RootView: View {
     @State private var selection: Item? = .all
@@ -80,9 +86,8 @@ public struct RootView: View {
     public var body: some View {
         content()
             .environmentObject(authState)
-            .environment(\.proposalStore, proposalStore)
             .task {
-                await proposalStore.onInitialize()
+                await proposalDataSource.onInitialize()
             }
             .onOpenURL { url in
                 #if os(iOS)
@@ -105,9 +110,13 @@ public struct RootView: View {
                             .environmentObject(proposalListViewModelAll)
                     }
                 } label: {
-                    menuItemAll()
+                    Label {
+                        Text("All")
+                    } icon: {
+                        Image(systemName: "list.bullet")
+                    }
                 }
-                .tag(Item.all)
+                .itemTag(.all)
 
                 //
                 // Stared
@@ -118,10 +127,13 @@ public struct RootView: View {
                             .environmentObject(proposalListViewModelStared)
                     }
                 } label: {
-                    menuItemStared()
+                    Label {
+                        Text("Stared")
+                    } icon: {
+                        Image(systemName: "star.fill").foregroundColor(.yellow)
+                    }
                 }
-                .tag(Item.star)
-                
+                .itemTag(.star)
             }
             .listStyle(SidebarListStyle())
         }
@@ -145,7 +157,11 @@ public struct RootView: View {
                     Text("Please select proposal from sidebar.")
                 }
                 .tabItem {
-                    menuItemAll()
+                    Label {
+                        Text("All")
+                    } icon: {
+                        Image(systemName: "list.bullet")
+                    }
                 }
                 .itemTag(.all)
                 
@@ -164,7 +180,11 @@ public struct RootView: View {
                     Text("Please select proposal from sidebar.")
                 }
                 .tabItem {
-                    menuItemStared()
+                    Label {
+                        Text("Stared")
+                    } icon: {
+                        Image(systemName: "star.fill").foregroundColor(.yellow)
+                    }
                 }
                 .itemTag(.star)
             }
@@ -178,22 +198,5 @@ public struct RootView: View {
             })
         }
         #endif
-    }
-    
-    func menuItemAll() -> some View {
-        Label {
-            Text("All")
-        } icon: {
-            Image(systemName: "list.bullet")
-        }
-    }
-    
-    func menuItemStared() -> some View {
-        Label {
-            Text("Stared")
-        } icon: {
-            Image(systemName: "star.fill")
-                .foregroundColor(.yellow)
-        }
     }
 }
