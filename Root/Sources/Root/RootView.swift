@@ -46,6 +46,8 @@ public struct RootView: View {
     @State private var selection: Item? = .all
     @State private var tappedTwice: Bool = false
     
+    // Note:
+    // For scroll to top when tab is tapped.
     private var selectionHandler: Binding<Item?> { Binding(
         get: { self.selection },
         set: {

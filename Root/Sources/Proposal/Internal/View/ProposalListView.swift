@@ -16,21 +16,25 @@ struct ProposalListView: View {
     let onTapStar: (Proposal) -> ()
 
     var body: some View {
-        List {
-            ForEach(proposals, id: \.id) { proposal in
-                NavigationLink {
-                    ProposalDetailView(url: proposal.proposalURL)
-                } label: {
-                    ProposalRowView(proposal: proposal, starTapped: {
-                        onTapStar(proposal)
-                    })
+        if proposals.isEmpty {
+            Text("No results found")
+        } else {
+            List {
+                ForEach(proposals, id: \.id) { proposal in
+                    NavigationLink {
+                        ProposalDetailView(url: proposal.proposalURL)
+                    } label: {
+                        ProposalRowView(proposal: proposal, starTapped: {
+                            onTapStar(proposal)
+                        })
+                    }
+                    .contextMenu {
+                        Link("Open in browser", destination: proposal.proposalURL)
+                    }
                 }
-                .contextMenu {
-                    Link("Open in browser", destination: proposal.proposalURL)
-                }
+                .id(scrollToTopID)
             }
-            .id(scrollToTopID)
+            .listStyle(.sidebar)
         }
-        .listStyle(.sidebar)
     }
 }
