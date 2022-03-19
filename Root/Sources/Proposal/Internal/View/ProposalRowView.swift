@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by 細沼祐介 on 2022/03/04.
 //
@@ -9,16 +9,16 @@ import SwiftUI
 
 struct ProposalRowView: View {
     let proposal: Proposal
-    let onTapStar: () -> ()
-    
+    let onTapStar: () -> Void
+
     init(
         proposal: Proposal,
-        starTapped: @escaping () -> ()
+        starTapped: @escaping () -> Void
     ) {
         self.proposal = proposal
-        self.onTapStar = starTapped
+        onTapStar = starTapped
     }
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack {

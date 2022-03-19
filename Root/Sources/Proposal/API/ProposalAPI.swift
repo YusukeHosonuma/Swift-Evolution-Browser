@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import class  SwiftEvolutionAPI.ProposalClient
+import class SwiftEvolutionAPI.ProposalClient
 import struct SwiftEvolutionAPI.StatusClass
 
 public protocol ProposalAPI {
@@ -15,9 +15,9 @@ public protocol ProposalAPI {
 
 public final class ProposalAPIClient: ProposalAPI {
     private let client = ProposalClient(config: .shared)
-    
+
     public init() {}
-    
+
     public func fetch() async throws -> [Proposal] {
         try await client.fetch()
             .map {
@@ -30,10 +30,10 @@ public final class ProposalAPIClient: ProposalAPI {
                 )
             }.reversed()
     }
-    
+
     // Note:
     // It may be easier to deal with this in Codable.
-    
+
     func convertStatus(status: StatusClass) -> Proposal.Status {
         switch status.state {
         case .accepted:

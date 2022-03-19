@@ -1,18 +1,18 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by 細沼祐介 on 2022/03/04.
 //
 
-import SwiftUI
+import Auth
 import Combine
 import Core
-import Auth
+import SwiftUI
 
 public struct ProposalListContainerView: View {
     @EnvironmentObject var viewModel: ProposalListViewModel
-    
+
     // ⚠️ Bug
     //
     // [macOS]
@@ -24,9 +24,9 @@ public struct ProposalListContainerView: View {
     // https://developer.apple.com/forums/thread/655159
     //
     // @StateObject var viewModel: ProposalListViewModel = .init(globalFilter: Filter.filter)
-    
+
     public init() {}
-    
+
     public var body: some View {
         Group {
             switch viewModel.state {
@@ -42,7 +42,7 @@ public struct ProposalListContainerView: View {
                     }
                     .padding()
                 }
-            case .success(let content):
+            case let .success(content):
                 contentView(content)
             }
         }
@@ -71,7 +71,7 @@ public struct ProposalListContainerView: View {
             placement: .automatic,
             prompt: Text("Search Proposal"),
             suggestions: {
-                ForEach(content.suggestions, id: \.0.self) { (title, completion) in
+                ForEach(content.suggestions, id: \.0.self) { title, completion in
                     Text(title).searchCompletion(completion)
                 }
             }
@@ -83,7 +83,7 @@ public struct ProposalListContainerView: View {
 }
 
 @MainActor
-final public class ProposalListViewModel: ObservableObject {
+public final class ProposalListViewModel: ObservableObject {
     @Published var state: State = .loading
     @Published var isPresentNetworkErrorAlert = false
     @Published var isPresentAuthView = false
@@ -93,33 +93,33 @@ final public class ProposalListViewModel: ObservableObject {
         case error
         case success(Content)
     }
-    
+
     struct Content: Equatable {
         var filteredProposals: [Proposal] // For display
-        var allProposals: [Proposal]      // For data-source
+        var allProposals: [Proposal] // For data-source
         var searchQuery: String = ""
-        
+
         internal init(proposals: [Proposal]) {
-            self.filteredProposals = proposals
-            self.allProposals = proposals
+            filteredProposals = proposals
+            allProposals = proposals
         }
 
         var swiftVersions: [String] {
             allProposals.swiftVersions()
         }
-        
+
         var suggestions: [(String, String)] {
             allProposals.suggestions(query: searchQuery)
         }
     }
-    
+
     private let globalFilter: (Proposal) -> Bool
     private var dataSource: ProposalDataSource
     private var authState: AuthState
-    
+
     private var cancellable: Set<AnyCancellable> = []
 
-    nonisolated public init(
+    public nonisolated init(
         globalFilter: @escaping (Proposal) -> Bool,
         authState: AuthState,
         dataSource: ProposalDataSource
@@ -128,51 +128,49 @@ final public class ProposalListViewModel: ObservableObject {
         self.authState = authState
         self.dataSource = dataSource
     }
-    
+
     // MARK: Lifecycle
 
-    lazy var initialize: () = {
-        dataSource.proposals
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] proposals in
-                guard let self = self else { return }
+    lazy var initialize: () = dataSource.proposals
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self] proposals in
+            guard let self = self else { return }
 
-                guard let proposals = proposals else {
-                    self.state = .error
-                    return
-                }
+            guard let proposals = proposals else {
+                self.state = .error
+                return
+            }
 
-                if proposals.isEmpty {
-                    self.state = .loading
-                } else {
-                    if case .success(var content) = self.state {
-                        let proposals = proposals.filter(self.globalFilter)
-                        content.filteredProposals = proposals.filter {
-                            proposal in content.filteredProposals.contains { $0.id == proposal.id }
-                        }
-                        content.allProposals = proposals
-                        self.state = .success(content)
-                    } else {
-                        self.state = .success(
-                            Content(
-                                proposals: proposals.filter(self.globalFilter)
-                            )
-                        )
+            if proposals.isEmpty {
+                self.state = .loading
+            } else {
+                if case var .success(content) = self.state {
+                    let proposals = proposals.filter(self.globalFilter)
+                    content.filteredProposals = proposals.filter {
+                        proposal in content.filteredProposals.contains { $0.id == proposal.id }
                     }
+                    content.allProposals = proposals
+                    self.state = .success(content)
+                } else {
+                    self.state = .success(
+                        Content(
+                            proposals: proposals.filter(self.globalFilter)
+                        )
+                    )
                 }
             }
-            .store(in: &cancellable)
-    }()
+        }
+        .store(in: &cancellable)
 
     func onAppear() async {
-        _ = self.initialize
+        _ = initialize
     }
-    
+
     // MARK: Actions - Success
-    
+
     func onChangeQuery(_ query: String) {
-        guard case .success(var content) = state else { return }
-        
+        guard case var .success(content) = state else { return }
+
         content.searchQuery = query
         content.filteredProposals = content.allProposals.search(by: query).filter(globalFilter)
         state = .success(content)
@@ -194,34 +192,34 @@ final public class ProposalListViewModel: ObservableObject {
             async let wait2: () = try dataSource.refresh()
             let _ = try await (wait1, wait2)
         } catch {
-            self.isPresentNetworkErrorAlert = true
+            isPresentNetworkErrorAlert = true
         }
     }
-    
+
     // MARK: Actions - Error
-    
+
     func onTapRetry() async {
-        self.state = .loading
+        state = .loading
         do {
             try await dataSource.refresh()
         } catch {
-            self.state = .error
+            state = .error
         }
     }
 }
 
-//protocol ProposalFilter {
+// protocol ProposalFilter {
 //    static func filter(entity: Proposal) -> Bool
-//}
+// }
 //
-//enum NoFilter: ProposalFilter {
+// enum NoFilter: ProposalFilter {
 //    static func filter(entity: Proposal) -> Bool {
 //        true
 //    }
-//}
+// }
 //
-//enum StaredFilter: ProposalFilter {
+// enum StaredFilter: ProposalFilter {
 //    static func filter(entity: Proposal) -> Bool {
 //        entity.star
 //    }
-//}
+// }

@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by 細沼祐介 on 2022/03/09.
 //
@@ -10,10 +10,10 @@ import SwiftUI
 
 struct ProposalStatusView: View {
     var status: Proposal.Status
-    
+
     var body: some View {
         let v = statusLabelView
-        
+
         switch status {
         case .accepted:
             v(.green)
@@ -23,7 +23,7 @@ struct ProposalStatusView: View {
             v(.orange)
         case .deferred:
             v(.indigo)
-        case .implemented(version: let version):
+        case let .implemented(version: version):
             Text("Swift \(version)")
                 .font(.caption)
                 .bold()
@@ -45,7 +45,7 @@ struct ProposalStatusView: View {
             v(.orange)
         }
     }
-    
+
     func statusLabelView(color: Color) -> some View {
         Text(status.label)
             .font(.caption)

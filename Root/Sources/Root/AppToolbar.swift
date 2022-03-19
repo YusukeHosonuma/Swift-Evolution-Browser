@@ -1,19 +1,18 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by 細沼祐介 on 2022/03/10.
 //
 
-import Foundation
-import SwiftUI
 import Auth
 import Core
+import Foundation
+import SwiftUI
 
 struct AppToolbar: ViewModifier {
-    
     @EnvironmentObject private var authState: AuthState
-    
+
     @State private var isPresentConfirmSheet = false
     @State private var isPresentAuthView = false
 
@@ -35,13 +34,13 @@ struct AppToolbar: ViewModifier {
                 LoginView()
             }
     }
-    
+
     // MARK: Events
-    
+
     private func onTapLogout() {
         authState.logout()
     }
-    
+
     private func onTapAccountButton() {
         if authState.isLogin {
             isPresentConfirmSheet = true
@@ -53,6 +52,6 @@ struct AppToolbar: ViewModifier {
 
 extension View {
     func appToolbar() -> some View {
-        self.modifier(AppToolbar())
+        modifier(AppToolbar())
     }
 }

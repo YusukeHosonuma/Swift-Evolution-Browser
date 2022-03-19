@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by 細沼祐介 on 2022/03/03.
 //
@@ -27,7 +27,7 @@ public struct Proposal: Equatable {
             .withdrawn,
             .scheduledForReview,
         ]
-        
+
         case accepted
         case activeReview
         case awaitingReview
@@ -38,7 +38,7 @@ public struct Proposal: Equatable {
         case returnedForRevision
         case withdrawn
         case scheduledForReview
-        
+
         public var label: String {
             switch self {
             case .accepted:
@@ -49,7 +49,7 @@ public struct Proposal: Equatable {
                 return "Awaiting Review"
             case .deferred:
                 return "Deferred"
-            case .implemented(_):
+            case .implemented:
                 return "Implemented"
             case .previewing:
                 return "Previewing"

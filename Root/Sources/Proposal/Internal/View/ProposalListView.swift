@@ -1,19 +1,19 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by 細沼祐介 on 2022/03/19.
 //
 
+import Core
 import Foundation
 import SwiftUI
-import Core
 
 struct ProposalListView: View {
     @Environment(\.scrollToTopID) var scrollToTopID
-    
+
     let proposals: [Proposal]
-    let onTapStar: (Proposal) -> ()
+    let onTapStar: (Proposal) -> Void
 
     var body: some View {
         if proposals.isEmpty {
