@@ -68,7 +68,14 @@ public struct ProposalListContainerView: View {
             await viewModel.onRefresh()
         }
         .searchable(
-            text: Binding(get: { viewModel.searchQuery }, set: { viewModel.onChangeQuery($0) }),
+            text: Binding(
+                get: {
+                    // 引数のcontentからsearchQueryを参照するとsubmit時にサーチバーが初期化されてしまう
+                    guard case let .success(content) = viewModel.state else { return "" }
+                    return content.searchQuery
+                },
+                set: { viewModel.onChangeQuery($0) }
+            ),
             placement: .automatic,
             prompt: Text("Search Proposal"),
             suggestions: {
@@ -88,10 +95,6 @@ public final class ProposalListViewModel: ObservableObject {
     @Published var state: State = .loading
     @Published var isPresentNetworkErrorAlert = false
     @Published var isPresentAuthView = false
-    var searchQuery: String {
-        guard case let .success(content) = state else { return "" }
-        return content.searchQuery
-    }
 
     enum State: Equatable {
         case loading
