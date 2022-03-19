@@ -8,17 +8,17 @@
 import Foundation
 import SwiftUI
 
-public struct ProposalStoreKey: EnvironmentKey {
-    public static var defaultValue: ProposalStore? { nil }
+public struct ProposalDataSourceKey: EnvironmentKey {
+    public static var defaultValue: ProposalDataSource? { nil }
 }
 
 extension EnvironmentValues {
-    public var proposalStore: ProposalStore? {
+    public var ProposalDataSource: ProposalDataSource? {
         get {
-            return self[ProposalStoreKey.self]
+            return self[ProposalDataSourceKey.self]
         }
         set {
-            self[ProposalStoreKey.self] = newValue
+            self[ProposalDataSourceKey.self] = newValue
         }
     }
 }

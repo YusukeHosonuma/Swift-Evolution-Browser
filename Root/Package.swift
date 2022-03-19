@@ -47,7 +47,6 @@ let package = Package(
         //
         .target(name: "SwiftEvolutionAPI", dependencies: []),
         .target(name: "Auth", dependencies: [
-            "Core",
             .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS", condition: .when(platforms: [.iOS])),
             .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
         ]),

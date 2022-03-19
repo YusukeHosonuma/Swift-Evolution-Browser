@@ -81,7 +81,7 @@ public final class UserServiceFirestore: UserService {
     }
 }
 
-extension DocumentReference {
+private extension DocumentReference {
     func updateDocument<T: Codable>(update: (inout T) -> ()) async throws {
         var document = try await self.getDocument().data(as: T.self)
         update(&document)

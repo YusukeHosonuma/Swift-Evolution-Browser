@@ -41,7 +41,7 @@ private let authState = AuthState()
 
 private let userService: UserService = UserServiceFirestore(authState: authState)
 
-private let proposalStore: ProposalStore = SharedProposal(
+private let proposalDataSource: ProposalDataSource = ProposalDataSourceImpl(
     proposalAPI: ProposalAPIClient(),
     userService: userService
 )
@@ -52,13 +52,13 @@ private let proposalStore: ProposalStore = SharedProposal(
 private let proposalListViewModelAll = ProposalListViewModel(
     globalFilter: { _ in true },
     authState: authState,
-    sharedProposal: proposalStore
+    dataSource: proposalDataSource
 )
 
 private let proposalListViewModelStared = ProposalListViewModel(
     globalFilter: { $0.star },
     authState: authState,
-    sharedProposal: proposalStore
+    dataSource: proposalDataSource
 )
 
 public struct RootView: View {
@@ -82,9 +82,9 @@ public struct RootView: View {
     public var body: some View {
         content()
             .environmentObject(authState)
-            .environment(\.proposalStore, proposalStore)
+            .environment(\.ProposalDataSource, proposalDataSource)
             .task {
-                await proposalStore.onInitialize()
+                await proposalDataSource.onInitialize()
             }
             .onOpenURL { url in
                 #if os(iOS)

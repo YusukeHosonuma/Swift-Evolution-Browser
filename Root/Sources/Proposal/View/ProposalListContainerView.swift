@@ -114,7 +114,7 @@ final public class ProposalListViewModel: ObservableObject {
     }
     
     private let globalFilter: (Proposal) -> Bool
-    private var sharedProposal: ProposalStore
+    private var dataSource: ProposalDataSource
     private var authState: AuthState
     
     private var cancellable: Set<AnyCancellable> = []
@@ -122,17 +122,17 @@ final public class ProposalListViewModel: ObservableObject {
     nonisolated public init(
         globalFilter: @escaping (Proposal) -> Bool,
         authState: AuthState,
-        sharedProposal: ProposalStore
+        dataSource: ProposalDataSource
     ) {
         self.globalFilter = globalFilter
         self.authState = authState
-        self.sharedProposal = sharedProposal
+        self.dataSource = dataSource
     }
     
     // MARK: Lifecycle
 
     lazy var initialize: () = {
-        sharedProposal.proposals
+        dataSource.proposals
             .receive(on: DispatchQueue.main)
             .sink { [weak self] proposals in
                 guard let self = self else { return }
@@ -180,7 +180,7 @@ final public class ProposalListViewModel: ObservableObject {
 
     func onTapStar(proposal: Proposal) async {
         if let _ = authState.user {
-            await sharedProposal.onTapStar(proposal: proposal)
+            await dataSource.toggleStar(proposal: proposal)
         } else {
             isPresentAuthView = true
         }
@@ -190,9 +190,9 @@ final public class ProposalListViewModel: ObservableObject {
         do {
             // Note:
             // Wait at least 1 seconds. (for UX)
-            async let _wait1 = try Task.sleep(seconds: 1)
-            async let _wait2 = try sharedProposal.refresh()
-            let _ = try await (_wait1, _wait2)
+            async let wait1: () = try Task.sleep(seconds: 1)
+            async let wait2: () = try dataSource.refresh()
+            let _ = try await (wait1, wait2)
         } catch {
             self.isPresentNetworkErrorAlert = true
         }
@@ -203,7 +203,7 @@ final public class ProposalListViewModel: ObservableObject {
     func onTapRetry() async {
         self.state = .loading
         do {
-            try await sharedProposal.refresh()
+            try await dataSource.refresh()
         } catch {
             self.state = .error
         }
