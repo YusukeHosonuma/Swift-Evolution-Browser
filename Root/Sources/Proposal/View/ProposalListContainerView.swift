@@ -59,8 +59,6 @@ public struct ProposalListContainerView: View {
     }
 
     func contentView(_ content: ProposalListViewModel.Content) -> some View {
-        // FIXME: キーボードでエンターして確定するとキーワードが消えちゃう（謎）
-
         ProposalListView(proposals: content.filteredProposals) { proposal in
             Task {
                 await viewModel.onTapStar(proposal: proposal)
@@ -99,7 +97,7 @@ public final class ProposalListViewModel: ObservableObject {
 
     struct Content: Equatable {
         var allProposals: [Proposal] // For data-source
-        var searchQuery: String = ""
+        var searchQuery: String = " " // 💡 初期値が空文字にするとsubmit時にサーチバーがクリアされる不具合があるため半角を入れておく
 
         init(proposals: [Proposal]) {
             allProposals = proposals
