@@ -34,7 +34,7 @@ struct ProposalListView: View {
                 }
                 .id(scrollToTopID)
             }
-            .listStyle(.sidebar)
+            .listStyle(.insetGrouped)
         }
     }
 }
