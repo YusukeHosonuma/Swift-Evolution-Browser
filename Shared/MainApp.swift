@@ -6,23 +6,14 @@
 //
 
 import SwiftUI
-import NeedleFoundation
 import Root
 import Firebase
 
 @main
 struct MainApp: App {
-    private let _component: RootComponent
-
     init() {
         // Initialize Firestore
         FirebaseApp.configure()
-        
-        // Initialize needle
-        registerProviderFactories()
-        
-        // Initialize component
-        _component = RootComponent()
     }
     
     var body: some Scene {

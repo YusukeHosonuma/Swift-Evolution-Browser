@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/openid/AppAuth-iOS.git",
       "state" : {
-        "revision" : "01131d68346c8ae552961c768d583c715fbe1410",
-        "version" : "1.4.0"
+        "revision" : "33660c271c961f8ce1084cc13f2ea8195e864f7d",
+        "version" : "1.5.0"
       }
     },
     {
@@ -115,15 +115,6 @@
       "state" : {
         "revision" : "7ee9ef9f627d85cbe1b8c4f49a3ed26eed216c77",
         "version" : "2.30908.0"
-      }
-    },
-    {
-      "identity" : "needle",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/uber/needle.git",
-      "state" : {
-        "revision" : "6a2d5e25cd3c77ddfa57835e991469db791c4744",
-        "version" : "0.17.2"
       }
     },
     {

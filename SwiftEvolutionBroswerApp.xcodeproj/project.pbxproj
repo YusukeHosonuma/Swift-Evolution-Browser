@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		700EE3EC27D9EFB700A9D65A /* NeedleGenerated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700EE3EB27D9EFB700A9D65A /* NeedleGenerated.swift */; };
-		700EE3ED27D9EFB700A9D65A /* NeedleGenerated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700EE3EB27D9EFB700A9D65A /* NeedleGenerated.swift */; };
 		700EE3EF27D9EFFE00A9D65A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 700EE3EE27D9EFFE00A9D65A /* GoogleService-Info.plist */; };
 		700EE3F027D9EFFE00A9D65A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 700EE3EE27D9EFFE00A9D65A /* GoogleService-Info.plist */; };
 		7071874127D884A3009A8169 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7071874027D884A3009A8169 /* Tests_iOS.swift */; };
@@ -41,7 +39,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		700EE3EB27D9EFB700A9D65A /* NeedleGenerated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NeedleGenerated.swift; sourceTree = "<group>"; };
 		700EE3EE27D9EFFE00A9D65A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		700EE3F227D9F02E00A9D65A /* SwiftEvolutionBroswerApp--macOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "SwiftEvolutionBroswerApp--macOS--Info.plist"; sourceTree = "<group>"; };
 		700EE3F327D9F0A500A9D65A /* SwiftEvolutionBroswerApp--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "SwiftEvolutionBroswerApp--iOS--Info.plist"; sourceTree = "<group>"; };
@@ -121,7 +118,6 @@
 			isa = PBXGroup;
 			children = (
 				700EE3F127D9F00400A9D65A /* Resources */,
-				700EE3EB27D9EFB700A9D65A /* NeedleGenerated.swift */,
 				7071872827D884A1009A8169 /* MainApp.swift */,
 			);
 			path = Shared;
@@ -198,7 +194,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7071875B27D884A3009A8169 /* Build configuration list for PBXNativeTarget "SwiftEvolutionBroswerApp (macOS)" */;
 			buildPhases = (
-				700EE3EA27D9EF5200A9D65A /* Needle */,
 				7071873127D884A3009A8169 /* Sources */,
 				7071873227D884A3009A8169 /* Frameworks */,
 				7071873327D884A3009A8169 /* Resources */,
@@ -335,33 +330,11 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		700EE3EA27D9EF5200A9D65A /* Needle */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = Needle;
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nexport SOURCEKIT_LOGGING=0 && needle generate $SRCROOT/Shared/NeedleGenerated.swift $SRCROOT/Root/  --additional-imports 'import Root'\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		7071872B27D884A3009A8169 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				700EE3EC27D9EFB700A9D65A /* NeedleGenerated.swift in Sources */,
 				7071875027D884A3009A8169 /* MainApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -370,7 +343,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				700EE3ED27D9EFB700A9D65A /* NeedleGenerated.swift in Sources */,
 				7071875127D884A3009A8169 /* MainApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
