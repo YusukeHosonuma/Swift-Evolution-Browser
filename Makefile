@@ -1,2 +1,2 @@
 setup:
-		brew bundle
+	brew bundle
