@@ -14,7 +14,7 @@ public struct Proposal: Equatable {
     var proposalURL: URL
     var status: Status
 
-    public enum Status: Codable, Equatable, CaseIterable {
+    public enum Status: Codable, CaseIterable, Comparable {
         public static var allCases: [Proposal.Status] = [
             .accepted,
             .activeReview,

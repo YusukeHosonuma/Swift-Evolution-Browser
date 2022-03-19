@@ -30,11 +30,20 @@ struct ProposalListView<Filter: ProposalFilter>: View {
     @EnvironmentObject var authState: AuthState
     @Environment(\.proposalStore) var proposalStore: ProposalStore!
     
-    // ⚠️
-    // Bug: initialized each time on macOS. (But display delay is not due to it)
-    // ref: https://stackoverflow.com/questions/71345489/swiftui-macos-navigationview-onchangeof-bool-action-tried-to-update-multipl
+    // Use if needed.
+    // @Environment(\.dismissSearch) var dismissSearch
+    
+    // ⚠️ Bug
+    //
+    // [macOS]
+    // Initialized each time like @ObservedObject.
+    // https://stackoverflow.com/questions/71345489/swiftui-macos-navigationview-onchangeof-bool-action-tried-to-update-multipl
+    //
+    // [iOS]
+    // Double generated with View.
+    // https://developer.apple.com/forums/thread/655159
     @StateObject var viewModel: ProposalListViewModel = .init(globalFilter: Filter.filter)
-
+    
     private let scrollToTopID: String
     
     init(scrollToTopID: String) {
@@ -61,39 +70,31 @@ struct ProposalListView<Filter: ProposalFilter>: View {
             }
         }
         .alert("Network Error", isPresented: $viewModel.isPresentNetworkErrorAlert) {}
+        .sheet(isPresented: $viewModel.isPresentAuthView) {
+            LoginView()
+        }
         .task {
             await viewModel.onAppear(authState: authState, sharedProposal: proposalStore)
         }
     }
 
     func contentView(_ content: ProposalListViewModel.Content) -> some View {
+
+        // FIXME: キーボードでエンターして確定するとキーワードが消えちゃう（謎）
         proposalList(content.proposals)
-            .sheet(isPresented: $viewModel.isPresentAuthView) {
-                LoginView()
-            }
             .searchable(
                 text: Binding(get: { content.searchQuery }, set: { viewModel.onChangeQuery($0) }),
-                placement: .automatic,
+                placement: .navigationBarDrawer,
                 prompt: Text("Search..."),
                 suggestions: {
-                    let statusLabels = Proposal.Status.allCases.map(\.label)
-                    if content.swiftVersions.contains(content.searchQuery) || statusLabels.contains(content.searchQuery) {
-                        EmptyView()
-                    } else {
-                        if content.searchQuery.contains("Swift") {
-                            ForEach(content.swiftVersions, id: \.self) { version in
-                                Text(version)
-                                    .searchCompletion(version)
-                            }
-                        } else {
-                            Text("Swift").searchCompletion("Swift ")
-                            ForEach(statusLabels, id: \.self) { label in
-                                Text(label).searchCompletion(label)
-                            }
-                        }
+                    ForEach(content.suggestions, id: \.0.self) { (title, completion) in
+                        Text(title).searchCompletion(completion)
                     }
                 }
             )
+            .onSubmit(of: .search) {
+                // Do something if needed.
+            }
     }
     
     func proposalList(_ proposals: [Proposal]) -> some View {
@@ -138,14 +139,21 @@ final class ProposalListViewModel: ObservableObject {
         var proposals: [Proposal]    // For display
         var allProposals: [Proposal] // For data-source
         var searchQuery: String = ""
-        var swiftVersions: [String] { allProposals.swiftVersions() }
         
         internal init(proposals: [Proposal]) {
             self.proposals = proposals
             self.allProposals = proposals
         }
-    }
 
+        var swiftVersions: [String] {
+            allProposals.swiftVersions()
+        }
+        
+        var suggestions: [(String, String)] {
+            allProposals.suggestions(query: searchQuery)
+        }
+    }
+    
     private let globalFilter: (Proposal) -> Bool
     private var sharedProposal: ProposalStore!
     private var authState: AuthState!
@@ -203,11 +211,11 @@ final class ProposalListViewModel: ObservableObject {
     func onChangeQuery(_ query: String) {
         guard case .success(var content) = state else { return }
         
-        // FIXME: キーボードでエンターして確定するとキーワードが消えちゃう
         content.searchQuery = query
         content.proposals = content.allProposals.apply(query: query).filter(globalFilter)
         state = .success(content)
     }
+
     
     func onTapStar(proposal: Proposal) async {
         if let _ = authState.user {

@@ -45,4 +45,27 @@ extension Array where Element == Proposal {
             }
         }
     }
+
+    func suggestions(query: String) -> [(String, String)] {
+        let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        let statusLabels = statusLabels()
+        let swiftVersions = swiftVersions()
+        
+        if swiftVersions.contains(query) || statusLabels.contains(query) {
+            return []
+        }
+        
+        if query.contains("Swift") {
+            return swiftVersions.map { ($0, $0) }
+        } else {
+            return [("Swift", "Swift ")] + statusLabels.map { ($0, $0) }
+        }
+    }
+    
+    // MARK: Private
+    
+    func statusLabels() -> [String] {
+        map(\.status.label).uniqued().sorted()
+    }
 }
