@@ -44,12 +44,6 @@ struct ProposalListContainerView<Filter: ProposalFilter>: View {
     // https://developer.apple.com/forums/thread/655159
     @StateObject var viewModel: ProposalListViewModel = .init(globalFilter: Filter.filter)
     
-    private let scrollToTopID: String
-    
-    init(scrollToTopID: String) {
-        self.scrollToTopID = scrollToTopID
-    }
-    
     public var body: some View {
         Group {
             switch viewModel.state {
@@ -86,7 +80,6 @@ struct ProposalListContainerView<Filter: ProposalFilter>: View {
                 await viewModel.onTapStar(proposal: proposal)
             }
         }
-        .environment(\.scrollToTopID, scrollToTopID)
         .refreshable {
             await viewModel.onRefresh()
         }

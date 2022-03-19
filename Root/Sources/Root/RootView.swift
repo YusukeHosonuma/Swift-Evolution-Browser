@@ -102,9 +102,10 @@ public struct RootView: View {
         ScrollViewReader { proxy in
             TabView(selection: selectionHandler) {
                 NavigationView {
-                    AllProposalListView(scrollToTopID: Item.all.scrollToTopID)
+                    AllProposalListView()
                         .navigationTitle("All Proposals")
                         .navigationBarTitleDisplayMode(.inline)
+                        .environment(\.scrollToTopID, Item.all.scrollToTopID)
                         .appToolbar()
                     
                     // Note: show when no selected.
@@ -116,9 +117,10 @@ public struct RootView: View {
                 .itemTag(.all)
 
                 NavigationView {
-                    StaredProposalListView(scrollToTopID: Item.star.scrollToTopID)
+                    StaredProposalListView()
                         .navigationTitle("Stared")
                         .navigationBarTitleDisplayMode(.inline)
+                        .environment(\.scrollToTopID, Item.star.scrollToTopID)
                         .appToolbar()
                     
                     // Note: show when no selected.

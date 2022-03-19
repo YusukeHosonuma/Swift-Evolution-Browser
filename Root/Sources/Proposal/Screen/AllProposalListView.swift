@@ -9,14 +9,10 @@ import SwiftUI
 import Core
 
 public struct AllProposalListView: View {
-
-    private let scrollToTopID: String
     
-    public init(scrollToTopID: String) {
-        self.scrollToTopID = scrollToTopID
-    }
+    public init() {}
     
     public var body: some View {
-        ProposalListContainerView<NoFilter>(scrollToTopID: scrollToTopID)
+        ProposalListContainerView<NoFilter>()
     }
 }
