@@ -34,18 +34,38 @@ fileprivate extension View {
     }
 }
 
-// Global Objects
+//
+// ⚙️ Global Objects
+//
 
 private let authState = AuthState()
+
 private let proposalStore: ProposalStore = SharedProposal(
     proposalAPI: ProposalAPIClient(),
     authState: authState
+)
+
+// 💡 Note:
+// For avoid to `@StateObject` bugs in iOS and macOS.
+
+private let proposalListViewModelAll = ProposalListViewModel(
+    globalFilter: { _ in true },
+    authState: authState,
+    sharedProposal: proposalStore
+)
+
+private let proposalListViewModelStared = ProposalListViewModel(
+    globalFilter: { $0.star },
+    authState: authState,
+    sharedProposal: proposalStore
 )
 
 public struct RootView: View {
     @State private var selection: Item? = .all
     @State private var tappedTwice: Bool = false
     
+    // Note:
+    // For scroll to top when tab is tapped.
     private var selectionHandler: Binding<Item?> { Binding(
         get: { self.selection },
         set: {
@@ -76,18 +96,27 @@ public struct RootView: View {
         #if os(macOS)
         NavigationView {
             List(selection: $selection) {
+                
+                //
+                // All Proposals
+                //
                 NavigationLink {
                     NavigationView {
-                        AllProposalListView(scrollToTopID: "")
+                        ProposalListContainerView()
+                            .environmentObject(proposalListViewModelAll)
                     }
                 } label: {
                     menuItemAll()
                 }
                 .tag(Item.all)
 
+                //
+                // Stared
+                //
                 NavigationLink {
                     NavigationView {
-                        StaredProposalListView(scrollToTopID: "")
+                        ProposalListContainerView()
+                            .environmentObject(proposalListViewModelStared)
                     }
                 } label: {
                     menuItemStared()
@@ -99,10 +128,18 @@ public struct RootView: View {
         }
         .appToolbar()
         #else
+        
+        
         ScrollViewReader { proxy in
             TabView(selection: selectionHandler) {
+                
+                //
+                // All Proposals
+                //
                 NavigationView {
-                    AllProposalListView(scrollToTopID: Item.all.scrollToTopID)
+                    ProposalListContainerView()
+                        .environment(\.scrollToTopID, Item.all.scrollToTopID)
+                        .environmentObject(proposalListViewModelAll)
                         .navigationTitle("All Proposals")
                         .navigationBarTitleDisplayMode(.inline)
                         .appToolbar()
@@ -114,9 +151,14 @@ public struct RootView: View {
                     menuItemAll()
                 }
                 .itemTag(.all)
-
+                
+                //
+                // Stared
+                //
                 NavigationView {
-                    StaredProposalListView(scrollToTopID: Item.star.scrollToTopID)
+                    ProposalListContainerView()
+                        .environment(\.scrollToTopID, Item.star.scrollToTopID)
+                        .environmentObject(proposalListViewModelStared)
                         .navigationTitle("Stared")
                         .navigationBarTitleDisplayMode(.inline)
                         .appToolbar()

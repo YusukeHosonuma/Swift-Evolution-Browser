@@ -6,31 +6,36 @@
 //
 
 import Foundation
-import SwiftEvolutionAPI
+
+import class  SwiftEvolutionAPI.ProposalClient
+import struct SwiftEvolutionAPI.StatusClass
 
 public protocol ProposalAPI {
-    func fetch() async throws -> [ProposalEntity]
+    func fetch() async throws -> [Proposal]
 }
 
 public final class ProposalAPIClient: ProposalAPI {
-    private let client = SwiftEvolutionProposalClient(config: .shared)
+    private let client = ProposalClient(config: .shared)
     
     public init() {}
     
-    public func fetch() async throws -> [ProposalEntity] {
-        let proposals = try await client.fetch()
-        return proposals.map {
-            ProposalEntity(
-                id: $0.id,
-                title: $0.title.trimmingCharacters(in: .whitespaces),
-                star: false,
-                proposalURL: URL(string: "https://github.com/apple/swift-evolution/blob/main/proposals/\($0.link)")!,
-                status: convertStatus(status: $0.status)
-            )
-        }.reversed()
+    public func fetch() async throws -> [Proposal] {
+        try await client.fetch()
+            .map {
+                Proposal(
+                    id: $0.id,
+                    title: $0.title.trimmingCharacters(in: .whitespaces),
+                    star: false,
+                    proposalURL: URL(string: "https://github.com/apple/swift-evolution/blob/main/proposals/\($0.link)")!,
+                    status: convertStatus(status: $0.status)
+                )
+            }.reversed()
     }
     
-    func convertStatus(status: StatusClass) -> ProposalEntity.Status {
+    // Note:
+    // It may be easier to deal with this in Codable.
+    
+    func convertStatus(status: StatusClass) -> Proposal.Status {
         switch status.state {
         case .accepted:
             return .accepted

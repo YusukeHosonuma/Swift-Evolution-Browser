@@ -9,11 +9,11 @@ import SwiftUI
 import SFSafeSymbols
 
 struct ProposalRowView: View {
-    var proposal: ProposalEntity
+    var proposal: Proposal
     var onTapStar: () -> ()
     
     init(
-        proposal: ProposalEntity,
+        proposal: Proposal,
         starTapped: @escaping () -> ()
     ) {
         self.proposal = proposal
@@ -45,29 +45,29 @@ struct ProposalRowView: View {
 }
 
 struct ProposalRowView_Previews: PreviewProvider {
-    static let proposals: [ProposalEntity] = [
-        ProposalEntity(
+    static let proposals: [Proposal] = [
+        Proposal(
             id: "SE-0335",
             title: "Introduce existential any",
             star: false,
             proposalURL: URL(string: "https://github.com/")!,
             status: .implemented(version: "5.4")
         ),
-        ProposalEntity(
+        Proposal(
             id: "SE-0334",
             title: "Pointer API Usability Improvements",
             star: false,
             proposalURL: URL(string: "https://github.com/")!,
             status: .awaitingReview
         ),
-        ProposalEntity(
+        Proposal(
             id: "SE-0345",
             title: "if let shorthand for shadowing an existing optional variable",
             star: false,
             proposalURL: URL(string: "https://github.com/")!,
             status: .awaitingReview
         ),
-        ProposalEntity(
+        Proposal(
             id: "SE-0090",
             title: "Remove .self and freely allow type references in expressions",
             star: false,
@@ -75,28 +75,28 @@ struct ProposalRowView_Previews: PreviewProvider {
             status: .deferred
         ),
 
-        ProposalEntity(
+        Proposal(
             id: "SE-0288",
             title: "Adding isPower(of:) to BinaryInteger",
             star: false,
             proposalURL: URL(string: "https://github.com/")!,
             status: .previewing
         ),
-        ProposalEntity(
+        Proposal(
             id: "SE-0275",
             title: "Allow more characters (like whitespaces and punctuations) for escaped identifiers",
             star: false,
             proposalURL: URL(string: "https://github.com/")!,
             status: .rejected
         ),
-        ProposalEntity(
+        Proposal(
             id: "SE-0330",
             title: "Conditionals in Collections",
             star: false,
             proposalURL: URL(string: "https://github.com/")!,
             status: .returnedForRevision
         ),
-        ProposalEntity(
+        Proposal(
             id: "SE-0223",
             title: "Accessing an Array's Uninitialized Buffer",
             star: false,
