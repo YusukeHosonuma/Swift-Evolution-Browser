@@ -97,7 +97,7 @@ public final class ProposalListViewModel: ObservableObject {
 
     struct Content: Equatable {
         var allProposals: [Proposal] // For data-source
-        var searchQuery: String = ""
+        var searchQuery: String = " " // 初期値が空文字にするとsubmit時にサーチバーがクリアされる不具合があるため半角を入れておく
 
         init(proposals: [Proposal]) {
             allProposals = proposals
