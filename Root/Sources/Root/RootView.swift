@@ -34,12 +34,30 @@ fileprivate extension View {
     }
 }
 
-// Global Objects
+//
+// ⚙️ Global Objects
+//
 
 private let authState = AuthState()
+
 private let proposalStore: ProposalStore = SharedProposal(
     proposalAPI: ProposalAPIClient(),
     authState: authState
+)
+
+// 💡 Note:
+// For avoid to `@StateObject` bugs in iOS and macOS.
+
+private let proposalListViewModelAll = ProposalListViewModel(
+    globalFilter: { _ in true },
+    authState: authState,
+    sharedProposal: proposalStore
+)
+
+private let proposalListViewModelStared = ProposalListViewModel(
+    globalFilter: { $0.star },
+    authState: authState,
+    sharedProposal: proposalStore
 )
 
 public struct RootView: View {
@@ -78,18 +96,27 @@ public struct RootView: View {
         #if os(macOS)
         NavigationView {
             List(selection: $selection) {
+                
+                //
+                // All Proposals
+                //
                 NavigationLink {
                     NavigationView {
-                        AllProposalListView(scrollToTopID: "")
+                        ProposalListContainerView()
+                            .environmentObject(proposalListViewModelAll)
                     }
                 } label: {
                     menuItemAll()
                 }
                 .tag(Item.all)
 
+                //
+                // Stared
+                //
                 NavigationLink {
                     NavigationView {
-                        StaredProposalListView(scrollToTopID: "")
+                        ProposalListContainerView()
+                            .environmentObject(proposalListViewModelStared)
                     }
                 } label: {
                     menuItemStared()
@@ -101,13 +128,20 @@ public struct RootView: View {
         }
         .appToolbar()
         #else
+        
+        
         ScrollViewReader { proxy in
             TabView(selection: selectionHandler) {
+                
+                //
+                // All Proposals
+                //
                 NavigationView {
-                    AllProposalListView()
+                    ProposalListContainerView()
+                        .environment(\.scrollToTopID, Item.all.scrollToTopID)
+                        .environmentObject(proposalListViewModelAll)
                         .navigationTitle("All Proposals")
                         .navigationBarTitleDisplayMode(.inline)
-                        .environment(\.scrollToTopID, Item.all.scrollToTopID)
                         .appToolbar()
                     
                     // Note: show when no selected.
@@ -117,12 +151,16 @@ public struct RootView: View {
                     menuItemAll()
                 }
                 .itemTag(.all)
-
+                
+                //
+                // Stared
+                //
                 NavigationView {
-                    StaredProposalListView()
+                    ProposalListContainerView()
+                        .environment(\.scrollToTopID, Item.star.scrollToTopID)
+                        .environmentObject(proposalListViewModelStared)
                         .navigationTitle("Stared")
                         .navigationBarTitleDisplayMode(.inline)
-                        .environment(\.scrollToTopID, Item.star.scrollToTopID)
                         .appToolbar()
                     
                     // Note: show when no selected.

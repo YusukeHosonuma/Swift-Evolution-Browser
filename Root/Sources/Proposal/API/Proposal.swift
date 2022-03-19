@@ -8,11 +8,11 @@
 import Foundation
 
 public struct Proposal: Equatable {
-    var id: String
-    var title: String
-    var star: Bool
-    var proposalURL: URL
-    var status: Status
+    public var id: String
+    public var title: String
+    public var star: Bool
+    public var proposalURL: URL
+    public var status: Status
 
     public enum Status: Codable, CaseIterable, Comparable {
         public static var allCases: [Proposal.Status] = [

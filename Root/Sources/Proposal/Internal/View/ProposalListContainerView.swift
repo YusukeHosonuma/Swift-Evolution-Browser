@@ -10,28 +10,8 @@ import Combine
 import Core
 import Auth
 
-protocol ProposalFilter {
-    static func filter(entity: Proposal) -> Bool
-}
-
-enum NoFilter: ProposalFilter {
-    static func filter(entity: Proposal) -> Bool {
-        true
-    }
-}
-
-enum StaredFilter: ProposalFilter {
-    static func filter(entity: Proposal) -> Bool {
-        entity.star
-    }
-}
-
-struct ProposalListContainerView<Filter: ProposalFilter>: View {
-    @EnvironmentObject var authState: AuthState
-    @Environment(\.proposalStore) var proposalStore: ProposalStore!
-    
-    // Use if needed.
-    // @Environment(\.dismissSearch) var dismissSearch
+public struct ProposalListContainerView: View {
+    @EnvironmentObject var viewModel: ProposalListViewModel
     
     // ⚠️ Bug
     //
@@ -42,7 +22,10 @@ struct ProposalListContainerView<Filter: ProposalFilter>: View {
     // [iOS]
     // Double generated with View.
     // https://developer.apple.com/forums/thread/655159
-    @StateObject var viewModel: ProposalListViewModel = .init(globalFilter: Filter.filter)
+    //
+    // @StateObject var viewModel: ProposalListViewModel = .init(globalFilter: Filter.filter)
+    
+    public init() {}
     
     public var body: some View {
         Group {
@@ -68,7 +51,7 @@ struct ProposalListContainerView<Filter: ProposalFilter>: View {
             LoginView()
         }
         .task {
-            await viewModel.onAppear(authState: authState, sharedProposal: proposalStore)
+            await viewModel.onAppear()
         }
     }
 
@@ -85,8 +68,8 @@ struct ProposalListContainerView<Filter: ProposalFilter>: View {
         }
         .searchable(
             text: Binding(get: { content.searchQuery }, set: { viewModel.onChangeQuery($0) }),
-            placement: .navigationBarDrawer,
-            prompt: Text("Search..."),
+            placement: .automatic,
+            prompt: Text("Search Proposal"),
             suggestions: {
                 ForEach(content.suggestions, id: \.0.self) { (title, completion) in
                     Text(title).searchCompletion(completion)
@@ -100,8 +83,7 @@ struct ProposalListContainerView<Filter: ProposalFilter>: View {
 }
 
 @MainActor
-final class ProposalListViewModel: ObservableObject {
-    
+final public class ProposalListViewModel: ObservableObject {
     @Published var state: State = .loading
     @Published var isPresentNetworkErrorAlert = false
     @Published var isPresentAuthView = false
@@ -132,12 +114,19 @@ final class ProposalListViewModel: ObservableObject {
     }
     
     private let globalFilter: (Proposal) -> Bool
-    private var sharedProposal: ProposalStore!
-    private var authState: AuthState!
+    private var sharedProposal: ProposalStore
+    private var authState: AuthState
+    
     private var cancellable: Set<AnyCancellable> = []
 
-    nonisolated init(globalFilter: @escaping (Proposal) -> Bool) {
+    nonisolated public init(
+        globalFilter: @escaping (Proposal) -> Bool,
+        authState: AuthState,
+        sharedProposal: ProposalStore
+    ) {
         self.globalFilter = globalFilter
+        self.authState = authState
+        self.sharedProposal = sharedProposal
     }
     
     // MARK: Lifecycle
@@ -152,7 +141,7 @@ final class ProposalListViewModel: ObservableObject {
                     self.state = .error
                     return
                 }
-                
+
                 if proposals.isEmpty {
                     self.state = .loading
                 } else {
@@ -174,12 +163,7 @@ final class ProposalListViewModel: ObservableObject {
             .store(in: &cancellable)
     }()
 
-    func onAppear(
-        authState: AuthState,
-        sharedProposal: ProposalStore
-    ) async {
-        self.authState = authState
-        self.sharedProposal = sharedProposal
+    func onAppear() async {
         _ = self.initialize
     }
     
@@ -224,3 +208,19 @@ final class ProposalListViewModel: ObservableObject {
         }
     }
 }
+
+//protocol ProposalFilter {
+//    static func filter(entity: Proposal) -> Bool
+//}
+//
+//enum NoFilter: ProposalFilter {
+//    static func filter(entity: Proposal) -> Bool {
+//        true
+//    }
+//}
+//
+//enum StaredFilter: ProposalFilter {
+//    static func filter(entity: Proposal) -> Bool {
+//        entity.star
+//    }
+//}
