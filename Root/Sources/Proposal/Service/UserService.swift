@@ -1,16 +1,16 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by 細沼祐介 on 2022/03/04.
 //
 
-import Foundation
+import Auth
 import Combine
 import FirebaseFirestore
-import FirebaseFirestoreSwift
 import FirebaseFirestoreCombineSwift
-import Auth
+import FirebaseFirestoreSwift
+import Foundation
 
 private struct UserDocument: Codable {
     @DocumentID var id: String?
@@ -27,11 +27,11 @@ public protocol UserService {
 
 public final class UserServiceFirestore: UserService {
     private let authState: AuthState
-    
+
     public init(authState: AuthState) {
         self.authState = authState
     }
-    
+
     public func listenStars() -> AnyPublisher<[String], Never> {
         authState.authedPublisher({ user in
             self.userDocumentRef(user: user)
@@ -44,7 +44,7 @@ public final class UserServiceFirestore: UserService {
                             snapshot.reference.setData(data) { _ in }
                             return []
                         }
-                        
+
                         let document = try snapshot.data(as: UserDocument.self)
                         return document.stars
                     } catch {
@@ -55,7 +55,7 @@ public final class UserServiceFirestore: UserService {
                 .eraseToAnyPublisher()
         }, defaultValue: [])
     }
-    
+
     public func addStar(proposalID: String) async throws {
         guard let user = authState.user else { throw NotLoginedError() }
 
@@ -64,28 +64,28 @@ public final class UserServiceFirestore: UserService {
                 document.stars.append(proposalID)
             }
     }
-    
+
     public func removeStar(proposalID: String) async throws {
         guard let user = authState.user else { throw NotLoginedError() }
-        
+
         try await userDocumentRef(user: user)
             .updateDocument { (document: inout UserDocument) in
                 document.stars = document.stars.filter { $0 != proposalID }
             }
     }
-    
+
     // MARK: Private
-    
+
     private func userDocumentRef(user: Account) -> DocumentReference {
         Firestore.firestore().collection("users").document(user.uid)
     }
 }
 
 private extension DocumentReference {
-    func updateDocument<T: Codable>(update: (inout T) -> ()) async throws {
-        var document = try await self.getDocument().data(as: T.self)
+    func updateDocument<T: Codable>(update: (inout T) -> Void) async throws {
+        var document = try await getDocument().data(as: T.self)
         update(&document)
         let data = try Firestore.Encoder().encode(document)
-        try await self.setData(data)
+        try await setData(data)
     }
 }

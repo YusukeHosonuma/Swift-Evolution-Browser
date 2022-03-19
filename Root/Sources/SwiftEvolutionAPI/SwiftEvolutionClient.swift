@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by 細沼祐介 on 2022/03/03.
 //
@@ -15,16 +15,15 @@ private let decoder: JSONDecoder = {
 }()
 
 public final class ProposalClient {
-
     private let config: URLSessionConfiguration
-    
+
     public init(config: URLSessionConfiguration = .default) {
         self.config = config
     }
-    
+
     public func fetch() async throws -> [Proposal] {
         let session = URLSession(configuration: config)
-        
+
         let (data, _) = try await session.data(for: URLRequest(url: proposalsURL))
         return try decoder.decode([Proposal].self, from: data)
     }

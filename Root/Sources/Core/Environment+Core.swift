@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by 細沼祐介 on 2022/03/08.
 //
@@ -12,8 +12,8 @@ public struct ScrollToTopID: EnvironmentKey {
     public static var defaultValue: String { "" }
 }
 
-extension EnvironmentValues {
-    public var scrollToTopID: String {
+public extension EnvironmentValues {
+    var scrollToTopID: String {
         get {
             return self[ScrollToTopID.self]
         }

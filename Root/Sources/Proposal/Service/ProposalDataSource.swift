@@ -1,14 +1,14 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by 細沼祐介 on 2022/03/04.
 //
 
-import Foundation
+import Auth
 import Combine
 import Core
-import Auth
+import Foundation
 
 @MainActor
 public protocol ProposalDataSource {
@@ -21,7 +21,6 @@ public protocol ProposalDataSource {
 
 @MainActor
 public class ProposalDataSourceImpl: ProposalDataSource, ObservableObject {
-    
     // Note: `nil` is represent error.
     public var proposals: CurrentValueSubject<[Proposal]?, Never> = .init([])
 
@@ -30,13 +29,13 @@ public class ProposalDataSourceImpl: ProposalDataSource, ObservableObject {
     private let latestProposals: PassthroughSubject<[Proposal]?, Never> = .init()
     private var cancellables: Set<AnyCancellable> = []
 
-    nonisolated public init(proposalAPI: ProposalAPI, userService: UserService) {
+    public nonisolated init(proposalAPI: ProposalAPI, userService: UserService) {
         self.proposalAPI = proposalAPI
         self.userService = userService
     }
 
     public func onInitialize() async {
-        self.latestProposals
+        latestProposals
             .combineLatest(userService.listenStars())
             .map { proposals, stars in
                 guard let proposals = proposals else { return nil }
@@ -48,19 +47,19 @@ public class ProposalDataSourceImpl: ProposalDataSource, ObservableObject {
             }
             .assign(to: \.value, on: proposals)
             .store(in: &cancellables)
-        
+
         do {
-            try await self.refresh()
+            try await refresh()
         } catch {
             latestProposals.send(nil)
         }
     }
-    
+
     public func refresh() async throws {
-        let proposals = try await self.proposalAPI.fetch()
+        let proposals = try await proposalAPI.fetch()
         latestProposals.send(proposals)
     }
-    
+
     public func toggleStar(proposal: Proposal) async {
         do {
             if proposal.star {
