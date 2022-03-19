@@ -61,6 +61,10 @@ private let proposalListViewModelStared = ProposalListViewModel(
     dataSource: proposalDataSource
 )
 
+//
+// 💻 Root
+//
+
 public struct RootView: View {
     @State private var selection: Item? = .all
     @State private var tappedTwice: Bool = false
@@ -82,7 +86,6 @@ public struct RootView: View {
     public var body: some View {
         content()
             .environmentObject(authState)
-            .environment(\.ProposalDataSource, proposalDataSource)
             .task {
                 await proposalDataSource.onInitialize()
             }
@@ -107,9 +110,13 @@ public struct RootView: View {
                             .environmentObject(proposalListViewModelAll)
                     }
                 } label: {
-                    menuItemAll()
+                    Label {
+                        Text("All")
+                    } icon: {
+                        Image(systemName: "list.bullet")
+                    }
                 }
-                .tag(Item.all)
+                .itemTag(.all)
 
                 //
                 // Stared
@@ -120,10 +127,13 @@ public struct RootView: View {
                             .environmentObject(proposalListViewModelStared)
                     }
                 } label: {
-                    menuItemStared()
+                    Label {
+                        Text("Stared")
+                    } icon: {
+                        Image(systemName: "star.fill").foregroundColor(.yellow)
+                    }
                 }
-                .tag(Item.star)
-                
+                .itemTag(.star)
             }
             .listStyle(SidebarListStyle())
         }
@@ -147,7 +157,11 @@ public struct RootView: View {
                     Text("Please select proposal from sidebar.")
                 }
                 .tabItem {
-                    menuItemAll()
+                    Label {
+                        Text("All")
+                    } icon: {
+                        Image(systemName: "list.bullet")
+                    }
                 }
                 .itemTag(.all)
                 
@@ -166,7 +180,11 @@ public struct RootView: View {
                     Text("Please select proposal from sidebar.")
                 }
                 .tabItem {
-                    menuItemStared()
+                    Label {
+                        Text("Stared")
+                    } icon: {
+                        Image(systemName: "star.fill").foregroundColor(.yellow)
+                    }
                 }
                 .itemTag(.star)
             }
@@ -180,22 +198,5 @@ public struct RootView: View {
             })
         }
         #endif
-    }
-    
-    func menuItemAll() -> some View {
-        Label {
-            Text("All")
-        } icon: {
-            Image(systemName: "list.bullet")
-        }
-    }
-    
-    func menuItemStared() -> some View {
-        Label {
-            Text("Stared")
-        } icon: {
-            Image(systemName: "star.fill")
-                .foregroundColor(.yellow)
-        }
     }
 }
