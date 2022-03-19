@@ -9,118 +9,118 @@
 // https://github.com/google/GoogleSignIn-iOS
 #if os(iOS)
 
-    import FirebaseAuth
-    import FirebaseCore
-    import Foundation
-    import GoogleSignIn
-    import SwiftUI
+import FirebaseAuth
+import FirebaseCore
+import Foundation
+import GoogleSignIn
+import SwiftUI
 
-    struct GoogleLoginButton: View {
-        var completion: (Error?) -> Void
+struct GoogleLoginButton: View {
+    var completion: (Error?) -> Void
 
-        private var viewModel: GoogleLoginButtonViewModel = .init()
+    private var viewModel: GoogleLoginButtonViewModel = .init()
 
-        init(completion: @escaping (Error?) -> Void) {
-            self.completion = completion
-        }
+    init(completion: @escaping (Error?) -> Void) {
+        self.completion = completion
+    }
 
-        var body: some View {
-            GoogleLoginButtonInternal()
-                .onTapGesture {
-                    Task {
-                        do {
-                            try await viewModel.onTap()
+    var body: some View {
+        GoogleLoginButtonInternal()
+            .onTapGesture {
+                Task {
+                    do {
+                        try await viewModel.onTap()
+                        completion(nil)
+                    } catch let error as GoogleLoginError {
+                        switch error {
+                        case .cancel:
                             completion(nil)
-                        } catch let error as GoogleLoginError {
-                            switch error {
-                            case .cancel:
-                                completion(nil)
-                            case .unknown:
-                                completion(error)
-                            }
+                        case .unknown:
+                            completion(error)
                         }
                     }
                 }
-        }
+            }
+    }
+}
+
+// MARK: File Private
+
+fileprivate enum GoogleLoginError: Error {
+    case cancel
+    case unknown
+}
+
+@MainActor
+fileprivate final class GoogleLoginButtonViewModel {
+    nonisolated init() {}
+
+    func onTap() async throws {
+        let credential = try await fetchCredential()
+        let _ = try await Auth.auth().signIn(with: credential)
     }
 
-    // MARK: File Private
+    // MARK: Private
 
-    fileprivate enum GoogleLoginError: Error {
-        case cancel
-        case unknown
-    }
+    private func fetchCredential() async throws -> AuthCredential {
+        guard let clientID = FirebaseApp.app()?.options.clientID else { fatalError() }
 
-    @MainActor
-    fileprivate final class GoogleLoginButtonViewModel {
-        nonisolated init() {}
+        let config = GIDConfiguration(clientID: clientID)
 
-        func onTap() async throws {
-            let credential = try await fetchCredential()
-            let _ = try await Auth.auth().signIn(with: credential)
-        }
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { fatalError() }
+        guard let rootViewController = windowScene.windows.first?.rootViewController else { fatalError() }
 
-        // MARK: Private
+        return try await withCheckedThrowingContinuation { continuation in
+            GIDSignIn.sharedInstance.signIn(with: config, presenting: rootViewController) { user, nsError in
 
-        private func fetchCredential() async throws -> AuthCredential {
-            guard let clientID = FirebaseApp.app()?.options.clientID else { fatalError() }
+                // 🚫 errors.
+                // ref: https://developers.google.com/identity/sign-in/ios/reference/Enums/GIDSignInErrorCode
+                if let nsError = nsError as? NSError {
+                    let code = GoogleSignIn.GIDSignInError(_nsError: nsError).code
+                    let error: GoogleLoginError
 
-            let config = GIDConfiguration(clientID: clientID)
+                    switch code {
+                    case .canceled:
+                        error = .cancel
 
-            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { fatalError() }
-            guard let rootViewController = windowScene.windows.first?.rootViewController else { fatalError() }
-
-            return try await withCheckedThrowingContinuation { continuation in
-                GIDSignIn.sharedInstance.signIn(with: config, presenting: rootViewController) { user, nsError in
-
-                    // 🚫 errors.
-                    // ref: https://developers.google.com/identity/sign-in/ios/reference/Enums/GIDSignInErrorCode
-                    if let nsError = nsError as? NSError {
-                        let code = GoogleSignIn.GIDSignInError(_nsError: nsError).code
-                        let error: GoogleLoginError
-
-                        switch code {
-                        case .canceled:
-                            error = .cancel
-
-                        default:
-                            error = .unknown
-                        }
-
-                        continuation.resume(throwing: error)
-                        return
+                    default:
+                        error = .unknown
                     }
 
-                    // ⚠️ not occur maybe.
-                    guard
-                        let authentication = user?.authentication,
-                        let idToken = authentication.idToken
-                    else {
-                        fatalError()
-                    }
-
-                    // ✅ success.
-                    let credential = GoogleAuthProvider.credential(withIDToken: idToken,
-                                                                   accessToken: authentication.accessToken)
-                    continuation.resume(returning: credential)
+                    continuation.resume(throwing: error)
+                    return
                 }
+
+                // ⚠️ not occur maybe.
+                guard
+                    let authentication = user?.authentication,
+                    let idToken = authentication.idToken
+                else {
+                    fatalError()
+                }
+
+                // ✅ success.
+                let credential = GoogleAuthProvider.credential(withIDToken: idToken,
+                                                               accessToken: authentication.accessToken)
+                continuation.resume(returning: credential)
             }
         }
     }
+}
 
-    fileprivate struct GoogleLoginButtonInternal: UIViewRepresentable {
-        @Environment(\.colorScheme) var colorScheme
+fileprivate struct GoogleLoginButtonInternal: UIViewRepresentable {
+    @Environment(\.colorScheme) var colorScheme
 
-        private var button = GIDSignInButton()
+    private var button = GIDSignInButton()
 
-        func makeUIView(context _: Context) -> GIDSignInButton {
-            button.colorScheme = colorScheme == .light ? .light : .dark
-            return button
-        }
-
-        func updateUIView(_: GIDSignInButton, context _: Context) {
-            button.colorScheme = colorScheme == .light ? .light : .dark
-        }
+    func makeUIView(context _: Context) -> GIDSignInButton {
+        button.colorScheme = colorScheme == .light ? .light : .dark
+        return button
     }
+
+    func updateUIView(_: GIDSignInButton, context _: Context) {
+        button.colorScheme = colorScheme == .light ? .light : .dark
+    }
+}
 
 #endif
