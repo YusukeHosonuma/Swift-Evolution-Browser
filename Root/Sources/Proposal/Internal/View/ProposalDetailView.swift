@@ -17,17 +17,17 @@ struct ProposalDetailView: View {
     var body: some View {
         ZStack {
             #if os(macOS)
-                WebView(url: url, isLoading: $isLoading)
+            WebView(url: url, isLoading: $isLoading)
             #else
-                WebView(url: url, isLoading: $isLoading)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem {
-                            Link(destination: url) {
-                                Image(systemName: "globe")
-                            }
+            WebView(url: url, isLoading: $isLoading)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem {
+                        Link(destination: url) {
+                            Image(systemName: "globe")
                         }
                     }
+                }
             #endif
             if isLoading {
                 ProgressView()

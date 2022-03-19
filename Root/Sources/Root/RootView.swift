@@ -10,7 +10,7 @@ import Proposal
 import SwiftUI
 
 #if os(iOS)
-    import GoogleSignIn
+import GoogleSignIn
 #endif
 
 private enum Item: Hashable {
@@ -91,110 +91,110 @@ public struct RootView: View {
             }
             .onOpenURL { url in
                 #if os(iOS)
-                    GIDSignIn.sharedInstance.handle(url)
+                GIDSignIn.sharedInstance.handle(url)
                 #endif
             }
     }
 
     func content() -> some View {
         #if os(macOS)
-            NavigationView {
-                List(selection: $selection) {
-                    //
-                    // All Proposals
-                    //
-                    NavigationLink {
-                        NavigationView {
-                            ProposalListContainerView()
-                                .environmentObject(proposalListViewModelAll)
-                        }
-                    } label: {
-                        Label {
-                            Text("All")
-                        } icon: {
-                            Image(systemName: "list.bullet")
-                        }
-                    }
-                    .itemTag(.all)
-
-                    //
-                    // Stared
-                    //
-                    NavigationLink {
-                        NavigationView {
-                            ProposalListContainerView()
-                                .environmentObject(proposalListViewModelStared)
-                        }
-                    } label: {
-                        Label {
-                            Text("Stared")
-                        } icon: {
-                            Image(systemName: "star.fill").foregroundColor(.yellow)
-                        }
-                    }
-                    .itemTag(.star)
-                }
-                .listStyle(SidebarListStyle())
-            }
-            .appToolbar()
-        #else
-            ScrollViewReader { proxy in
-                TabView(selection: selectionHandler) {
-                    //
-                    // All Proposals
-                    //
+        NavigationView {
+            List(selection: $selection) {
+                //
+                // All Proposals
+                //
+                NavigationLink {
                     NavigationView {
                         ProposalListContainerView()
-                            .environment(\.scrollToTopID, Item.all.scrollToTopID)
                             .environmentObject(proposalListViewModelAll)
-                            .navigationTitle("All Proposals")
-                            .navigationBarTitleDisplayMode(.inline)
-                            .appToolbar()
-
-                        // Note: show when no selected.
-                        Text("Please select proposal from sidebar.")
                     }
-                    .tabItem {
-                        Label {
-                            Text("All")
-                        } icon: {
-                            Image(systemName: "list.bullet")
-                        }
+                } label: {
+                    Label {
+                        Text("All")
+                    } icon: {
+                        Image(systemName: "list.bullet")
                     }
-                    .itemTag(.all)
+                }
+                .itemTag(.all)
 
-                    //
-                    // Stared
-                    //
+                //
+                // Stared
+                //
+                NavigationLink {
                     NavigationView {
                         ProposalListContainerView()
-                            .environment(\.scrollToTopID, Item.star.scrollToTopID)
                             .environmentObject(proposalListViewModelStared)
-                            .navigationTitle("Stared")
-                            .navigationBarTitleDisplayMode(.inline)
-                            .appToolbar()
-
-                        // Note: show when no selected.
-                        Text("Please select proposal from sidebar.")
                     }
-                    .tabItem {
-                        Label {
-                            Text("Stared")
-                        } icon: {
-                            Image(systemName: "star.fill").foregroundColor(.yellow)
-                        }
+                } label: {
+                    Label {
+                        Text("Stared")
+                    } icon: {
+                        Image(systemName: "star.fill").foregroundColor(.yellow)
                     }
-                    .itemTag(.star)
                 }
-                .onChange(of: tappedTwice, perform: { tapped in
-                    if let selection = self.selection, tapped {
-                        withAnimation {
-                            proxy.scrollTo(selection.scrollToTopID)
-                        }
-                        tappedTwice = false
-                    }
-                })
+                .itemTag(.star)
             }
+            .listStyle(SidebarListStyle())
+        }
+        .appToolbar()
+        #else
+        ScrollViewReader { proxy in
+            TabView(selection: selectionHandler) {
+                //
+                // All Proposals
+                //
+                NavigationView {
+                    ProposalListContainerView()
+                        .environment(\.scrollToTopID, Item.all.scrollToTopID)
+                        .environmentObject(proposalListViewModelAll)
+                        .navigationTitle("All Proposals")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .appToolbar()
+
+                    // Note: show when no selected.
+                    Text("Please select proposal from sidebar.")
+                }
+                .tabItem {
+                    Label {
+                        Text("All")
+                    } icon: {
+                        Image(systemName: "list.bullet")
+                    }
+                }
+                .itemTag(.all)
+
+                //
+                // Stared
+                //
+                NavigationView {
+                    ProposalListContainerView()
+                        .environment(\.scrollToTopID, Item.star.scrollToTopID)
+                        .environmentObject(proposalListViewModelStared)
+                        .navigationTitle("Stared")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .appToolbar()
+
+                    // Note: show when no selected.
+                    Text("Please select proposal from sidebar.")
+                }
+                .tabItem {
+                    Label {
+                        Text("Stared")
+                    } icon: {
+                        Image(systemName: "star.fill").foregroundColor(.yellow)
+                    }
+                }
+                .itemTag(.star)
+            }
+            .onChange(of: tappedTwice, perform: { tapped in
+                if let selection = self.selection, tapped {
+                    withAnimation {
+                        proxy.scrollTo(selection.scrollToTopID)
+                    }
+                    tappedTwice = false
+                }
+            })
+        }
         #endif
     }
 }
