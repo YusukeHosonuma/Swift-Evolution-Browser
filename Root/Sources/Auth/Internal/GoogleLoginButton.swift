@@ -2,7 +2,7 @@
 //  File.swift
 //
 //
-//  Created by 細沼祐介 on 2022/03/10.
+//  Created by Yusuke Hosonuma on 2022/03/10.
 //
 
 // FIXME: macOS は GoogleSignIn-iOS v6.2.0 のリリース待ち
