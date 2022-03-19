@@ -9,6 +9,9 @@ import Auth
 import Combine
 import Core
 import SwiftUI
+#if os(iOS)
+import UIKit
+#endif
 
 public struct ProposalListContainerView: View {
     @EnvironmentObject var viewModel: ProposalListViewModel
@@ -117,6 +120,10 @@ public final class ProposalListViewModel: ObservableObject {
     private var dataSource: ProposalDataSource
     private var authState: AuthState
 
+    #if os(iOS)
+    private var feedbackGenerator: UIImpactFeedbackGenerator!
+    #endif
+
     private var cancellable: Set<AnyCancellable> = []
 
     public nonisolated init(
@@ -131,39 +138,47 @@ public final class ProposalListViewModel: ObservableObject {
 
     // MARK: Lifecycle
 
-    lazy var initialize: () = dataSource.proposals
-        .receive(on: DispatchQueue.main)
-        .sink { [weak self] proposals in
-            guard let self = self else { return }
+    lazy var initialize: () = {
+        #if os(iOS)
+        feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+        #endif
+        dataSource.proposals
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] proposals in
+                guard let self = self else { return }
 
-            guard let proposals = proposals else {
-                self.state = .error
-                return
-            }
+                guard let proposals = proposals else {
+                    self.state = .error
+                    return
+                }
 
-            if proposals.isEmpty {
-                self.state = .loading
-            } else {
-                if case var .success(content) = self.state {
-                    let proposals = proposals.filter(self.globalFilter)
-                    content.filteredProposals = proposals.filter {
-                        proposal in content.filteredProposals.contains { $0.id == proposal.id }
-                    }
-                    content.allProposals = proposals
-                    self.state = .success(content)
+                if proposals.isEmpty {
+                    self.state = .loading
                 } else {
-                    self.state = .success(
-                        Content(
-                            proposals: proposals.filter(self.globalFilter)
+                    if case var .success(content) = self.state {
+                        let proposals = proposals.filter(self.globalFilter)
+                        content.filteredProposals = proposals.filter {
+                            proposal in content.filteredProposals.contains { $0.id == proposal.id }
+                        }
+                        content.allProposals = proposals
+                        self.state = .success(content)
+                    } else {
+                        self.state = .success(
+                            Content(
+                                proposals: proposals.filter(self.globalFilter)
+                            )
                         )
-                    )
+                    }
                 }
             }
-        }
-        .store(in: &cancellable)
+            .store(in: &cancellable)
+    }()
 
     func onAppear() async {
         _ = initialize
+        #if os(iOS)
+        feedbackGenerator.prepare()
+        #endif
     }
 
     // MARK: Actions - Success
@@ -178,6 +193,9 @@ public final class ProposalListViewModel: ObservableObject {
 
     func onTapStar(proposal: Proposal) async {
         if let _ = authState.user {
+            #if os(iOS)
+            feedbackGenerator.impactOccurred()
+            #endif
             await dataSource.toggleStar(proposal: proposal)
         } else {
             isPresentAuthView = true
