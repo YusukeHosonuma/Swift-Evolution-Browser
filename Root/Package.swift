@@ -15,24 +15,21 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMajor(from: "8.10.0")),
         .package(url: "https://github.com/google/GoogleSignIn-iOS.git", .upToNextMajor(from: "6.1.0")),
-        .package(url: "https://github.com/uber/needle.git", .upToNextMajor(from: "0.17.0")),
         .package(url: "https://github.com/SFSafeSymbols/SFSafeSymbols.git", .upToNextMajor(from: "2.1.3")),
         .package(url: "https://github.com/apple/swift-algorithms", .upToNextMajor(from: "1.0.0")),
     ],
     targets: [
+        //
+        // 💻 Root
+        //
         .target(name: "Root", dependencies: [
             "Auth",
             "Proposal",
-            .product(name: "NeedleFoundation", package: "needle")
         ]),
-        .target(name: "Core", dependencies: [
-            "SFSafeSymbols",
-        ]),
-        .target(name: "Auth", dependencies: [
-            "Core",
-            .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS", condition: .when(platforms: [.iOS])),
-            .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
-        ]),
+        .testTarget(name: "RootTests", dependencies: ["Root"]),
+        //
+        // 🚀 Feature
+        //
         .target(name: "Proposal", dependencies: [
             "Core",
             "Auth",
@@ -42,9 +39,18 @@ let package = Package(
             .product(name: "FirebaseFirestoreSwift-Beta", package: "firebase-ios-sdk"),
             .product(name: "FirebaseFirestoreCombine-Community", package: "firebase-ios-sdk"),
         ]),
+        //
+        // ⚙️ Core
+        //
+        .target(name: "Core", dependencies: ["SFSafeSymbols"]),
+        //
+        // 📚 Library
+        //
         .target(name: "SwiftEvolutionAPI", dependencies: []),
-        .testTarget(
-            name: "RootTests",
-            dependencies: ["Root"]),
+        .target(name: "Auth", dependencies: [
+            "Core",
+            .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS", condition: .when(platforms: [.iOS])),
+            .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
+        ]),
     ]
 )
