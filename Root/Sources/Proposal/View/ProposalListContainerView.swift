@@ -98,17 +98,15 @@ public final class ProposalListViewModel: ObservableObject {
     }
 
     struct Content: Equatable {
-        var filteredProposals: [Proposal] // For display
         var allProposals: [Proposal] // For data-source
         var searchQuery: String = ""
 
-        internal init(proposals: [Proposal]) {
-            filteredProposals = proposals
+        init(proposals: [Proposal]) {
             allProposals = proposals
         }
 
-        var swiftVersions: [String] {
-            allProposals.swiftVersions()
+        var filteredProposals: [Proposal] {
+            allProposals.search(by: searchQuery)
         }
 
         var suggestions: [(String, String)] {
@@ -156,11 +154,7 @@ public final class ProposalListViewModel: ObservableObject {
                     self.state = .loading
                 } else {
                     if case var .success(content) = self.state {
-                        let proposals = proposals.filter(self.globalFilter)
-                        content.filteredProposals = proposals.filter {
-                            proposal in content.filteredProposals.contains { $0.id == proposal.id }
-                        }
-                        content.allProposals = proposals
+                        content.allProposals = proposals.filter(self.globalFilter)
                         self.state = .success(content)
                     } else {
                         self.state = .success(
@@ -187,7 +181,6 @@ public final class ProposalListViewModel: ObservableObject {
         guard case var .success(content) = state else { return }
 
         content.searchQuery = query
-        content.filteredProposals = content.allProposals.search(by: query).filter(globalFilter)
         state = .success(content)
     }
 
