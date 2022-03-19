@@ -127,7 +127,7 @@ final class ProposalListViewModel: ObservableObject {
     @Published var state: State = .loading
     @Published var isPresentNetworkErrorAlert = false
     @Published var isPresentAuthView = false
-    
+
     enum State: Equatable {
         case loading
         case error
@@ -135,10 +135,9 @@ final class ProposalListViewModel: ObservableObject {
     }
     
     struct Content: Equatable {
-        var proposals: [Proposal]
+        var proposals: [Proposal]    // For display
+        var allProposals: [Proposal] // For data-source
         var searchQuery: String = ""
-
-        let allProposals: [Proposal]
         var swiftVersions: [String] { allProposals.swiftVersions() }
         
         internal init(proposals: [Proposal]) {
@@ -156,6 +155,8 @@ final class ProposalListViewModel: ObservableObject {
         self.globalFilter = globalFilter
     }
     
+    // MARK: Lifecycle
+
     lazy var initialize: () = {
         sharedProposal.proposals
             .receive(on: DispatchQueue.main)
@@ -170,26 +171,23 @@ final class ProposalListViewModel: ObservableObject {
                 if proposals.isEmpty {
                     self.state = .loading
                 } else {
-                    self.state = .success(
-                        Content(
-                            proposals: proposals.apply(query: "").filter(self.globalFilter)
+                    if case .success(var content) = self.state {
+                        content.proposals = proposals.filter { proposal in
+                            content.proposals.contains { $0.id == proposal.id }
+                        }
+                        content.allProposals = proposals
+                        self.state = .success(content)
+                    } else {
+                        self.state = .success(
+                            Content(
+                                proposals: proposals.filter(self.globalFilter)
+                            )
                         )
-                    )
+                    }
                 }
             }
             .store(in: &cancellable)
     }()
-    
-    // MARK: Lifecycle
-    
-    func onChangeQuery(_ query: String) {
-        guard case .success(var content) = state else { return }
-        
-        // FIXME: キーボードでエンターして確定するとキーワードが消えちゃう
-        content.searchQuery = query
-        content.proposals = content.allProposals.apply(query: query).filter(globalFilter)
-        state = .success(content)
-    }
 
     func onAppear(
         authState: AuthState,
@@ -200,14 +198,22 @@ final class ProposalListViewModel: ObservableObject {
         _ = self.initialize
     }
     
-    // MARK: Actions
+    // MARK: Actions - Success
     
-    func onTapRetry() async {
-        self.state = .loading
-        do {
-            try await sharedProposal.refresh()
-        } catch {
-            self.state = .error
+    func onChangeQuery(_ query: String) {
+        guard case .success(var content) = state else { return }
+        
+        // FIXME: キーボードでエンターして確定するとキーワードが消えちゃう
+        content.searchQuery = query
+        content.proposals = content.allProposals.apply(query: query).filter(globalFilter)
+        state = .success(content)
+    }
+    
+    func onTapStar(proposal: Proposal) async {
+        if let _ = authState.user {
+            await sharedProposal.onTapStar(proposal: proposal)
+        } else {
+            isPresentAuthView = true
         }
     }
 
@@ -223,11 +229,14 @@ final class ProposalListViewModel: ObservableObject {
         }
     }
     
-    func onTapStar(proposal: Proposal) async {
-        if let _ = authState.user {
-            await sharedProposal.onTapStar(proposal: proposal)
-        } else {
-            isPresentAuthView = true
+    // MARK: Actions - Error
+    
+    func onTapRetry() async {
+        self.state = .loading
+        do {
+            try await sharedProposal.refresh()
+        } catch {
+            self.state = .error
         }
     }
 }
