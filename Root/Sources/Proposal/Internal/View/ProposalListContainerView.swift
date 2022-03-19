@@ -146,8 +146,9 @@ final public class ProposalListViewModel: ObservableObject {
                     self.state = .loading
                 } else {
                     if case .success(var content) = self.state {
-                        content.filteredProposals = proposals.filter { proposal in
-                            content.filteredProposals.contains { $0.id == proposal.id }
+                        let proposals = proposals.filter(self.globalFilter)
+                        content.filteredProposals = proposals.filter {
+                            proposal in content.filteredProposals.contains { $0.id == proposal.id }
                         }
                         content.allProposals = proposals
                         self.state = .success(content)
