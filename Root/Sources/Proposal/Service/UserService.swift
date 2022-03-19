@@ -10,30 +10,35 @@ import Combine
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 import FirebaseFirestoreCombineSwift
-import Core
 import Auth
 
-struct UserDocument: Codable {
+private struct UserDocument: Codable {
     @DocumentID var id: String?
     var stars: [String]
 }
 
 struct NotLoginedError: Error {}
 
-final class UserService {
+public protocol UserService {
+    func listenStars() -> AnyPublisher<[String], Never>
+    func addStar(proposalID: String) async throws
+    func removeStar(proposalID: String) async throws
+}
+
+public final class UserServiceFirestore: UserService {
     private let authState: AuthState
     
-    init(authState: AuthState) {
+    public init(authState: AuthState) {
         self.authState = authState
     }
     
-    func listenStars() -> AnyPublisher<[String], Never> {
+    public func listenStars() -> AnyPublisher<[String], Never> {
         authState.authedPublisher({ user in
             self.userDocumentRef(user: user)
                 .snapshotPublisher()
                 .map { snapshot -> [String] in
                     do {
-                        // Create user if need.
+                        // 🙋‍♂️ Create user if need.
                         guard snapshot.exists else {
                             let data = try Firestore.Encoder().encode(UserDocument(stars: []))
                             snapshot.reference.setData(data) { _ in }
@@ -51,20 +56,22 @@ final class UserService {
         }, defaultValue: [])
     }
     
-    func addStar(proposalID: String) async throws {
+    public func addStar(proposalID: String) async throws {
         guard let user = authState.user else { throw NotLoginedError() }
 
-        try await userDocumentRef(user: user).updateDocument { (document: inout UserDocument) in
-            document.stars.append(proposalID)
-        }
+        try await userDocumentRef(user: user)
+            .updateDocument { (document: inout UserDocument) in
+                document.stars.append(proposalID)
+            }
     }
     
-    func removeStar(proposalID: String) async throws {
+    public func removeStar(proposalID: String) async throws {
         guard let user = authState.user else { throw NotLoginedError() }
         
-        try await userDocumentRef(user: user).updateDocument { (document: inout UserDocument) in
-            document.stars = document.stars.filter { $0 != proposalID }
-        }
+        try await userDocumentRef(user: user)
+            .updateDocument { (document: inout UserDocument) in
+                document.stars = document.stars.filter { $0 != proposalID }
+            }
     }
     
     // MARK: Private

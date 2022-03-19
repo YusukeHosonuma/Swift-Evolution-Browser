@@ -29,9 +29,9 @@ public class SharedProposal: ProposalStore, ObservableObject {
     private let latestProposals: PassthroughSubject<[Proposal]?, Never> = .init()
     private var cancellables: Set<AnyCancellable> = []
 
-    nonisolated public init(proposalAPI: ProposalAPI, authState: AuthState) {
+    nonisolated public init(proposalAPI: ProposalAPI, userService: UserService) {
         self.proposalAPI = proposalAPI
-        self.userService = UserService(authState: authState)
+        self.userService = userService
     }
 
     public func onInitialize() async {

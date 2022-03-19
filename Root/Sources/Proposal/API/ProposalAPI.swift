@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 import class  SwiftEvolutionAPI.ProposalClient
 import struct SwiftEvolutionAPI.StatusClass
 

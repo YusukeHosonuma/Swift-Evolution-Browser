@@ -39,9 +39,11 @@ fileprivate extension View {
 
 private let authState = AuthState()
 
+private let userService: UserService = UserServiceFirestore(authState: authState)
+
 private let proposalStore: ProposalStore = SharedProposal(
     proposalAPI: ProposalAPIClient(),
-    authState: authState
+    userService: userService
 )
 
 // 💡 Note:
