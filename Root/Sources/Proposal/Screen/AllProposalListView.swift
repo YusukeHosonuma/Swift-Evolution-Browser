@@ -17,6 +17,6 @@ public struct AllProposalListView: View {
     }
     
     public var body: some View {
-        ProposalListView<NoFilter>(scrollToTopID: scrollToTopID)
+        ProposalListContainerView<NoFilter>(scrollToTopID: scrollToTopID)
     }
 }

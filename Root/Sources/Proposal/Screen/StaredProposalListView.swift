@@ -17,6 +17,6 @@ public struct StaredProposalListView: View {
     }
     
     public var body: some View {
-        ProposalListView<StaredFilter>(scrollToTopID: scrollToTopID)
+        ProposalListContainerView<StaredFilter>(scrollToTopID: scrollToTopID)
     }
 }
