@@ -81,7 +81,7 @@ struct ProposalListView<Filter: ProposalFilter>: View {
     func contentView(_ content: ProposalListViewModel.Content) -> some View {
 
         // FIXME: キーボードでエンターして確定するとキーワードが消えちゃう（謎）
-        proposalList(content.proposals)
+        proposalList(content.filteredProposals)
             .searchable(
                 text: Binding(get: { content.searchQuery }, set: { viewModel.onChangeQuery($0) }),
                 placement: .navigationBarDrawer,
@@ -136,12 +136,12 @@ final class ProposalListViewModel: ObservableObject {
     }
     
     struct Content: Equatable {
-        var proposals: [Proposal]    // For display
-        var allProposals: [Proposal] // For data-source
+        var filteredProposals: [Proposal] // For display
+        var allProposals: [Proposal]      // For data-source
         var searchQuery: String = ""
         
         internal init(proposals: [Proposal]) {
-            self.proposals = proposals
+            self.filteredProposals = proposals
             self.allProposals = proposals
         }
 
@@ -180,8 +180,8 @@ final class ProposalListViewModel: ObservableObject {
                     self.state = .loading
                 } else {
                     if case .success(var content) = self.state {
-                        content.proposals = proposals.filter { proposal in
-                            content.proposals.contains { $0.id == proposal.id }
+                        content.filteredProposals = proposals.filter { proposal in
+                            content.filteredProposals.contains { $0.id == proposal.id }
                         }
                         content.allProposals = proposals
                         self.state = .success(content)
@@ -212,11 +212,10 @@ final class ProposalListViewModel: ObservableObject {
         guard case .success(var content) = state else { return }
         
         content.searchQuery = query
-        content.proposals = content.allProposals.apply(query: query).filter(globalFilter)
+        content.filteredProposals = content.allProposals.apply(query: query).filter(globalFilter)
         state = .success(content)
     }
 
-    
     func onTapStar(proposal: Proposal) async {
         if let _ = authState.user {
             await sharedProposal.onTapStar(proposal: proposal)
