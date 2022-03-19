@@ -34,7 +34,9 @@ struct ProposalListView: View {
                 }
                 .id(scrollToTopID)
             }
+            #if os(iOS)
             .listStyle(.insetGrouped)
+            #endif
         }
     }
 }
