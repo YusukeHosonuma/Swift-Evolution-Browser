@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SFSafeSymbols
 
 struct ProposalRowView: View {
     var proposal: Proposal
@@ -34,7 +33,7 @@ struct ProposalRowView: View {
                 Text(proposal.title)
                     .font(.subheadline)
                 Spacer()
-                Image(systemSymbol: proposal.star ? .starFill : .star)
+                Image(systemName: proposal.star ? "star.fill" : "star")
                     .foregroundColor(.yellow)
                     .onTapGesture {
                         onTapStar()

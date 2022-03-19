@@ -7,7 +7,6 @@
 
 import SwiftUI
 import Proposal
-import SFSafeSymbols
 import Auth
 
 #if os(iOS)
@@ -128,8 +127,6 @@ public struct RootView: View {
         }
         .appToolbar()
         #else
-        
-        
         ScrollViewReader { proxy in
             TabView(selection: selectionHandler) {
                 
@@ -187,7 +184,7 @@ public struct RootView: View {
         Label {
             Text("All")
         } icon: {
-            Image(systemSymbol: .listBullet)
+            Image(systemName: "list.bullet")
         }
     }
     
@@ -195,7 +192,7 @@ public struct RootView: View {
         Label {
             Text("Stared")
         } icon: {
-            Image(systemSymbol: .starFill)
+            Image(systemName: "star.fill")
                 .foregroundColor(.yellow)
         }
     }

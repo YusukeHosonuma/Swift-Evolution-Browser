@@ -15,7 +15,6 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMajor(from: "8.10.0")),
         .package(url: "https://github.com/google/GoogleSignIn-iOS.git", .upToNextMajor(from: "6.1.0")),
-        .package(url: "https://github.com/SFSafeSymbols/SFSafeSymbols.git", .upToNextMajor(from: "2.1.3")),
         .package(url: "https://github.com/apple/swift-algorithms", .upToNextMajor(from: "1.0.0")),
     ],
     targets: [
@@ -42,7 +41,7 @@ let package = Package(
         //
         // ⚙️ Core
         //
-        .target(name: "Core", dependencies: ["SFSafeSymbols"]),
+        .target(name: "Core", dependencies: []),
         //
         // 📚 Library
         //
