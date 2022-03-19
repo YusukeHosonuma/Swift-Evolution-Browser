@@ -2,7 +2,7 @@
 //  Tests_macOSLaunchTests.swift
 //  Tests macOS
 //
-//  Created by 細沼祐介 on 2022/03/09.
+//  Created by Yusuke Hosonuma on 2022/03/09.
 //
 
 import XCTest
