@@ -21,7 +21,7 @@ struct ProposalRowView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
+            HStack(alignment: .top) {
                 Text(proposal.id)
                     .font(.headline)
                     .bold()
@@ -40,6 +40,7 @@ struct ProposalRowView: View {
                     }
             }
         }
+        .padding(.vertical, 4)
     }
 }
 
