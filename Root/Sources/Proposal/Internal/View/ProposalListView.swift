@@ -18,6 +18,7 @@ struct ProposalListView: View {
     var body: some View {
         if proposals.isEmpty {
             Text("No results found")
+                .frame(maxWidth: .infinity, maxHeight: .infinity) // 💡 検索サジェスチョンの領域が潰れる問題の対処
         } else {
             List {
                 ForEach(proposals, id: \.id) { proposal in

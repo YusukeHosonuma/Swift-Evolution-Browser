@@ -45,7 +45,7 @@ extension Array where Element == Proposal {
         }
     }
 
-    func suggestions(query: String) -> [(String, String)] {
+    func suggestions(by query: String) -> [(String, String)] {
         let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
 
         let statusLabels = statusLabels()
