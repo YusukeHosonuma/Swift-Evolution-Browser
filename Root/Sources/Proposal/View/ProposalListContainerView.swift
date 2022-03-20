@@ -71,12 +71,13 @@ public struct ProposalListContainerView: View {
                 await viewModel.onTapStar(proposal: proposal)
             }
         }
-        .refreshable {
-            await viewModel.onRefresh()
-        }
         .searchable(
-            text: Binding(get: { content.searchQuery }, set: { viewModel.onChangeQuery($0) }),
-            placement: .automatic,
+            text: Binding(get: {
+                // 💡 `content.searchQuery`を直接返すと、submit 時に検索テキストがクリアされる問題の回避
+                guard case let .success(content) = viewModel.state else { return "" }
+                return content.searchQuery
+            }, set: { viewModel.onChangeQuery($0) }),
+            placement: .navigationBarDrawer(displayMode: .always),
             prompt: Text("Search Proposal"),
             suggestions: {
                 ForEach(content.suggestions, id: \.0.self) { title, completion in
@@ -84,6 +85,9 @@ public struct ProposalListContainerView: View {
                 }
             }
         )
+        .refreshable {
+            await viewModel.onRefresh()
+        }
         .onSubmit(of: .search) {
             // Do something if needed.
         }
@@ -103,8 +107,8 @@ public final class ProposalListViewModel: ObservableObject {
     }
 
     struct Content: Equatable {
-        var allProposals: [Proposal] // For data-source
-        var searchQuery: String = " " // 💡 初期値が空文字にするとsubmit時にサーチバーがクリアされる不具合があるため半角を入れておく
+        var allProposals: [Proposal]
+        var searchQuery: String = ""
 
         init(proposals: [Proposal]) {
             allProposals = proposals
@@ -115,7 +119,7 @@ public final class ProposalListViewModel: ObservableObject {
         }
 
         var suggestions: [(String, String)] {
-            allProposals.suggestions(query: searchQuery)
+            allProposals.suggestions(by: searchQuery)
         }
     }
 
@@ -141,7 +145,7 @@ public final class ProposalListViewModel: ObservableObject {
 
     // MARK: Lifecycle
 
-    lazy var initialize: () = {
+    private lazy var initialize: () = {
         #if os(iOS)
         feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
         #endif
@@ -150,7 +154,7 @@ public final class ProposalListViewModel: ObservableObject {
             .sink { [weak self] proposals in
                 guard let self = self else { return }
 
-                guard let proposals = proposals else {
+                guard let proposals = proposals?.filter(self.globalFilter) else {
                     self.state = .error
                     return
                 }
@@ -159,14 +163,10 @@ public final class ProposalListViewModel: ObservableObject {
                     self.state = .loading
                 } else {
                     if case var .success(content) = self.state {
-                        content.allProposals = proposals.filter(self.globalFilter)
+                        content.allProposals = proposals
                         self.state = .success(content)
                     } else {
-                        self.state = .success(
-                            Content(
-                                proposals: proposals.filter(self.globalFilter)
-                            )
-                        )
+                        self.state = .success(.init(proposals: proposals))
                     }
                 }
             }

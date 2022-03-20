@@ -148,10 +148,9 @@ public struct RootView: View {
                         .environment(\.scrollToTopID, Item.all.scrollToTopID)
                         .environmentObject(proposalListViewModelAll)
                         .navigationTitle("All Proposals")
-                        .navigationBarTitleDisplayMode(.inline)
                         .appToolbar()
 
-                    // Note: show when no selected.
+                    // Note: show when no selected on iPad.
                     Text("Please select proposal from sidebar.")
                 }
                 .tabItem {
@@ -171,10 +170,9 @@ public struct RootView: View {
                         .environment(\.scrollToTopID, Item.star.scrollToTopID)
                         .environmentObject(proposalListViewModelStared)
                         .navigationTitle("Stared")
-                        .navigationBarTitleDisplayMode(.inline)
                         .appToolbar()
 
-                    // Note: show when no selected.
+                    // Note: show when no selected on iPad.
                     Text("Please select proposal from sidebar.")
                 }
                 .tabItem {
