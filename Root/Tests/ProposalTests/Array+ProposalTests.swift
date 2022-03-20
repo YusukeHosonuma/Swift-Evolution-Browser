@@ -7,6 +7,7 @@
 
 @testable import Proposal
 import XCTest
+import SwiftParamTest
 
 private let url = URL(string: "https://github.com/")!
 
@@ -37,8 +38,10 @@ final class RootTests: XCTestCase {
     // MARK: Tests
 
     func test_swiftVersions() throws {
-        XCTAssertTrue([Proposal]().swiftVersions().isEmpty)
-        XCTAssertEqual(["Swift 3.0", "Swift 4.0"], target.swiftVersions())
+        assert(to: [Proposal].swiftVersions) {
+            args([Proposal](), expect: [String]())
+            args(target,       expect: ["Swift 3.0", "Swift 4.0"])
+        }
     }
 
     func test_search() throws {
@@ -46,70 +49,76 @@ final class RootTests: XCTestCase {
             target.search(by: query).map(\.id)
         }
 
-        // Common
-        XCTAssertEqual(["SE-001"], search(by: "  A1  ")) // ✅ Trimming white spaces.
-        XCTAssertTrue(search(by: "a1").isEmpty) // ⚠️ Not ignoring case. (currently)
+        assert(to: search) {
+            // 💡 Common
+            args("  A1  ", expect: ["SE-001"]) // Trimming white spaces.
+            args("a1",     expect: [String]()) // ⚠️ Not ignoring case. (currently)
+            
+            // ✅ Match `Swift version`
+            args("Swift 3.0", expect: ["SE-001"])
+            args("3.0",       expect: ["SE-001"])
+            args("Swift 4.0", expect: ["SE-002", "SE-003"])
+            
+            // ⚠️ Not match `Swift version`
+            args("Swift", expect: [String]())
+            
+            // ✅ Match `title`
+            args("A", expect: ["SE-001"])
+            args("1", expect: ["SE-001", "SE-002"])
+            args("2", expect: ["SE-003", "SE-004"])
+            
+            // ⚠️ Not match `title`
+            args("E", expect: [String]())
 
-        // ✅ Match `Swift version`
-        XCTAssertEqual(["SE-001"], search(by: "Swift 3.0"))
-        XCTAssertEqual(["SE-001"], search(by: "3.0"))
-        XCTAssertEqual(["SE-002", "SE-003"], search(by: "Swift 4.0"))
-
-        // ⚠️ Not match `Swift version`
-        XCTAssertTrue(search(by: "Swift").isEmpty)
-
-        // ✅ Match `title`
-        XCTAssertEqual(["SE-001"], search(by: "A"))
-        XCTAssertEqual(["SE-001", "SE-002"], search(by: "1"))
-        XCTAssertEqual(["SE-003", "SE-004"], search(by: "2"))
-
-        // ⚠️ Not match `title`
-        XCTAssertTrue(search(by: "E").isEmpty)
-
-        // ✅ Match `label`
-        XCTAssertEqual(["SE-001", "SE-002", "SE-003"], search(by: "Implemented"))
-        XCTAssertEqual(["SE-004"], search(by: "Accepted"))
+            // ✅ Match `label`
+            args("Implemented", expect: ["SE-001", "SE-002", "SE-003"])
+            args("Accepted",    expect: ["SE-004"])
+            
+            // ⚠️ Ignoring case is not supported. (currently)
+            // args("accepted", expect: ["SE-004"])
+        }
     }
 
     func test_suggestions() throws {
         func suggestions(by query: String) -> [Suggestion] {
             target.suggestions(by: query)
         }
+        
+        assert(to: suggestions) {
+            // Empty
+            args(
+                "",
+                expect: [
+                    suggestion("Swift", "Swift "),
+                    suggestion("Accepted", "Accepted"),
+                    suggestion("Implemented", "Implemented"),
+                ]
+            )
 
-        // Empty
-        XCTAssertEqual(
-            [
-                suggestion("Swift", "Swift "),
-                suggestion("Accepted", "Accepted"),
-                suggestion("Implemented", "Implemented"),
-            ],
-            suggestions(by: "")
-        )
+            // `Swift`
+            args(
+                "Swift",
+                expect: [
+                    suggestion("Swift 3.0", "Swift 3.0"),
+                    suggestion("Swift 4.0", "Swift 4.0"),
+                ]
+            )
 
-        // `Swift`
-        XCTAssertEqual(
-            [
-                suggestion("Swift 3.0", "Swift 3.0"),
-                suggestion("Swift 4.0", "Swift 4.0"),
-            ],
-            suggestions(by: "Swift")
-        )
+            // Match `Swift x.x`
+            args("Swift 3.0", expect: [Suggestion]())
+            args("Swift 4.0", expect: [Suggestion]())
 
-        // Match `Swift x.x`
-        XCTAssertTrue(suggestions(by: "Swift 3.0").isEmpty)
-        XCTAssertTrue(suggestions(by: "Swift 4.0").isEmpty)
-
-        // Match `status`
-        XCTAssertTrue(suggestions(by: "Accepted").isEmpty)
-        XCTAssertTrue(suggestions(by: "Implemented").isEmpty)
-
-        // ⚠️ Not implemented.
-        // Partial match `status`
-        // XCTAssertEqual(
-        //     [
-        //         suggestion("Accepted", "Accepted"),
-        //     ],
-        //     suggestions(by: "A")
-        // )
+            // Match `status`
+            args("Accepted",    expect: [Suggestion]())
+            args("Implemented", expect: [Suggestion]())
+            
+            // ⚠️ Partial match `status`. (not implemented currently)
+            // args(
+            //     "A",
+            //     expect: [
+            //         suggestion("Accepted", "Accepted"),
+            //     ]
+            // )
+        }
     }
 }

@@ -16,6 +16,7 @@ let package = Package(
         .package(url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMajor(from: "8.10.0")),
         .package(url: "https://github.com/google/GoogleSignIn-iOS.git", .upToNextMajor(from: "6.1.0")),
         .package(url: "https://github.com/apple/swift-algorithms", .upToNextMajor(from: "1.0.0")),
+        .package(url: "https://github.com/YusukeHosonuma/SwiftParamTest.git", .upToNextMajor(from: "2.2.0")),
     ],
     targets: [
         //
@@ -38,7 +39,7 @@ let package = Package(
             .product(name: "FirebaseFirestoreSwift-Beta", package: "firebase-ios-sdk"),
             .product(name: "FirebaseFirestoreCombine-Community", package: "firebase-ios-sdk"),
         ]),
-        .testTarget(name: "ProposalTests", dependencies: ["Proposal"]),
+        .testTarget(name: "ProposalTests", dependencies: ["Proposal", "SwiftParamTest"]),
         //
         // ⚙️ Core
         //
