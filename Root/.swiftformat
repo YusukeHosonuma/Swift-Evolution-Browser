@@ -1,1 +1,2 @@
 --ifdef no-indent
+--exclude Tests

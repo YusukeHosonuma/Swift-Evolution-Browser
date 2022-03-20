@@ -38,8 +38,10 @@ final class RootTests: XCTestCase {
     // MARK: Tests
 
     func test_swiftVersions() throws {
-        XCTAssertTrue([Proposal]().swiftVersions().isEmpty)
-        XCTAssertEqual(["Swift 3.0", "Swift 4.0"], target.swiftVersions())
+        assert(to: [Proposal].swiftVersions) {
+            args([Proposal](), expect: [String]())
+            args(target,       expect: ["Swift 3.0", "Swift 4.0"])
+        }
     }
 
     func test_search() throws {
@@ -49,69 +51,31 @@ final class RootTests: XCTestCase {
 
         assert(to: search) {
             // 💡 Common
-            args(
-                "  A1  ", // Trimming white spaces.
-                expect: ["SE-001"]
-            )
-            args(
-                "a1", // ⚠️ Not ignoring case. (currently)
-                expect: [String]()
-            )
+            args("  A1  ", expect: ["SE-001"]) // Trimming white spaces.
+            args("a1",     expect: [String]()) // ⚠️ Not ignoring case. (currently)
             
             // ✅ Match `Swift version`
-            args(
-                "Swift 3.0",
-                expect: ["SE-001"]
-            )
-            args(
-                "3.0",
-                expect: ["SE-001"]
-            )
-            args(
-                "Swift 4.0",
-                expect: ["SE-002", "SE-003"]
-            )
+            args("Swift 3.0", expect: ["SE-001"])
+            args("3.0",       expect: ["SE-001"])
+            args("Swift 4.0", expect: ["SE-002", "SE-003"])
             
             // ⚠️ Not match `Swift version`
-            args(
-                "Swift",
-                expect: [String]()
-            )
+            args("Swift", expect: [String]())
             
             // ✅ Match `title`
-            args(
-                "A",
-                expect: ["SE-001"]
-            )
-            args(
-                "1",
-                expect: ["SE-001", "SE-002"]
-            )
-            args(
-                "2",
-                expect: ["SE-003", "SE-004"]
-            )
+            args("A", expect: ["SE-001"])
+            args("1", expect: ["SE-001", "SE-002"])
+            args("2", expect: ["SE-003", "SE-004"])
             
             // ⚠️ Not match `title`
-            args(
-                "E",
-                expect: [String]()
-            )
+            args("E", expect: [String]())
 
             // ✅ Match `label`
-            args(
-                "Implemented",
-                expect: ["SE-001", "SE-002", "SE-003"]
-            )
-            args(
-                "Accepted",
-                expect: ["SE-004"]
-            )
+            args("Implemented", expect: ["SE-001", "SE-002", "SE-003"])
+            args("Accepted",    expect: ["SE-004"])
+            
             // ⚠️ Ignoring case is not supported. (currently)
-            // args(
-            //     "accepted",
-            //     expect: ["SE-004"]
-            // )
+            // args("accepted", expect: ["SE-004"])
         }
     }
 
@@ -145,7 +109,7 @@ final class RootTests: XCTestCase {
             args("Swift 4.0", expect: [Suggestion]())
 
             // Match `status`
-            args("Accepted", expect: [Suggestion]())
+            args("Accepted",    expect: [Suggestion]())
             args("Implemented", expect: [Suggestion]())
             
             // ⚠️ Partial match `status`. (not implemented currently)
