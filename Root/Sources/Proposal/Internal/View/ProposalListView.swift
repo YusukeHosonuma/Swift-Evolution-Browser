@@ -22,9 +22,13 @@ struct ProposalListView: View {
         } else {
             List {
                 ForEach(proposals, id: \.id) { proposal in
-                    NavigationLink {
-                        ProposalDetailView(url: proposal.proposalURL)
-                    } label: {
+                    ZStack {
+                        NavigationLink {
+                            ProposalDetailView(url: proposal.proposalURL)
+                        } label: {
+                            EmptyView()
+                        }
+                        .opacity(0)
                         ProposalRowView(proposal: proposal, starTapped: {
                             onTapStar(proposal)
                         })

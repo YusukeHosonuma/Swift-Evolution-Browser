@@ -12,7 +12,10 @@ import SwiftUI
 struct ProposalDetailView: View {
     let url: URL
 
-    @State private var isLoading: Bool = true
+    @Environment(\.openURL) private var openURL
+
+    @State private var isLoading = true
+    @State private var isPresentSheet = false
 
     var body: some View {
         ZStack {
@@ -22,11 +25,27 @@ struct ProposalDetailView: View {
             WebView(url: url, isLoading: $isLoading)
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
-                    ToolbarItem {
-                        Link(destination: url) {
-                            Image(systemName: "globe")
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            isPresentSheet = true
+                        } label: {
+                            Image(systemName: "square.and.arrow.up")
                         }
                     }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Menu {
+                            Button {
+                                openURL(url)
+                            } label: {
+                                Label("Open in browser", systemImage: "globe")
+                            }
+                        } label: {
+                            Image(systemName: "ellipsis")
+                        }
+                    }
+                }
+                .sheet(isPresented: $isPresentSheet) {
+                    ActivityView(activityItems: [url])
                 }
             #endif
             if isLoading {
