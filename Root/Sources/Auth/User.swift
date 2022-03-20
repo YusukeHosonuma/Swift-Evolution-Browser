@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Account {
+public struct User {
     public var uid: String
     public var name: String
 
