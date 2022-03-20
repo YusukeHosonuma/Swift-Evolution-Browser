@@ -38,6 +38,7 @@ let package = Package(
             .product(name: "FirebaseFirestoreSwift-Beta", package: "firebase-ios-sdk"),
             .product(name: "FirebaseFirestoreCombine-Community", package: "firebase-ios-sdk"),
         ]),
+        .testTarget(name: "ProposalTests", dependencies: ["Proposal"]),
         //
         // ⚙️ Core
         //

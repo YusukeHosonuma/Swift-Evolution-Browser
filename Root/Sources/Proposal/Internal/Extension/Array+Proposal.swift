@@ -22,6 +22,9 @@ extension Array where Element == Proposal {
     }
 
     func search(by query: String) -> [Proposal] {
+        // ⚠️ Note:
+        // Not ignoring case currently.
+
         let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
 
         func isVersionMatch(_ proposal: Proposal) -> Bool {
@@ -45,7 +48,7 @@ extension Array where Element == Proposal {
         }
     }
 
-    func suggestions(by query: String) -> [(String, String)] {
+    func suggestions(by query: String) -> [Suggestion] {
         let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
 
         let statusLabels = statusLabels()
@@ -56,9 +59,10 @@ extension Array where Element == Proposal {
         }
 
         if query.contains("Swift") {
-            return swiftVersions.map { ($0, $0) }
+            return swiftVersions.map { Suggestion(keyword: $0, completion: $0) }
         } else {
-            return [("Swift", "Swift ")] + statusLabels.map { ($0, $0) }
+            return [Suggestion(keyword: "Swift", completion: "Swift ")]
+                + statusLabels.map { Suggestion(keyword: $0, completion: $0) }
         }
     }
 

@@ -86,8 +86,8 @@ public struct ProposalListContainerView: View {
             placement: searchFieldPlacement,
             prompt: Text("Search Proposal"),
             suggestions: {
-                ForEach(content.suggestions, id: \.0.self) { title, completion in
-                    Text(title).searchCompletion(completion)
+                ForEach(content.suggestions) {
+                    Text($0.keyword).searchCompletion($0.completion)
                 }
             }
         )
@@ -124,7 +124,7 @@ public final class ProposalListViewModel: ObservableObject {
             allProposals.search(by: searchQuery)
         }
 
-        var suggestions: [(String, String)] {
+        var suggestions: [Suggestion] {
             allProposals.suggestions(by: searchQuery)
         }
     }
