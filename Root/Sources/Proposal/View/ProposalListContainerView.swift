@@ -35,6 +35,9 @@ public struct ProposalListContainerView: View {
             switch viewModel.state {
             case .loading:
                 ProgressView()
+                    // 💡 [iOS 15.4]
+                    // 初期表示で Navigation タイトルの表示が切り替わってしまう問題への対処
+                    .searchable(text: .constant(""))
             case .error:
                 VStack {
                     Text("Network error")
@@ -44,6 +47,10 @@ public struct ProposalListContainerView: View {
                         }
                     }
                     .padding()
+                    // 💡 [iOS 15.4]
+                    // 初期表示で Navigation タイトルの表示が切り替わってしまう問題への対処
+                    // （こちらは無くても動いてそうだが一応）
+                    .searchable(text: .constant(""))
                 }
             case let .success(content):
                 contentView(content)
