@@ -76,7 +76,7 @@ public final class UserServiceFirestore: UserService {
 
     // MARK: Private
 
-    private func userDocumentRef(user: Account) -> DocumentReference {
+    private func userDocumentRef(user: User) -> DocumentReference {
         Firestore.firestore().collection("users").document(user.uid)
     }
 }

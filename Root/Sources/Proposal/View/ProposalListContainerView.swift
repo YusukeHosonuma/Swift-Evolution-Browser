@@ -13,6 +13,12 @@ import SwiftUI
 import UIKit
 #endif
 
+#if os(macOS)
+private let searchFieldPlacement: SearchFieldPlacement = .automatic
+#else
+private let searchFieldPlacement: SearchFieldPlacement = .navigationBarDrawer(displayMode: .automatic)
+#endif
+
 public struct ProposalListContainerView: View {
     @EnvironmentObject var viewModel: ProposalListViewModel
 
@@ -77,7 +83,7 @@ public struct ProposalListContainerView: View {
                 guard case let .success(content) = viewModel.state else { return "" }
                 return content.searchQuery
             }, set: { viewModel.onChangeQuery($0) }),
-            placement: .navigationBarDrawer(displayMode: .always),
+            placement: searchFieldPlacement,
             prompt: Text("Search Proposal"),
             suggestions: {
                 ForEach(content.suggestions, id: \.0.self) { title, completion in

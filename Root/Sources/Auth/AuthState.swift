@@ -7,18 +7,19 @@
 
 import Combine
 import Core
-import FirebaseAuth
+import class FirebaseAuth.Auth
+import protocol FirebaseAuth.AuthStateDidChangeListenerHandle
 import Foundation
 
 public final class AuthState: ObservableObject {
-    @Published public var user: Account? = nil
+    @Published public var user: User? = nil
     @Published public var isLogin: Bool = false
 
     private var handle: AuthStateDidChangeListenerHandle!
 
     public init() {
         handle = Auth.auth().addStateDidChangeListener { _, user in
-            self.user = user.map { Account(uid: $0.uid, name: $0.displayName ?? "") }
+            self.user = user.map { User(uid: $0.uid, name: $0.displayName ?? "") }
             self.isLogin = user != nil
         }
     }
@@ -36,7 +37,7 @@ public final class AuthState: ObservableObject {
     }
 
     public func authedPublisher<Output>(
-        _ innerPublisher: @escaping (Account) -> AnyPublisher<Output, Never>,
+        _ innerPublisher: @escaping (User) -> AnyPublisher<Output, Never>,
         defaultValue: Output
     ) -> AnyPublisher<Output, Never> {
         $user
