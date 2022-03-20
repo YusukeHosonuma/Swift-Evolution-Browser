@@ -157,26 +157,25 @@ public final class ProposalListViewModel: ObservableObject {
         #endif
         dataSource.proposals
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] proposals in
-                guard let self = self else { return }
+            .map { [weak self] proposals in
+                guard let self = self else { return .error }
 
                 guard let proposals = proposals?.filter(self.globalFilter) else {
-                    self.state = .error
-                    return
+                    return .error
                 }
 
                 if proposals.isEmpty {
-                    self.state = .loading
+                    return .loading
                 } else {
                     if case var .success(content) = self.state {
                         content.allProposals = proposals
-                        self.state = .success(content)
+                        return .success(content)
                     } else {
-                        self.state = .success(.init(proposals: proposals))
+                        return .success(.init(proposals: proposals))
                     }
                 }
             }
-            .store(in: &cancellable)
+            .assign(to: &$state)
     }()
 
     func onAppear() async {
@@ -229,19 +228,3 @@ public final class ProposalListViewModel: ObservableObject {
         }
     }
 }
-
-// protocol ProposalFilter {
-//    static func filter(entity: Proposal) -> Bool
-// }
-//
-// enum NoFilter: ProposalFilter {
-//    static func filter(entity: Proposal) -> Bool {
-//        true
-//    }
-// }
-//
-// enum StaredFilter: ProposalFilter {
-//    static func filter(entity: Proposal) -> Bool {
-//        entity.star
-//    }
-// }
