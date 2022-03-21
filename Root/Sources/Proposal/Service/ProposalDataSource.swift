@@ -10,9 +10,15 @@ import Combine
 import Core
 import Foundation
 
+public enum ProposalData {
+    case loading
+    case error
+    case success([Proposal])
+}
+
 @MainActor
 public protocol ProposalDataSource {
-    var proposals: CurrentValueSubject<[Proposal]?, Never> { get }
+    var proposals: CurrentValueSubject<ProposalData, Never> { get }
 
     func onInitialize() async
     func refresh() async throws
@@ -21,8 +27,7 @@ public protocol ProposalDataSource {
 
 @MainActor
 public class ProposalDataSourceImpl: ProposalDataSource, ObservableObject {
-    // Note: `nil` is represent error.
-    public var proposals: CurrentValueSubject<[Proposal]?, Never> = .init([]) // FIXME:
+    public var proposals: CurrentValueSubject<ProposalData, Never> = .init(.loading)
 
     private let proposalAPI: ProposalAPI
     private let userService: UserService
@@ -38,12 +43,14 @@ public class ProposalDataSourceImpl: ProposalDataSource, ObservableObject {
         await latestProposals
             .combineLatest(userService.listenStars())
             .map { proposals, stars in
-                guard let proposals = proposals else { return nil }
-                return proposals.map {
-                    var proposal = $0
-                    proposal.star = stars.contains($0.id)
-                    return proposal
-                }
+                guard let proposals = proposals else { return .error }
+                return .success(
+                    proposals.map {
+                        var proposal = $0
+                        proposal.star = stars.contains($0.id)
+                        return proposal
+                    }
+                )
             }
             .assign(to: \.value, on: proposals)
             .store(in: &cancellables)

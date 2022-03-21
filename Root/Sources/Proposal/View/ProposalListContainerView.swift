@@ -157,16 +157,16 @@ public final class ProposalListViewModel: ObservableObject {
         #endif
         dataSource.proposals
             .receive(on: DispatchQueue.main)
-            .map { [weak self] proposals in
+            .map { [weak self] proposalData in
                 guard let self = self else { return .error }
 
-                guard let proposals = proposals?.filter(self.globalFilter) else {
-                    return .error
-                }
-
-                if proposals.isEmpty {
+                switch proposalData {
+                case .loading:
                     return .loading
-                } else {
+                case .error:
+                    return .error
+                case var .success(proposals):
+                    proposals = proposals.filter(self.globalFilter)
                     if case var .success(content) = self.state {
                         content.allProposals = proposals
                         return .success(content)
