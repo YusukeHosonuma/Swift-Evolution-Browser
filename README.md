@@ -17,6 +17,10 @@ The Swift Proposal Browswer that build with SwiftUI. (**beta** currently)
 make setup # Install required tools for development
 ```
 
+## Links
+
+[Effective SwiftUI 候補（仮説）](https://zenn.dev/tobi462/scraps/905f2e6ac9b895)
+
 ## Author
 
 Yusuke Hosonuma / [@tobi462](https://twitter.com/tobi462)
