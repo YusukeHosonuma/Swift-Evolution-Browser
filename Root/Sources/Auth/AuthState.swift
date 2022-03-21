@@ -7,25 +7,33 @@
 
 import Combine
 import Core
-import class FirebaseAuth.Auth
-import protocol FirebaseAuth.AuthStateDidChangeListenerHandle
+import FirebaseAuth
 import Foundation
 
+@MainActor
 public final class AuthState: ObservableObject {
     @Published public var user: User? = nil
     @Published public var isLogin: Bool = false
 
-    private var handle: AuthStateDidChangeListenerHandle!
+    public nonisolated init() {}
 
-    public init() {
-        handle = Auth.auth().addStateDidChangeListener { _, user in
-            self.user = user.map { User(uid: $0.uid, name: $0.displayName ?? "") }
-            self.isLogin = user != nil
+    public func onInitialize() async {
+        // Note:
+        // A `weak self` is not needed.
+        // Because This class is not need to discard in app is running.
+        Task {
+            for await user in stateDidChangeStream() {
+                if let user = user {
+                    let authedUser = User(uid: user.uid, name: user.displayName ?? "")
+                    await UserDocument.createNewUser(user: authedUser)
+                    self.user = authedUser
+                    self.isLogin = true
+                } else {
+                    self.user = nil
+                    self.isLogin = false
+                }
+            }
         }
-    }
-
-    deinit {
-        Auth.auth().removeStateDidChangeListener(handle)
     }
 
     public func logout() {
@@ -37,8 +45,8 @@ public final class AuthState: ObservableObject {
     }
 
     public func authedPublisher<Output>(
-        _ innerPublisher: @escaping (User) -> AnyPublisher<Output, Never>,
-        defaultValue: Output
+        defaultValue: Output,
+        innerPublisher: @escaping (User) -> AnyPublisher<Output, Never>
     ) -> AnyPublisher<Output, Never> {
         $user
             .flatMap { user -> AnyPublisher<Output, Never> in
@@ -49,5 +57,15 @@ public final class AuthState: ObservableObject {
                 }
             }
             .eraseToAnyPublisher()
+    }
+
+    // MARK: Private
+
+    private func stateDidChangeStream() -> AsyncStream<FirebaseAuth.User?> {
+        AsyncStream { continuation in
+            Auth.auth().addStateDidChangeListener { _, user in
+                continuation.yield(user)
+            }
+        }
     }
 }

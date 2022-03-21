@@ -87,6 +87,7 @@ public struct RootView: View {
         content()
             .environmentObject(authState)
             .task {
+                await authState.onInitialize()
                 await proposalDataSource.onInitialize()
             }
             .onOpenURL { url in

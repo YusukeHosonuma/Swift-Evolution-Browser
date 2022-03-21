@@ -22,7 +22,7 @@ public protocol ProposalDataSource {
 @MainActor
 public class ProposalDataSourceImpl: ProposalDataSource, ObservableObject {
     // Note: `nil` is represent error.
-    public var proposals: CurrentValueSubject<[Proposal]?, Never> = .init([])
+    public var proposals: CurrentValueSubject<[Proposal]?, Never> = .init([]) // FIXME:
 
     private let proposalAPI: ProposalAPI
     private let userService: UserService
@@ -35,7 +35,7 @@ public class ProposalDataSourceImpl: ProposalDataSource, ObservableObject {
     }
 
     public func onInitialize() async {
-        latestProposals
+        await latestProposals
             .combineLatest(userService.listenStars())
             .map { proposals, stars in
                 guard let proposals = proposals else { return nil }
