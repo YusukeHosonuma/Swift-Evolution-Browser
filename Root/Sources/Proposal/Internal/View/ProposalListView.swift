@@ -32,6 +32,7 @@ struct ProposalListView: View {
                                 .navigationBarTitleDisplayMode(.inline)
                             #endif
                                 .toolbar {
+                                    #if os(iOS)
                                     ToolbarItem(placement: .navigationBarTrailing) {
                                         Button {
                                             isPresentActivitySheet = true
@@ -46,10 +47,21 @@ struct ProposalListView: View {
                                             Image(systemName: "ellipsis")
                                         }
                                     }
+                                    #else
+                                    ToolbarItem(placement: .status) {
+                                        Menu {
+                                            ProposalMenu(proposal: proposal)
+                                        } label: {
+                                            Image(systemName: "ellipsis")
+                                        }
+                                    }
+                                    #endif
                                 }
+                            #if os(iOS)
                                 .sheet(isPresented: $isPresentActivitySheet) {
                                     ActivityView(activityItems: [proposal.proposalURL])
                                 }
+                            #endif
                         } label: {
                             EmptyView()
                         }
