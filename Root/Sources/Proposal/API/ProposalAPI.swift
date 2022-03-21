@@ -5,6 +5,7 @@
 //  Created by Yusuke Hosonuma on 2022/03/03.
 //
 
+import Core
 import Foundation
 import class SwiftEvolutionAPI.ProposalClient
 import struct SwiftEvolutionAPI.StatusClass

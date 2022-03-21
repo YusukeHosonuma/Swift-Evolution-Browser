@@ -5,6 +5,7 @@
 //  Created by Yusuke Hosonuma on 2022/03/04.
 //
 
+import Core
 import SwiftUI
 
 struct ProposalRowView: View {
