@@ -18,6 +18,8 @@ extension Array where Element == Proposal {
             }
         }
         .uniqued()
+        .sorted()
+        .reversed()
         .asArray()
     }
 
@@ -61,8 +63,8 @@ extension Array where Element == Proposal {
         if query.contains("Swift") {
             return swiftVersions.map { Suggestion(keyword: $0, completion: $0) }
         } else {
-            return [Suggestion(keyword: "Swift", completion: "Swift ")]
-                + statusLabels.map { Suggestion(keyword: $0, completion: $0) }
+            let head = swiftVersions.isEmpty ? [] : [Suggestion(keyword: "Swift", completion: "Swift ")]
+            return head + statusLabels.map { Suggestion(keyword: $0, completion: $0) }
         }
     }
 

@@ -120,5 +120,19 @@ final class RootTests: XCTestCase {
             //     ]
             // )
         }
+        
+        let notIncludeImplemented: [Proposal] = [
+            proposal(id: "SE-001", title: "", status: .accepted),
+            proposal(id: "SE-002", title: "", status: .rejected),
+        ]
+        
+        XCTAssertEqual(
+            notIncludeImplemented.suggestions(by: ""),
+            [
+                suggestion("Accepted", "Accepted"),
+                suggestion("Rejected", "Rejected"),
+            ],
+            "Not include `Swift` suggestion."
+        )
     }
 }
