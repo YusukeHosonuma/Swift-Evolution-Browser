@@ -1,6 +1,6 @@
 # Swift Evolution Browser
 
-The Swift Proposal Browswer that build with SwiftUI. (beta currently)
+The Swift Proposal Browswer that build with SwiftUI. (**beta** currently)
 
 |iOS|iPad|macOS|
 |--|--|--|
