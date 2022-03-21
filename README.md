@@ -9,7 +9,7 @@ The Swift Proposal Browswer that build with SwiftUI. (**beta** currently)
 ## Requirements
 
 - Xcode 13.3 (RC)
-- macOS Monterey
+- Swift 5.6
 
 ## Setup
 
