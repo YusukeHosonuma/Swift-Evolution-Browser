@@ -14,6 +14,14 @@ public struct Proposal: Equatable {
     public var proposalURL: URL
     public var status: Status
 
+    public init(id: String, title: String, star: Bool, proposalURL: URL, status: Proposal.Status) {
+        self.id = id
+        self.title = title
+        self.star = star
+        self.proposalURL = proposalURL
+        self.status = status
+    }
+
     public enum Status: Codable, CaseIterable, Comparable {
         public static var allCases: [Proposal.Status] = [
             .accepted,

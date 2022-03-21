@@ -6,6 +6,7 @@
 //
 
 import Algorithms
+import Core
 import Foundation
 
 extension Array where Element == Proposal {

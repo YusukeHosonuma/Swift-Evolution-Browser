@@ -33,7 +33,20 @@ struct ProposalListView: View {
                                 .navigationBarTitleDisplayMode(.inline)
                             #endif
                                 .toolbar {
-                                    toolbar(proposal: proposal)
+                                    ToolbarItem(placement: .navigationBarTrailing) {
+                                        Button {
+                                            isPresentActivitySheet = true
+                                        } label: {
+                                            Image(systemName: "square.and.arrow.up")
+                                        }
+                                    }
+                                    ToolbarItem(placement: .navigationBarTrailing) {
+                                        Menu {
+                                            ProposalMenu(proposal: proposal)
+                                        } label: {
+                                            Image(systemName: "ellipsis")
+                                        }
+                                    }
                                 }
                                 .sheet(isPresented: $isPresentActivitySheet) {
                                     ActivityView(activityItems: [proposal.proposalURL])
@@ -42,12 +55,13 @@ struct ProposalListView: View {
                             EmptyView()
                         }
                         .opacity(0)
+
                         ProposalRowView(proposal: proposal, starTapped: {
                             onTapStar(proposal)
                         })
                     }
                     .contextMenu {
-                        Link("Open in browser", destination: proposal.proposalURL)
+                        ProposalMenu(proposal: proposal)
                     }
                 }
                 .id(scrollToTopID)
@@ -55,38 +69,6 @@ struct ProposalListView: View {
             #if os(iOS)
             .listStyle(.insetGrouped)
             #endif
-        }
-    }
-
-    @ToolbarContentBuilder
-    private func toolbar(proposal: Proposal) -> some ToolbarContent {
-        ToolbarItem(placement: .navigationBarTrailing) {
-            Button {
-                isPresentActivitySheet = true
-            } label: {
-                Image(systemName: "square.and.arrow.up")
-            }
-        }
-        ToolbarItem(placement: .navigationBarTrailing) {
-            Menu {
-                Button {
-                    openURL(proposal.proposalURL)
-                } label: {
-                    Label("Open in browser", systemImage: "globe")
-                }
-                Button {
-                    openURL(URL.searchInForums(proposalID: proposal.id))
-                } label: {
-                    Label("Search in Forums", systemImage: "swift")
-                }
-                Button {
-                    openURL(URL.searchInTwitter(proposalID: proposal.id))
-                } label: {
-                    Text("Search in Twitter")
-                }
-            } label: {
-                Image(systemName: "ellipsis")
-            }
         }
     }
 }

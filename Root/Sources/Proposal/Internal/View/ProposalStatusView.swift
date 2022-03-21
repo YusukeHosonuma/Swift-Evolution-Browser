@@ -5,6 +5,7 @@
 //  Created by Yusuke Hosonuma on 2022/03/09.
 //
 
+import Core
 import Foundation
 import SwiftUI
 
