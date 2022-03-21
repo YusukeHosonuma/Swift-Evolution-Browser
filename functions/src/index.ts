@@ -1,15 +1,15 @@
-import * as functions from 'firebase-functions';
-import * as admin from "firebase-admin";
+// import * as functions from 'firebase-functions';
+// import * as admin from "firebase-admin";
 
-admin.initializeApp()
+// admin.initializeApp()
 
-// Auth: on create user.
-export const onCreateUser = functions.auth.user().onCreate(async (user) => {
-  await admin.firestore()
-    .collection("users")
-    .doc(user.uid)
-    .set({
-      stars: []
-    })
-  // TODO: error handling
-});
+// // Auth: on create user.
+// export const onCreateUser = functions.auth.user().onCreate(async (user) => {
+//   await admin.firestore()
+//     .collection("users")
+//     .doc(user.uid)
+//     .set({
+//       stars: []
+//     })
+//   // TODO: error handling
+// });
