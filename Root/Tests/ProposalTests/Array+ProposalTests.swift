@@ -8,6 +8,7 @@
 @testable import Proposal
 import XCTest
 import SwiftParamTest
+import Core
 
 private let url = URL(string: "https://github.com/")!
 
@@ -40,7 +41,14 @@ final class RootTests: XCTestCase {
     func test_swiftVersions() throws {
         assert(to: [Proposal].swiftVersions) {
             args([Proposal](), expect: [String]())
-            args(target,       expect: ["Swift 3.0", "Swift 4.0"])
+            args(
+                [
+                    proposal(id: "", title: "", status: .implemented(version: "3.0")),
+                    proposal(id: "", title: "", status: .implemented(version: "4.0")),
+                    proposal(id: "", title: "", status: .implemented(version: "3.0")),
+                ],
+                expect: ["Swift 4.0", "Swift 3.0"]
+            )
         }
     }
 

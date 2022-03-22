@@ -19,9 +19,7 @@ extension Array where Element == Proposal {
             }
         }
         .uniqued()
-        .sorted()
-        .reversed()
-        .asArray()
+        .sorted { $0 > $1 }
     }
 
     func statusLabels() -> [String] {
