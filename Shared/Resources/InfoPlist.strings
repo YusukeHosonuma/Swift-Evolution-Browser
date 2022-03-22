@@ -1,0 +1,8 @@
+/* 
+  InfoPlist.strings
+  SwiftEvolutionBroswerApp
+
+  Created by Yusuke Hosonuma on 2022/03/22.
+  
+*/
+"CFBundleDisplayName" = "SE Browser";
