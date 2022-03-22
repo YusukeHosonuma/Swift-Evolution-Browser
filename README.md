@@ -35,7 +35,7 @@ Q. 機能○○が欲しい。ここを改善して欲しい。<br>
 A. [Discussions](https://github.com/YusukeHosonuma/Swift-Evolution-Browser/discussions) で気軽に書き込んでいただければ幸いです :pray: 原因不明な不具合もこちらでお気軽に。
 
 Q. このデータってどこから取ってきてるの？<br>
-A. [Swift Evolution](https://apple.github.io/swift-evolution/) が参照している [JSON](https://apple.github.io/swift-evolution/) から取得しています。（なので内容は一致します）
+A. [Swift Evolution](https://apple.github.io/swift-evolution/) が参照している [JSON](https://data.swift.org/swift-evolution/proposals) から取得しています。（なので内容は一致します）
 
 Q. なぜ SPM multi-module？<br>
 A. いいぞという噂を聞いていたので試してみようと思い。ただ、Xcode 13.3 ではとにかく落ちます。
