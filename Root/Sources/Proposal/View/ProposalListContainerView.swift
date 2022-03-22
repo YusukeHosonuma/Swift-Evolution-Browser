@@ -66,6 +66,14 @@ public struct ProposalListContainerView: View {
         .sheet(isPresented: $viewModel.isPresentAuthView) {
             LoginView()
         }
+        #if os(iOS)
+        .onReceive(viewModel.$toHideKeyboard) {
+            if $0 {
+                UIApplication.hideKeyboard()
+                viewModel.toHideKeyboard = false
+            }
+        }
+        #endif
         .task {
             await viewModel.onAppear()
         }
@@ -105,6 +113,7 @@ public final class ProposalListViewModel: ObservableObject {
     @Published var state: State = .loading
     @Published var isPresentNetworkErrorAlert = false
     @Published var isPresentAuthView = false
+    @Published var toHideKeyboard = false
 
     enum State: Equatable {
         case loading
@@ -192,6 +201,12 @@ public final class ProposalListViewModel: ObservableObject {
 
         content.searchQuery = query
         state = .success(content)
+
+        #if os(iOS)
+        if content.allProposals.isMatchKeyword(query: query) {
+            toHideKeyboard = true
+        }
+        #endif
     }
 
     func onTapStar(proposal: Proposal) async {
