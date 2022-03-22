@@ -46,7 +46,7 @@ A. まずは自分なりに書き方を模索したいと思ったため。（�
 Q. Firestore のスキーマ設計間違ってない？<br>
 A. Async/Await と Combine の共存の学習のため。（データ量を無視すれば）全データをユーザごとに持たせるのがセオリーかとは。
 
-Q. [@StateObject]([Apple Developer Documentation](https://developer.apple.com/documentation/swiftui/stateobject)) を利用していないのはなぜ？<br>
+Q. [@StateObject](https://developer.apple.com/documentation/swiftui/stateobject) を利用していないのはなぜ？<br>
 A. 最新の iOS/macOS プラットフォームで期待どおりの動作をしないことがあったため。（[詳細](https://github.com/YusukeHosonuma/Swift-Evolution-Browser/blob/0.1.0/Root/Sources/Proposal/View/ProposalListContainerView.swift#L25-L35)）
 
 Q.  [SFSafeSymbols](https://github.com/SFSafeSymbols/SFSafeSymbols) を利用していないのはなぜ？<br>
@@ -56,7 +56,7 @@ Q. エラーケースの実装甘くない？<br>
 A. 通信エラーは作り込んでいますが、現状一部では `preconditionFialure` で雑に落としている箇所もあります。
 
 Q. この[クールなテストコード](https://github.com/YusukeHosonuma/Swift-Evolution-Browser/blob/0.1.0/Root/Tests/ProposalTests/Array%2BProposalTests.swift#L52-L79)は何？<br>
-A. [SwiftParamTest](https://github.com/YusukeHosonuma/SwiftParamTest) という便利な OSS があるらしいです。（露骨な宣伝だ…）
+A. [SwiftParamTest](https://github.com/YusukeHosonuma/SwiftParamTest) という OSS があるらしいです。（露骨な宣伝だ…）
 ```swift
 assert(to: search) {
 ...
