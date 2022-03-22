@@ -24,6 +24,14 @@ extension Array where Element == Proposal {
         .asArray()
     }
 
+    func statusLabels() -> [String] {
+        map(\.status.label).uniqued().sorted()
+    }
+
+    func isMatchKeyword(query: String) -> Bool {
+        swiftVersions().contains(query) || statusLabels().contains(query)
+    }
+
     func search(by query: String) -> [Proposal] {
         // ⚠️ Note:
         // Not ignoring case currently.
@@ -67,11 +75,5 @@ extension Array where Element == Proposal {
             let head = swiftVersions.isEmpty ? [] : [Suggestion(keyword: "Swift", completion: "Swift ")]
             return head + statusLabels.map { Suggestion(keyword: $0, completion: $0) }
         }
-    }
-
-    // MARK: Private
-
-    private func statusLabels() -> [String] {
-        map(\.status.label).uniqued().sorted()
     }
 }
