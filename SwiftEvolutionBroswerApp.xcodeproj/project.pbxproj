@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		700EE3EF27D9EFFE00A9D65A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 700EE3EE27D9EFFE00A9D65A /* GoogleService-Info.plist */; };
 		700EE3F027D9EFFE00A9D65A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 700EE3EE27D9EFFE00A9D65A /* GoogleService-Info.plist */; };
+		7046EB2F27E9E8A6003B883D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7046EB2E27E9E8A6003B883D /* InfoPlist.strings */; };
+		7046EB3027E9E8A6003B883D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7046EB2E27E9E8A6003B883D /* InfoPlist.strings */; };
 		7071874127D884A3009A8169 /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7071874027D884A3009A8169 /* Tests_iOS.swift */; };
 		7071874327D884A3009A8169 /* Tests_iOSLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7071874227D884A3009A8169 /* Tests_iOSLaunchTests.swift */; };
 		7071874D27D884A3009A8169 /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7071874C27D884A3009A8169 /* Tests_macOS.swift */; };
@@ -43,6 +45,7 @@
 		700EE3F227D9F02E00A9D65A /* SwiftEvolutionBroswerApp--macOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SwiftEvolutionBroswerApp--macOS--Info.plist"; sourceTree = "<group>"; };
 		700EE3F327D9F0A500A9D65A /* SwiftEvolutionBroswerApp--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SwiftEvolutionBroswerApp--iOS--Info.plist"; sourceTree = "<group>"; };
 		7043A7DD27DACBA400232812 /* SwiftEvolutionBroswerApp (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "SwiftEvolutionBroswerApp (iOS).entitlements"; sourceTree = "<group>"; };
+		7046EB2E27E9E8A6003B883D /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		7071872827D884A1009A8169 /* MainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApp.swift; sourceTree = "<group>"; };
 		7071872A27D884A3009A8169 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7071872F27D884A3009A8169 /* SwiftEvolutionBroswerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftEvolutionBroswerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,6 +101,7 @@
 				700EE3F227D9F02E00A9D65A /* SwiftEvolutionBroswerApp--macOS--Info.plist */,
 				7071872A27D884A3009A8169 /* Assets.xcassets */,
 				700EE3EE27D9EFFE00A9D65A /* GoogleService-Info.plist */,
+				7046EB2E27E9E8A6003B883D /* InfoPlist.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -303,6 +307,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7071875427D884A3009A8169 /* Assets.xcassets in Resources */,
+				7046EB2F27E9E8A6003B883D /* InfoPlist.strings in Resources */,
 				700EE3EF27D9EFFE00A9D65A /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -312,6 +317,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7071875527D884A3009A8169 /* Assets.xcassets in Resources */,
+				7046EB3027E9E8A6003B883D /* InfoPlist.strings in Resources */,
 				700EE3F027D9EFFE00A9D65A /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
