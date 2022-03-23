@@ -12,14 +12,31 @@ import FirebaseFirestoreSwift
 import Foundation
 
 public struct UserDocument: Codable {
+    private static let maxSearchHistoryCount: Int = 5
+
     @DocumentID public var id: String?
-    public var stars: [String]
-    public var searchHistories: [String]
+    public private(set) var stars: [String]
+    public private(set) var searchHistories: [String]
 
     public init(id: String? = nil, stars: [String], searchHistories: [String]) {
         self.id = id
         self.stars = stars
         self.searchHistories = searchHistories
+    }
+
+    public mutating func toggleStar(_ proposalID: String) {
+        if stars.contains(proposalID) {
+            stars = stars.filter { $0 != proposalID }
+        } else {
+            stars.append(proposalID)
+        }
+    }
+
+    public mutating func addSearchHistory(_ keyword: String) {
+        var xs = searchHistories
+        xs.removeAll { $0 == keyword }
+        xs.insert(keyword, at: 0)
+        searchHistories = Array(xs.prefix(UserDocument.maxSearchHistoryCount))
     }
 }
 

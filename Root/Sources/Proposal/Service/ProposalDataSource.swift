@@ -40,14 +40,6 @@ public class ProposalDataSourceImpl: ProposalDataSource, ObservableObject {
         self.userService = userService
     }
 
-    public func addSearchHistory(_ keyword: String) async {
-        do {
-            try await userService.addSearchHistory(keyword)
-        } catch {
-            preconditionFailure("\(error)")
-        }
-    }
-
     public func onInitialize() async {
         await latestProposals
             .combineLatest(userService.listen())
@@ -61,14 +53,6 @@ public class ProposalDataSourceImpl: ProposalDataSource, ObservableObject {
                     },
                     searchHistories: userData.searchHistories
                 )
-//
-//                return .success(
-//                    proposals.map {
-//                        var proposal = $0
-//                        proposal.star = stars.contains($0.id)
-//                        return proposal
-//                    }
-//                )
             }
             .assign(to: \.value, on: proposals)
             .store(in: &cancellables)
@@ -87,11 +71,15 @@ public class ProposalDataSourceImpl: ProposalDataSource, ObservableObject {
 
     public func toggleStar(proposal: Proposal) async {
         do {
-            if proposal.star {
-                try await userService.removeStar(proposalID: proposal.id)
-            } else {
-                try await userService.addStar(proposalID: proposal.id)
-            }
+            try await userService.toggleStar(proposalID: proposal.id)
+        } catch {
+            preconditionFailure("\(error)")
+        }
+    }
+    
+    public func addSearchHistory(_ keyword: String) async {
+        do {
+            try await userService.addSearchHistory(keyword)
         } catch {
             preconditionFailure("\(error)")
         }
