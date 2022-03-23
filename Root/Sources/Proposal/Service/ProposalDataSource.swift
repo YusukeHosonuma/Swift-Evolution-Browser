@@ -76,7 +76,7 @@ public class ProposalDataSourceImpl: ProposalDataSource, ObservableObject {
             preconditionFailure("\(error)")
         }
     }
-    
+
     public func addSearchHistory(_ keyword: String) async {
         do {
             try await userService.addSearchHistory(keyword)

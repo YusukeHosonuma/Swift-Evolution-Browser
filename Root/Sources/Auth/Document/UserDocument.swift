@@ -16,7 +16,7 @@ public struct UserDocument: Codable {
 
     @DocumentID public var id: String?
     public private(set) var stars: [String]
-    public private(set) var searchHistories: [String]
+    public private(set) var searchHistories: [String]? // 💡 for compatibility.
 
     public init(id: String? = nil, stars: [String], searchHistories: [String]) {
         self.id = id
@@ -33,7 +33,7 @@ public struct UserDocument: Codable {
     }
 
     public mutating func addSearchHistory(_ keyword: String) {
-        var xs = searchHistories
+        var xs = searchHistories ?? []
         xs.removeAll { $0 == keyword }
         xs.insert(keyword, at: 0)
         searchHistories = Array(xs.prefix(UserDocument.maxSearchHistoryCount))

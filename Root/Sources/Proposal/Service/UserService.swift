@@ -36,7 +36,12 @@ public final class UserServiceFirestore: UserService {
     public func listen() async -> AnyPublisher<UserData, Never> {
         await authState.authedPublisher(defaultValue: .empty) { user in
             UserDocument.publisher(user: user)
-                .map { UserData(stars: $0.stars, searchHistories: $0.searchHistories) }
+                .map {
+                    UserData(
+                        stars: $0.stars,
+                        searchHistories: $0.searchHistories ?? []
+                    )
+                }
                 .replaceError(with: .empty)
                 .eraseToAnyPublisher()
         }
