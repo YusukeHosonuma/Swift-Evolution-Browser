@@ -14,10 +14,12 @@ import Foundation
 public struct UserDocument: Codable {
     @DocumentID public var id: String?
     public var stars: [String]
+    public var searchHistories: [String]
 
-    public init(id: String? = nil, stars: [String]) {
+    public init(id: String? = nil, stars: [String], searchHistories: [String]) {
         self.id = id
         self.stars = stars
+        self.searchHistories = searchHistories
     }
 }
 
@@ -46,7 +48,7 @@ extension UserDocument {
 
     static func createNewUser(user: User) async {
         guard await isExists(user: user) == false else { return }
-        await UserDocument(id: user.uid, stars: []).update()
+        await UserDocument(id: user.uid, stars: [], searchHistories: []).update()
     }
 
     static func isExists(user: User) async -> Bool {

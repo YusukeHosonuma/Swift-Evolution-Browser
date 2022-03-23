@@ -13,7 +13,7 @@ import Foundation
 public enum ProposalData {
     case loading
     case error
-    case success([Proposal])
+    case success(proposals: [Proposal], searchHistories: [String])
 }
 
 @MainActor
@@ -23,6 +23,7 @@ public protocol ProposalDataSource {
     func onInitialize() async
     func refresh() async throws
     func toggleStar(proposal: Proposal) async
+    func addSearchHistory(_ keyword: String) async
 }
 
 @MainActor
@@ -39,18 +40,35 @@ public class ProposalDataSourceImpl: ProposalDataSource, ObservableObject {
         self.userService = userService
     }
 
+    public func addSearchHistory(_ keyword: String) async {
+        do {
+            try await userService.addSearchHistory(keyword)
+        } catch {
+            preconditionFailure("\(error)")
+        }
+    }
+
     public func onInitialize() async {
         await latestProposals
-            .combineLatest(userService.listenStars())
-            .map { proposals, stars in
+            .combineLatest(userService.listen())
+            .map { proposals, userData in
                 guard let proposals = proposals else { return .error }
-                return .success(
-                    proposals.map {
+                return ProposalData.success(
+                    proposals: proposals.map {
                         var proposal = $0
-                        proposal.star = stars.contains($0.id)
+                        proposal.star = userData.stars.contains($0.id)
                         return proposal
-                    }
+                    },
+                    searchHistories: userData.searchHistories
                 )
+//
+//                return .success(
+//                    proposals.map {
+//                        var proposal = $0
+//                        proposal.star = stars.contains($0.id)
+//                        return proposal
+//                    }
+//                )
             }
             .assign(to: \.value, on: proposals)
             .store(in: &cancellables)

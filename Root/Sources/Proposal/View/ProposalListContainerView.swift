@@ -90,12 +90,34 @@ public struct ProposalListContainerView: View {
                 // 💡 `content.searchQuery`を直接返すと、submit 時に検索テキストがクリアされる問題の回避
                 guard case let .success(content) = viewModel.state else { return "" }
                 return content.searchQuery
-            }, set: { viewModel.onChangeQuery($0) }),
+            }, set: { query in
+                viewModel.onChangeQuery(query)
+            }),
             placement: searchFieldPlacement,
             prompt: Text("Search Proposal"),
             suggestions: {
-                ForEach(content.suggestions) {
-                    Text($0.keyword).searchCompletion($0.completion)
+                if content.searchQuery.isEmpty {
+                    //
+                    // Search by xxx
+                    //
+                    Label("Search by Swift version", systemImage: "swift")
+                        .searchCompletion("Swift")
+                    Label("Search by Status", systemImage: "smallcircle.filled.circle")
+                        .searchCompletion("Status")
+                    //
+                    // Histories
+                    //
+                    ForEach(content.searchHistories, id: \.self) {
+                        Label($0, systemImage: "clock")
+                            .searchCompletion($0)
+                    }
+                } else {
+                    //
+                    // Suggestions
+                    //
+                    ForEach(content.suggestions) {
+                        Text($0.keyword).searchCompletion($0.completion)
+                    }
                 }
             }
         )
@@ -103,7 +125,7 @@ public struct ProposalListContainerView: View {
             await viewModel.onRefresh()
         }
         .onSubmit(of: .search) {
-            // Do something if needed.
+            viewModel.onSubmitSearch()
         }
     }
 }
@@ -124,9 +146,11 @@ public final class ProposalListViewModel: ObservableObject {
     struct Content: Equatable {
         var allProposals: [Proposal]
         var searchQuery: String = ""
+        var searchHistories: [String]
 
-        init(proposals: [Proposal]) {
+        init(proposals: [Proposal], searchHistories: [String]) {
             allProposals = proposals
+            self.searchHistories = searchHistories
         }
 
         var filteredProposals: [Proposal] {
@@ -174,13 +198,17 @@ public final class ProposalListViewModel: ObservableObject {
                     return .loading
                 case .error:
                     return .error
-                case var .success(proposals):
+                case var .success(proposals, searchHistories):
                     proposals = proposals.filter(self.globalFilter)
                     if case var .success(content) = self.state {
                         content.allProposals = proposals
+                        content.searchHistories = searchHistories
                         return .success(content)
                     } else {
-                        return .success(.init(proposals: proposals))
+                        return .success(.init(
+                            proposals: proposals,
+                            searchHistories: searchHistories
+                        ))
                     }
                 }
             }
@@ -202,11 +230,24 @@ public final class ProposalListViewModel: ObservableObject {
         content.searchQuery = query
         state = .success(content)
 
-        #if os(iOS)
         if content.allProposals.isMatchKeyword(query: query) {
+            #if os(iOS)
             toHideKeyboard = true
+            #endif
+            Task {
+                await dataSource.addSearchHistory(query)
+            }
         }
-        #endif
+    }
+
+    func onSubmitSearch() {
+        guard case let .success(content) = state else { return }
+
+        if content.searchQuery != "Swift", content.searchQuery != "Status" {
+            Task {
+                await dataSource.addSearchHistory(content.searchQuery)
+            }
+        }
     }
 
     func onTapStar(proposal: Proposal) async {

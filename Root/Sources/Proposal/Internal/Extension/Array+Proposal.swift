@@ -60,18 +60,19 @@ extension Array where Element == Proposal {
     func suggestions(by query: String) -> [Suggestion] {
         let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        let statusLabels = statusLabels()
-        let swiftVersions = swiftVersions()
-
-        if swiftVersions.contains(query) || statusLabels.contains(query) {
+        if query.isEmpty || isMatchKeyword(query: query) {
             return []
         }
 
-        if query.contains("Swift") {
+        let statusLabels = statusLabels()
+        let swiftVersions = swiftVersions()
+
+        if query.hasPrefix("Swift") {
             return swiftVersions.map { Suggestion(keyword: $0, completion: $0) }
+        } else if query.hasPrefix("Status") {
+            return statusLabels.map { Suggestion(keyword: $0, completion: $0) }
         } else {
-            let head = swiftVersions.isEmpty ? [] : [Suggestion(keyword: "Swift", completion: "Swift ")]
-            return head + statusLabels.map { Suggestion(keyword: $0, completion: $0) }
+            return []
         }
     }
 }
