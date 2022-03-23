@@ -102,7 +102,7 @@ public struct ProposalListContainerView: View {
                     //
                     Label("Search by Swift version", systemImage: "swift")
                         .searchCompletion("Swift")
-                    Label("Search by Status", systemImage: "smallcircle.filled.circle")
+                    Label("Search by Status", systemImage: "flag")
                         .searchCompletion("Status")
                     //
                     // Histories
