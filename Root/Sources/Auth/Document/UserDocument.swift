@@ -12,12 +12,31 @@ import FirebaseFirestoreSwift
 import Foundation
 
 public struct UserDocument: Codable {
-    @DocumentID public var id: String?
-    public var stars: [String]
+    private static let maxSearchHistoryCount: Int = 5
 
-    public init(id: String? = nil, stars: [String]) {
+    @DocumentID public var id: String?
+    public private(set) var stars: [String]
+    public private(set) var searchHistories: [String]? // 💡 for compatibility.
+
+    public init(id: String? = nil, stars: [String], searchHistories: [String]) {
         self.id = id
         self.stars = stars
+        self.searchHistories = searchHistories
+    }
+
+    public mutating func toggleStar(_ proposalID: String) {
+        if stars.contains(proposalID) {
+            stars = stars.filter { $0 != proposalID }
+        } else {
+            stars.append(proposalID)
+        }
+    }
+
+    public mutating func addSearchHistory(_ keyword: String) {
+        var xs = searchHistories ?? []
+        xs.removeAll { $0 == keyword }
+        xs.insert(keyword, at: 0)
+        searchHistories = Array(xs.prefix(UserDocument.maxSearchHistoryCount))
     }
 }
 
@@ -46,7 +65,7 @@ extension UserDocument {
 
     static func createNewUser(user: User) async {
         guard await isExists(user: user) == false else { return }
-        await UserDocument(id: user.uid, stars: []).update()
+        await UserDocument(id: user.uid, stars: [], searchHistories: []).update()
     }
 
     static func isExists(user: User) async -> Bool {

@@ -62,13 +62,14 @@ final class RootTests: XCTestCase {
             args("  A1  ", expect: ["SE-001"]) // Trimming white spaces.
             args("a1",     expect: [String]()) // ⚠️ Not ignoring case. (currently)
             
+            // 💡 Match category keywords.
+            args("Swift", expect: target.map(\.id))
+            args("Status", expect: target.map(\.id))
+
             // ✅ Match `Swift version`
             args("Swift 3.0", expect: ["SE-001"])
             args("3.0",       expect: ["SE-001"])
             args("Swift 4.0", expect: ["SE-002", "SE-003"])
-            
-            // ⚠️ Not match `Swift version`
-            args("Swift", expect: [String]())
             
             // ✅ Match `title`
             args("A", expect: ["SE-001"])
@@ -93,22 +94,21 @@ final class RootTests: XCTestCase {
         }
         
         assert(to: suggestions) {
-            // Empty
-            args(
-                "",
-                expect: [
-                    suggestion("Swift", "Swift "),
-                    suggestion("Accepted", "Accepted"),
-                    suggestion("Implemented", "Implemented"),
-                ]
-            )
-
             // `Swift`
             args(
                 "Swift",
                 expect: [
-                    suggestion("Swift 3.0", "Swift 3.0"),
                     suggestion("Swift 4.0", "Swift 4.0"),
+                    suggestion("Swift 3.0", "Swift 3.0"),
+                ]
+            )
+            
+            // `Status`
+            args(
+                "Status",
+                expect: [
+                    suggestion("Accepted", "Accepted"),
+                    suggestion("Implemented", "Implemented"),
                 ]
             )
 
@@ -129,18 +129,18 @@ final class RootTests: XCTestCase {
             // )
         }
         
-        let notIncludeImplemented: [Proposal] = [
-            proposal(id: "SE-001", title: "", status: .accepted),
-            proposal(id: "SE-002", title: "", status: .rejected),
-        ]
-        
-        XCTAssertEqual(
-            notIncludeImplemented.suggestions(by: ""),
-            [
-                suggestion("Accepted", "Accepted"),
-                suggestion("Rejected", "Rejected"),
-            ],
-            "Not include `Swift` suggestion."
-        )
+        // let notIncludeImplemented: [Proposal] = [
+        //     proposal(id: "SE-001", title: "", status: .accepted),
+        //     proposal(id: "SE-002", title: "", status: .rejected),
+        // ]
+        //
+        // XCTAssertEqual(
+        //     notIncludeImplemented.suggestions(by: ""),
+        //     [
+        //         suggestion("Accepted", "Accepted"),
+        //         suggestion("Rejected", "Rejected"),
+        //     ],
+        //     "Not include `Swift` suggestion."
+        // )
     }
 }
