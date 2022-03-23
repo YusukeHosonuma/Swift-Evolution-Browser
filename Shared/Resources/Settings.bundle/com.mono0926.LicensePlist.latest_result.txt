@@ -1,0 +1,37 @@
+name: abseil-cpp-SwiftPM, nameSpecified: abseil-cpp-swiftpm, owner: firebase, version: 0.20200225.4, source: https://github.com/firebase/abseil-cpp-SwiftPM
+
+name: boringssl-SwiftPM, nameSpecified: boringssl-swiftpm, owner: firebase, version: 0.7.2, source: https://github.com/firebase/boringssl-SwiftPM
+
+name: firebase-ios-sdk, nameSpecified: firebase-ios-sdk, owner: firebase, version: 8.13.0, source: https://github.com/firebase/firebase-ios-sdk
+
+name: Flatten, nameSpecified: flatten, owner: YusukeHosonuma, version: 0.1.0, source: https://github.com/YusukeHosonuma/Flatten
+
+name: GoogleAppMeasurement, nameSpecified: googleappmeasurement, owner: google, version: 8.12.0, source: https://github.com/google/GoogleAppMeasurement
+
+name: GoogleDataTransport, nameSpecified: googledatatransport, owner: google, version: 9.1.2, source: https://github.com/google/GoogleDataTransport
+
+name: GoogleUtilities, nameSpecified: googleutilities, owner: google, version: 7.7.0, source: https://github.com/google/GoogleUtilities
+
+name: grpc-SwiftPM, nameSpecified: grpc-swiftpm, owner: firebase, version: 1.28.4, source: https://github.com/firebase/grpc-SwiftPM
+
+name: gtm-session-fetcher, nameSpecified: gtm-session-fetcher, owner: google, version: 1.7.0, source: https://github.com/google/gtm-session-fetcher
+
+name: leveldb, nameSpecified: leveldb, owner: firebase, version: 1.22.2, source: https://github.com/firebase/leveldb
+
+name: nanopb, nameSpecified: nanopb, owner: firebase, version: 2.30908.0, source: https://github.com/firebase/nanopb
+
+name: promises, nameSpecified: promises, owner: google, version: 2.0.0, source: https://github.com/google/promises
+
+name: SHList, nameSpecified: shlist, owner: YusukeHosonuma, version: 0.1.0, source: https://github.com/YusukeHosonuma/SHList
+
+name: swift-algorithms, nameSpecified: swift-algorithms, owner: apple, version: 1.0.0, source: https://github.com/apple/swift-algorithms
+
+name: swift-numerics, nameSpecified: swift-numerics, owner: apple, version: 1.0.2, source: https://github.com/apple/swift-numerics
+
+name: swift-protobuf, nameSpecified: swift-protobuf, owner: apple, version: 1.19.0, source: https://github.com/apple/swift-protobuf
+
+name: SwiftParamTest, nameSpecified: swiftparamtest, owner: YusukeHosonuma, version: 2.2.1, source: https://github.com/YusukeHosonuma/SwiftParamTest
+
+add-version-numbers: false
+
+LicensePlist Version: 3.19.1
