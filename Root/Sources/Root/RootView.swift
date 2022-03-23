@@ -28,8 +28,15 @@ private enum Item: Hashable {
 }
 
 private extension View {
-    func itemTag(_ tag: Item?) -> some View {
+    func itemTag(_ tag: Item) -> some View {
+        // ⚠️ SwiftUI Bug:
+        // iOS では型レベル（Optional<Item>）で一致させないと動かないが、
+        // macOS では逆に型レベルで一致させると動かない。
+        #if os(iOS)
+        self.tag(Optional.some(tag))
+        #else
         self.tag(tag)
+        #endif
     }
 }
 
@@ -69,6 +76,7 @@ public struct RootView: View {
     @State private var selection: Item? = .all
     @State private var tappedTwice: Bool = false
 
+    #if os(iOS)
     // Note:
     // For scroll to top when tab is tapped.
     private var selectionHandler: Binding<Item?> { Binding(
@@ -80,6 +88,7 @@ public struct RootView: View {
             self.selection = $0
         }
     ) }
+    #endif
 
     public init() {}
 
@@ -116,6 +125,7 @@ public struct RootView: View {
                         Image(systemName: "list.bullet")
                     }
                 }
+                // .tag(Item.all)
                 .itemTag(.all)
 
                 //
@@ -133,6 +143,7 @@ public struct RootView: View {
                         Image(systemName: "star.fill").foregroundColor(.yellow)
                     }
                 }
+                // .tag(Item.star)
                 .itemTag(.star)
             }
             .listStyle(SidebarListStyle())
