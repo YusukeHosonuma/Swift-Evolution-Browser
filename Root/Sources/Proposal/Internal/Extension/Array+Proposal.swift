@@ -36,6 +36,10 @@ extension Array where Element == Proposal {
 
         let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
 
+        if query.isEmpty || query == "Swift" || query == "Status" {
+            return self
+        }
+
         func isVersionMatch(_ proposal: Proposal) -> Bool {
             guard case let .implemented(version) = proposal.status else { return false }
 
@@ -46,14 +50,10 @@ extension Array where Element == Proposal {
             return version == versionString
         }
 
-        if query.isEmpty {
-            return self
-        } else {
-            return filter {
-                $0.title.contains(query) ||
-                    $0.status.label == query ||
-                    isVersionMatch($0)
-            }
+        return filter {
+            $0.title.contains(query) ||
+                $0.status.label == query ||
+                isVersionMatch($0)
         }
     }
 
