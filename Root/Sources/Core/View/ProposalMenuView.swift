@@ -21,7 +21,7 @@ public struct ProposalMenu: View {
         Button {
             openURL(proposal.proposalURL)
         } label: {
-            Label("Open in browser", systemImage: "globe")
+            Label("Open in Browser", systemImage: "globe")
         }
         Button {
             openURL(URL.searchInForums(proposalID: proposal.id))
