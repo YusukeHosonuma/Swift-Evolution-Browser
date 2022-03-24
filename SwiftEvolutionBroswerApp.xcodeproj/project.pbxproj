@@ -361,7 +361,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nswiftformat $SRCROOT/Root\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nmint run swiftformat $SRCROOT/Root\n";
 		};
 		70A91E1C27E5D46D005684DD /* Format Sources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -379,7 +379,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nswiftformat $SRCROOT/Root\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nmint run swiftformat $SRCROOT/Root\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
