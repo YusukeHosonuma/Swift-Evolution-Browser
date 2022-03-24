@@ -13,7 +13,7 @@ import SwiftUI
 import GoogleSignIn
 #endif
 
-private enum Item: String, Hashable {
+private enum Item: Int, Hashable {
     case all
     case star
 
@@ -24,27 +24,6 @@ private enum Item: String, Hashable {
         case .star:
             return "SCROLL_TO_TOP_STAR"
         }
-    }
-}
-
-extension Item: StorageValue {
-    var rawString: String { rawValue }
-    init?(rawString: String?) {
-        guard let rawString = rawString, let item = Item(rawValue: rawString) else { return nil }
-        self = item
-    }
-}
-
-private extension View {
-    func itemTag(_ tag: Item) -> some View {
-        // ⚠️ SwiftUI Bug:
-        // iOS では型レベル（Optional<Item>）で一致させないと動かないが、
-        // macOS では逆に型レベルで一致させると動かない。
-        #if os(iOS)
-        self.tag(Optional.some(tag))
-        #else
-        self.tag(tag)
-        #endif
     }
 }
 
@@ -79,32 +58,46 @@ private let proposalListViewModelStared = ProposalListViewModel(
 //
 // 💾 Storage
 //
-private let storageSelectedTab =
-    UserDefaultStorage<Item>(key: "selectedTab", .all)
 private let storageSelectedProposalIDAll =
-    UserDefaultStorage<String>(key: "selectedProposalIDAll", nil)
+    UserDefaultStorage<String?>(key: "selectedProposalIDAll", nil)
 private let storageSelectedProposalIDStared =
-    UserDefaultStorage<String>(key: "selectedProposalIDStared", nil)
+    UserDefaultStorage<String?>(key: "selectedProposalIDStared", nil)
 
 //
 // 💻 Root view
 //
 public struct RootView: View {
-    @State private var tappedTwice: Bool = false
-    @ObservedObject private var selectedTab: UserDefaultStorage<Item> = storageSelectedTab
+    @AppStorage("selectedTab") private var selectedTab: Item = .all
 
-    #if os(iOS)
+    #if os(macOS)
+    // Note:
+    // Adopt to data type of List's `selection`.
+    private var selectionHandler: Binding<Item?> {
+        .init(
+            get: { self.selectedTab },
+            set: {
+                if let value = $0 {
+                    self.selectedTab = value
+                }
+            }
+        )
+    }
+    #else
+    @State private var tappedTwice: Bool = false
+
     // Note:
     // For scroll to top when tab is tapped.
-    private var selectionHandler: Binding<Item?> { Binding(
-        get: { self.selectedTab.value },
-        set: {
-            if $0 == self.selectedTab.value {
-                tappedTwice = true
+    private var selectionHandler: Binding<Item> {
+        .init(
+            get: { self.selectedTab },
+            set: {
+                if $0 == self.selectedTab {
+                    tappedTwice = true
+                }
+                self.selectedTab = $0
             }
-            self.selectedTab.value = $0
-        }
-    ) }
+        )
+    }
     #endif
 
     public init() {}
@@ -126,24 +119,17 @@ public struct RootView: View {
     func content() -> some View {
         #if os(macOS)
         NavigationView {
-            List(selection: $selectedTab.value) {
+            List(selection: selectionHandler) {
                 //
                 // All Proposals
                 //
                 NavigationLink {
                     NavigationView {
-                        ProposalListContainerView()
-                            .environmentObject(proposalListViewModelAll)
-                            .environmentObject(storageSelectedProposalIDAll)
+                        allView()
                     }
                 } label: {
-                    Label {
-                        Text("All")
-                    } icon: {
-                        Image(systemName: "list.bullet")
-                    }
+                    Label("All", systemImage: "list.bullet")
                 }
-                // .tag(Item.all)
                 .itemTag(.all)
 
                 //
@@ -151,18 +137,13 @@ public struct RootView: View {
                 //
                 NavigationLink {
                     NavigationView {
-                        ProposalListContainerView()
-                            .environmentObject(proposalListViewModelStared)
-                            .environmentObject(storageSelectedProposalIDStared)
+                        staredView()
                     }
                 } label: {
-                    Label {
-                        Text("Stared")
-                    } icon: {
+                    Label { Text("Stared") } icon: {
                         Image(systemName: "star.fill").foregroundColor(.yellow)
                     }
                 }
-                // .tag(Item.star)
                 .itemTag(.star)
             }
             .listStyle(SidebarListStyle())
@@ -175,22 +156,11 @@ public struct RootView: View {
                 // All Proposals
                 //
                 NavigationView {
-                    ProposalListContainerView()
-                        .environment(\.scrollToTopID, Item.all.scrollToTopID)
-                        .environmentObject(proposalListViewModelAll)
-                        .environmentObject(storageSelectedProposalIDAll)
-                        .navigationTitle("All Proposals")
-                        .appToolbar()
-
-                    // Note: show when no selected on iPad.
-                    Text("Please select proposal from sidebar.")
+                    allView()
+                    noneSelectedView()
                 }
                 .tabItem {
-                    Label {
-                        Text("All")
-                    } icon: {
-                        Image(systemName: "list.bullet")
-                    }
+                    Label("All", systemImage: "list.bullet")
                 }
                 .itemTag(.all)
 
@@ -198,34 +168,72 @@ public struct RootView: View {
                 // Stared
                 //
                 NavigationView {
-                    ProposalListContainerView()
-                        .environment(\.scrollToTopID, Item.star.scrollToTopID)
-                        .environmentObject(proposalListViewModelStared)
-                        .environmentObject(storageSelectedProposalIDStared)
-                        .navigationTitle("Stared")
-                        .appToolbar()
-
-                    // Note: show when no selected on iPad.
-                    Text("Please select proposal from sidebar.")
+                    staredView()
+                    noneSelectedView()
                 }
                 .tabItem {
-                    Label {
-                        Text("Stared")
-                    } icon: {
-                        Image(systemName: "star.fill").foregroundColor(.yellow)
-                    }
+                    Label("Shared", systemImage: "star.fill")
                 }
                 .itemTag(.star)
             }
-            .onChange(of: tappedTwice, perform: { tapped in
-                if let selection = self.selectedTab.value, tapped {
+            .onChange(of: tappedTwice) { tapped in
+                if tapped {
                     withAnimation {
-                        proxy.scrollTo(selection.scrollToTopID)
+                        proxy.scrollTo(self.selectedTab.scrollToTopID)
                     }
                     tappedTwice = false
                 }
-            })
+            }
         }
         #endif
+    }
+
+    func allView() -> some View {
+        ProposalListContainerView()
+            .environmentObject(proposalListViewModelAll)
+            .environmentObject(storageSelectedProposalIDAll)
+        #if os(iOS)
+            .navigationTitle("All Proposals")
+            .scrollToTop(.all)
+            .appToolbar()
+        #endif
+    }
+
+    func staredView() -> some View {
+        ProposalListContainerView()
+            .environmentObject(proposalListViewModelStared)
+            .environmentObject(storageSelectedProposalIDStared)
+        #if os(iOS)
+            .navigationTitle("Stared")
+            .scrollToTop(.star)
+            .appToolbar()
+        #endif
+    }
+
+    // Note: show when no selected on iPad.
+    func noneSelectedView() -> some View {
+        Text("Please select proposal from sidebar.")
+    }
+}
+
+// MARK: Private
+
+private extension View {
+    func scrollToTop(_ item: Item) -> some View {
+        environment(\.scrollToTopID, item.scrollToTopID)
+    }
+}
+
+private extension View {
+    func itemTag(_ tag: Item) -> some View {
+        // ⚠️ SwiftUI Bug:
+        // iOS では型レベル（Optional<Item>）で一致させないと動かないが、
+        // macOS では逆に型レベルで一致させると動かない。
+        // #if os(iOS)
+        // self.tag(Optional.some(tag))
+        // #else
+        // self.tag(tag)
+        // #endif
+        self.tag(tag)
     }
 }
