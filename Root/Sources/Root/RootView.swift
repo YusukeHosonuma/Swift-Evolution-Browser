@@ -27,20 +27,6 @@ private enum Item: Int, Hashable {
     }
 }
 
-private extension View {
-    func itemTag(_ tag: Item) -> some View {
-        // ⚠️ SwiftUI Bug:
-        // iOS では型レベル（Optional<Item>）で一致させないと動かないが、
-        // macOS では逆に型レベルで一致させると動かない。
-        // #if os(iOS)
-        // self.tag(Optional.some(tag))
-        // #else
-        // self.tag(tag)
-        // #endif
-        self.tag(tag)
-    }
-}
-
 //
 // ⚙️ Global Objects
 //
@@ -171,9 +157,7 @@ public struct RootView: View {
                 //
                 NavigationView {
                     allView()
-
-                    // Note: show when no selected on iPad.
-                    Text("Please select proposal from sidebar.")
+                    noneSelectedView()
                 }
                 .tabItem {
                     Label("All", systemImage: "list.bullet")
@@ -185,9 +169,7 @@ public struct RootView: View {
                 //
                 NavigationView {
                     staredView()
-
-                    // Note: show when no selected on iPad.
-                    Text("Please select proposal from sidebar.")
+                    noneSelectedView()
                 }
                 .tabItem {
                     Label("Shared", systemImage: "star.fill")
@@ -211,8 +193,8 @@ public struct RootView: View {
             .environmentObject(proposalListViewModelAll)
             .environmentObject(storageSelectedProposalIDAll)
         #if os(iOS)
-            .environment(\.scrollToTopID, Item.all.scrollToTopID)
             .navigationTitle("All Proposals")
+            .scrollToTop(.all)
             .appToolbar()
         #endif
     }
@@ -222,9 +204,36 @@ public struct RootView: View {
             .environmentObject(proposalListViewModelStared)
             .environmentObject(storageSelectedProposalIDStared)
         #if os(iOS)
-            .environment(\.scrollToTopID, Item.star.scrollToTopID)
             .navigationTitle("Stared")
+            .scrollToTop(.star)
             .appToolbar()
         #endif
+    }
+
+    // Note: show when no selected on iPad.
+    func noneSelectedView() -> some View {
+        Text("Please select proposal from sidebar.")
+    }
+}
+
+// MARK: Private
+
+private extension View {
+    func scrollToTop(_ item: Item) -> some View {
+        environment(\.scrollToTopID, item.scrollToTopID)
+    }
+}
+
+private extension View {
+    func itemTag(_ tag: Item) -> some View {
+        // ⚠️ SwiftUI Bug:
+        // iOS では型レベル（Optional<Item>）で一致させないと動かないが、
+        // macOS では逆に型レベルで一致させると動かない。
+        // #if os(iOS)
+        // self.tag(Optional.some(tag))
+        // #else
+        // self.tag(tag)
+        // #endif
+        self.tag(tag)
     }
 }
