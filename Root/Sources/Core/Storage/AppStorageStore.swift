@@ -9,18 +9,34 @@ import Combine
 import Foundation
 import SwiftUI
 
-public final class UserDefaultStorage: ObservableObject {
-    @Published public var value: String?
+public protocol StorageValue {
+    var rawString: String { get }
+    init?(rawString: String?)
+}
+
+extension String: StorageValue {
+    public var rawString: String { self }
+    public init?(rawString: String?) {
+        guard let rawString = rawString else { return nil }
+        self = rawString
+    }
+}
+
+public final class UserDefaultStorage<Value: StorageValue>: ObservableObject {
+    @Published public var value: Value?
 
     private var cancellables: Set<AnyCancellable> = []
 
-    public init(_ key: String, _ defaultValue: String?) {
-        value = UserDefaults.standard.string(forKey: key) ?? defaultValue
+    public init(key: String, _ defaultValue: Value?) {
+        value = Value(rawString: UserDefaults.standard.string(forKey: key)) ?? defaultValue
         $value
             .dropFirst()
-            .removeDuplicates()
-            .sink { value in
-                UserDefaults.standard.set(value, forKey: key)
+            .sink {
+                if let value = $0 {
+                    UserDefaults.standard.set(value.rawString, forKey: key)
+                } else {
+                    UserDefaults.standard.removeObject(forKey: key)
+                }
             }
             .store(in: &cancellables)
     }

@@ -12,7 +12,7 @@ import SwiftUI
 struct ProposalListView: View {
     @Environment(\.scrollToTopID) private var scrollToTopID
     @Environment(\.openURL) private var openURL
-    @EnvironmentObject private var selectedProposalID: UserDefaultStorage
+    @EnvironmentObject private var selectedProposalID: UserDefaultStorage<String>
 
     let proposals: [Proposal]
     let onTapStar: (Proposal) -> Void
