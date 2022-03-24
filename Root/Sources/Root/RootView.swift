@@ -138,9 +138,7 @@ public struct RootView: View {
                 //
                 NavigationLink {
                     NavigationView {
-                        ProposalListContainerView()
-                            .environmentObject(proposalListViewModelAll)
-                            .environmentObject(storageSelectedProposalIDAll)
+                        allView()
                     }
                 } label: {
                     Label {
@@ -156,9 +154,7 @@ public struct RootView: View {
                 //
                 NavigationLink {
                     NavigationView {
-                        ProposalListContainerView()
-                            .environmentObject(proposalListViewModelStared)
-                            .environmentObject(storageSelectedProposalIDStared)
+                        staredView()
                     }
                 } label: {
                     Label {
@@ -179,12 +175,7 @@ public struct RootView: View {
                 // All Proposals
                 //
                 NavigationView {
-                    ProposalListContainerView()
-                        .environment(\.scrollToTopID, Item.all.scrollToTopID)
-                        .environmentObject(proposalListViewModelAll)
-                        .environmentObject(storageSelectedProposalIDAll)
-                        .navigationTitle("All Proposals")
-                        .appToolbar()
+                    allView()
 
                     // Note: show when no selected on iPad.
                     Text("Please select proposal from sidebar.")
@@ -202,12 +193,7 @@ public struct RootView: View {
                 // Stared
                 //
                 NavigationView {
-                    ProposalListContainerView()
-                        .environment(\.scrollToTopID, Item.star.scrollToTopID)
-                        .environmentObject(proposalListViewModelStared)
-                        .environmentObject(storageSelectedProposalIDStared)
-                        .navigationTitle("Stared")
-                        .appToolbar()
+                    staredView()
 
                     // Note: show when no selected on iPad.
                     Text("Please select proposal from sidebar.")
@@ -230,6 +216,28 @@ public struct RootView: View {
                 }
             })
         }
+        #endif
+    }
+
+    func allView() -> some View {
+        ProposalListContainerView()
+            .environmentObject(proposalListViewModelAll)
+            .environmentObject(storageSelectedProposalIDAll)
+        #if os(iOS)
+            .environment(\.scrollToTopID, Item.all.scrollToTopID)
+            .navigationTitle("All Proposals")
+            .appToolbar()
+        #endif
+    }
+    
+    func staredView() -> some View {
+        ProposalListContainerView()
+            .environmentObject(proposalListViewModelStared)
+            .environmentObject(storageSelectedProposalIDStared)
+        #if os(iOS)
+            .environment(\.scrollToTopID, Item.star.scrollToTopID)
+            .navigationTitle("Stared")
+            .appToolbar()
         #endif
     }
 }
