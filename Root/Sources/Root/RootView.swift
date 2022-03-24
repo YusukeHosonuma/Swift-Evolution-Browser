@@ -6,9 +6,9 @@
 //
 
 import Auth
+import Core
 import Proposal
 import SwiftUI
-
 #if os(iOS)
 import GoogleSignIn
 #endif
@@ -68,6 +68,12 @@ private let proposalListViewModelStared = ProposalListViewModel(
     dataSource: proposalDataSource
 )
 
+// 💾 Storage
+private let storageSelectedProposalIDAll =
+    UserDefaultStorage("selectedProposalIDAll", nil)
+private let storageSelectedProposalIDStared =
+    UserDefaultStorage("selectedProposalIDStared", nil)
+
 //
 // 💻 Root
 //
@@ -75,7 +81,7 @@ private let proposalListViewModelStared = ProposalListViewModel(
 public struct RootView: View {
     @State private var selection: Item? = .all
     @State private var tappedTwice: Bool = false
-
+    
     #if os(iOS)
     // Note:
     // For scroll to top when tab is tapped.
@@ -159,6 +165,7 @@ public struct RootView: View {
                     ProposalListContainerView()
                         .environment(\.scrollToTopID, Item.all.scrollToTopID)
                         .environmentObject(proposalListViewModelAll)
+                        .environmentObject(storageSelectedProposalIDAll)
                         .navigationTitle("All Proposals")
                         .appToolbar()
 
@@ -181,6 +188,7 @@ public struct RootView: View {
                     ProposalListContainerView()
                         .environment(\.scrollToTopID, Item.star.scrollToTopID)
                         .environmentObject(proposalListViewModelStared)
+                        .environmentObject(storageSelectedProposalIDStared)
                         .navigationTitle("Stared")
                         .appToolbar()
 
