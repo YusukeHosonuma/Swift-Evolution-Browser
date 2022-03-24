@@ -13,7 +13,7 @@ import SwiftUI
 import GoogleSignIn
 #endif
 
-private enum Item: String, Hashable {
+private enum Item: Int, Hashable {
     case all
     case star
 
@@ -27,24 +27,17 @@ private enum Item: String, Hashable {
     }
 }
 
-extension Item: StorageValue {
-    var rawString: String { rawValue }
-    init?(rawString: String?) {
-        guard let rawString = rawString, let item = Item(rawValue: rawString) else { return nil }
-        self = item
-    }
-}
-
 private extension View {
     func itemTag(_ tag: Item) -> some View {
         // ⚠️ SwiftUI Bug:
         // iOS では型レベル（Optional<Item>）で一致させないと動かないが、
         // macOS では逆に型レベルで一致させると動かない。
-        #if os(iOS)
-        self.tag(Optional.some(tag))
-        #else
+        // #if os(iOS)
+        // self.tag(Optional.some(tag))
+        // #else
+        // self.tag(tag)
+        // #endif
         self.tag(tag)
-        #endif
     }
 }
 
@@ -79,32 +72,45 @@ private let proposalListViewModelStared = ProposalListViewModel(
 //
 // 💾 Storage
 //
-private let storageSelectedTab =
-    UserDefaultStorage<Item>(key: "selectedTab", .all)
 private let storageSelectedProposalIDAll =
-    UserDefaultStorage<String>(key: "selectedProposalIDAll", nil)
+    UserDefaultStorage<String?>(key: "selectedProposalIDAll", nil)
 private let storageSelectedProposalIDStared =
-    UserDefaultStorage<String>(key: "selectedProposalIDStared", nil)
+    UserDefaultStorage<String?>(key: "selectedProposalIDStared", nil)
 
 //
 // 💻 Root view
 //
 public struct RootView: View {
+    @AppStorage("selectedTab") private var selectedTab: Item = .all
     @State private var tappedTwice: Bool = false
-    @ObservedObject private var selectedTab: UserDefaultStorage<Item> = storageSelectedTab
 
-    #if os(iOS)
+    #if os(macOS)
+    // Note:
+    // Adopt to data type of List's `selection`.
+    private var selectionHandler: Binding<Item?> {
+        .init(
+            get: { self.selectedTab },
+            set: {
+                if let value = $0 {
+                    self.selectedTab = value
+                }
+            }
+        )
+    }
+    #else
     // Note:
     // For scroll to top when tab is tapped.
-    private var selectionHandler: Binding<Item?> { Binding(
-        get: { self.selectedTab.value },
-        set: {
-            if $0 == self.selectedTab.value {
-                tappedTwice = true
+    private var selectionHandler: Binding<Item> {
+        .init(
+            get: { self.selectedTab },
+            set: {
+                if $0 == self.selectedTab {
+                    tappedTwice = true
+                }
+                self.selectedTab = $0
             }
-            self.selectedTab.value = $0
-        }
-    ) }
+        )
+    }
     #endif
 
     public init() {}
@@ -126,7 +132,7 @@ public struct RootView: View {
     func content() -> some View {
         #if os(macOS)
         NavigationView {
-            List(selection: $selectedTab.value) {
+            List(selection: selectionHandler) {
                 //
                 // All Proposals
                 //
@@ -143,7 +149,6 @@ public struct RootView: View {
                         Image(systemName: "list.bullet")
                     }
                 }
-                // .tag(Item.all)
                 .itemTag(.all)
 
                 //
@@ -162,7 +167,6 @@ public struct RootView: View {
                         Image(systemName: "star.fill").foregroundColor(.yellow)
                     }
                 }
-                // .tag(Item.star)
                 .itemTag(.star)
             }
             .listStyle(SidebarListStyle())
@@ -218,9 +222,9 @@ public struct RootView: View {
                 .itemTag(.star)
             }
             .onChange(of: tappedTwice, perform: { tapped in
-                if let selection = self.selectedTab.value, tapped {
+                if tapped {
                     withAnimation {
-                        proxy.scrollTo(selection.scrollToTopID)
+                        proxy.scrollTo(self.selectedTab.scrollToTopID)
                     }
                     tappedTwice = false
                 }
