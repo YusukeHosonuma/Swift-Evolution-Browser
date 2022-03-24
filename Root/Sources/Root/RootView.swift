@@ -82,7 +82,6 @@ private let storageSelectedProposalIDStared =
 //
 public struct RootView: View {
     @AppStorage("selectedTab") private var selectedTab: Item = .all
-    @State private var tappedTwice: Bool = false
 
     #if os(macOS)
     // Note:
@@ -98,6 +97,8 @@ public struct RootView: View {
         )
     }
     #else
+    @State private var tappedTwice: Bool = false
+
     // Note:
     // For scroll to top when tab is tapped.
     private var selectionHandler: Binding<Item> {
@@ -141,11 +142,7 @@ public struct RootView: View {
                         allView()
                     }
                 } label: {
-                    Label {
-                        Text("All")
-                    } icon: {
-                        Image(systemName: "list.bullet")
-                    }
+                    Label("All", systemImage: "list.bullet")
                 }
                 .itemTag(.all)
 
@@ -157,9 +154,7 @@ public struct RootView: View {
                         staredView()
                     }
                 } label: {
-                    Label {
-                        Text("Stared")
-                    } icon: {
+                    Label { Text("Stared") } icon: {
                         Image(systemName: "star.fill").foregroundColor(.yellow)
                     }
                 }
@@ -181,11 +176,7 @@ public struct RootView: View {
                     Text("Please select proposal from sidebar.")
                 }
                 .tabItem {
-                    Label {
-                        Text("All")
-                    } icon: {
-                        Image(systemName: "list.bullet")
-                    }
+                    Label("All", systemImage: "list.bullet")
                 }
                 .itemTag(.all)
 
@@ -199,22 +190,18 @@ public struct RootView: View {
                     Text("Please select proposal from sidebar.")
                 }
                 .tabItem {
-                    Label {
-                        Text("Stared")
-                    } icon: {
-                        Image(systemName: "star.fill").foregroundColor(.yellow)
-                    }
+                    Label("Shared", systemImage: "star.fill")
                 }
                 .itemTag(.star)
             }
-            .onChange(of: tappedTwice, perform: { tapped in
+            .onChange(of: tappedTwice) { tapped in
                 if tapped {
                     withAnimation {
                         proxy.scrollTo(self.selectedTab.scrollToTopID)
                     }
                     tappedTwice = false
                 }
-            })
+            }
         }
         #endif
     }
@@ -229,7 +216,7 @@ public struct RootView: View {
             .appToolbar()
         #endif
     }
-    
+
     func staredView() -> some View {
         ProposalListContainerView()
             .environmentObject(proposalListViewModelStared)
