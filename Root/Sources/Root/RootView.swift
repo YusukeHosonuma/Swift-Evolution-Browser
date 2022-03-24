@@ -16,52 +16,7 @@ import GoogleSignIn
 private enum Item: Int, Hashable {
     case all
     case star
-
-    var scrollToTopID: String {
-        switch self {
-        case .all:
-            return "SCROLL_TO_TOP_ALL"
-        case .star:
-            return "SCROLL_TO_TOP_STAR"
-        }
-    }
 }
-
-//
-// ⚙️ Global Objects
-//
-
-private let authState = AuthState()
-
-private let userService: UserService = UserServiceFirestore(authState: authState)
-
-private let proposalDataSource: ProposalDataSource = ProposalDataSourceImpl(
-    proposalAPI: ProposalAPIClient(),
-    userService: userService
-)
-
-// 💡 Note:
-// For avoid to `@StateObject` bugs in iOS and macOS.
-
-private let proposalListViewModelAll = ProposalListViewModel(
-    globalFilter: { _ in true },
-    authState: authState,
-    dataSource: proposalDataSource
-)
-
-private let proposalListViewModelStared = ProposalListViewModel(
-    globalFilter: { $0.star },
-    authState: authState,
-    dataSource: proposalDataSource
-)
-
-//
-// 💾 Storage
-//
-private let storageSelectedProposalIDAll =
-    UserDefaultStorage<String?>(key: "selectedProposalIDAll", nil)
-private let storageSelectedProposalIDStared =
-    UserDefaultStorage<String?>(key: "selectedProposalIDStared", nil)
 
 //
 // 💻 Root view
@@ -100,14 +55,15 @@ public struct RootView: View {
     }
     #endif
 
+    private let component = Component()
+
     public init() {}
 
     public var body: some View {
         content()
-            .environmentObject(authState)
+            .environmentObject(component.authState)
             .task {
-                await authState.onInitialize()
-                await proposalDataSource.onInitialize()
+                await component.ignite()
             }
             .onOpenURL { url in
                 #if os(iOS)
@@ -190,8 +146,8 @@ public struct RootView: View {
 
     func allView() -> some View {
         ProposalListContainerView()
-            .environmentObject(proposalListViewModelAll)
-            .environmentObject(storageSelectedProposalIDAll)
+            .environmentObject(component.proposalListViewModelAll)
+            .environmentObject(component.storageSelectedProposalIDAll)
         #if os(iOS)
             .navigationTitle("All Proposals")
             .scrollToTop(.all)
@@ -201,8 +157,8 @@ public struct RootView: View {
 
     func staredView() -> some View {
         ProposalListContainerView()
-            .environmentObject(proposalListViewModelStared)
-            .environmentObject(storageSelectedProposalIDStared)
+            .environmentObject(component.proposalListViewModelStared)
+            .environmentObject(component.storageSelectedProposalIDStared)
         #if os(iOS)
             .navigationTitle("Stared")
             .scrollToTop(.star)
@@ -217,6 +173,17 @@ public struct RootView: View {
 }
 
 // MARK: Private
+
+private extension Item {
+    var scrollToTopID: String {
+        switch self {
+        case .all:
+            return "SCROLL_TO_TOP_ALL"
+        case .star:
+            return "SCROLL_TO_TOP_STAR"
+        }
+    }
+}
 
 private extension View {
     func scrollToTop(_ item: Item) -> some View {
