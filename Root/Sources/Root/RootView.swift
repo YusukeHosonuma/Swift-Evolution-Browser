@@ -6,14 +6,14 @@
 //
 
 import Auth
+import Core
 import Proposal
 import SwiftUI
-
 #if os(iOS)
 import GoogleSignIn
 #endif
 
-private enum Item: Hashable {
+private enum Item: String, Hashable {
     case all
     case star
 
@@ -24,6 +24,14 @@ private enum Item: Hashable {
         case .star:
             return "SCROLL_TO_TOP_STAR"
         }
+    }
+}
+
+extension Item: StorageValue {
+    var rawString: String { rawValue }
+    init?(rawString: String?) {
+        guard let rawString = rawString, let item = Item(rawValue: rawString) else { return nil }
+        self = item
     }
 }
 
@@ -69,23 +77,32 @@ private let proposalListViewModelStared = ProposalListViewModel(
 )
 
 //
-// 💻 Root
+// 💾 Storage
 //
+private let storageSelectedTab =
+    UserDefaultStorage<Item>(key: "selectedTab", .all)
+private let storageSelectedProposalIDAll =
+    UserDefaultStorage<String>(key: "selectedProposalIDAll", nil)
+private let storageSelectedProposalIDStared =
+    UserDefaultStorage<String>(key: "selectedProposalIDStared", nil)
 
+//
+// 💻 Root view
+//
 public struct RootView: View {
-    @State private var selection: Item? = .all
     @State private var tappedTwice: Bool = false
+    @ObservedObject private var selectedTab: UserDefaultStorage<Item> = storageSelectedTab
 
     #if os(iOS)
     // Note:
     // For scroll to top when tab is tapped.
     private var selectionHandler: Binding<Item?> { Binding(
-        get: { self.selection },
+        get: { self.selectedTab.value },
         set: {
-            if $0 == self.selection {
+            if $0 == self.selectedTab.value {
                 tappedTwice = true
             }
-            self.selection = $0
+            self.selectedTab.value = $0
         }
     ) }
     #endif
@@ -109,7 +126,7 @@ public struct RootView: View {
     func content() -> some View {
         #if os(macOS)
         NavigationView {
-            List(selection: $selection) {
+            List(selection: $selectedTab.value) {
                 //
                 // All Proposals
                 //
@@ -117,6 +134,7 @@ public struct RootView: View {
                     NavigationView {
                         ProposalListContainerView()
                             .environmentObject(proposalListViewModelAll)
+                            .environmentObject(storageSelectedProposalIDAll)
                     }
                 } label: {
                     Label {
@@ -135,6 +153,7 @@ public struct RootView: View {
                     NavigationView {
                         ProposalListContainerView()
                             .environmentObject(proposalListViewModelStared)
+                            .environmentObject(storageSelectedProposalIDStared)
                     }
                 } label: {
                     Label {
@@ -159,6 +178,7 @@ public struct RootView: View {
                     ProposalListContainerView()
                         .environment(\.scrollToTopID, Item.all.scrollToTopID)
                         .environmentObject(proposalListViewModelAll)
+                        .environmentObject(storageSelectedProposalIDAll)
                         .navigationTitle("All Proposals")
                         .appToolbar()
 
@@ -181,6 +201,7 @@ public struct RootView: View {
                     ProposalListContainerView()
                         .environment(\.scrollToTopID, Item.star.scrollToTopID)
                         .environmentObject(proposalListViewModelStared)
+                        .environmentObject(storageSelectedProposalIDStared)
                         .navigationTitle("Stared")
                         .appToolbar()
 
@@ -197,7 +218,7 @@ public struct RootView: View {
                 .itemTag(.star)
             }
             .onChange(of: tappedTwice, perform: { tapped in
-                if let selection = self.selection, tapped {
+                if let selection = self.selectedTab.value, tapped {
                     withAnimation {
                         proxy.scrollTo(selection.scrollToTopID)
                     }

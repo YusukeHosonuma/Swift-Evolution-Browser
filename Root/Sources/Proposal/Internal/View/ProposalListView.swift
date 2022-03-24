@@ -10,8 +10,9 @@ import Foundation
 import SwiftUI
 
 struct ProposalListView: View {
-    @Environment(\.scrollToTopID) var scrollToTopID
+    @Environment(\.scrollToTopID) private var scrollToTopID
     @Environment(\.openURL) private var openURL
+    @EnvironmentObject private var selectedProposalID: UserDefaultStorage<String>
 
     let proposals: [Proposal]
     let onTapStar: (Proposal) -> Void
@@ -25,7 +26,7 @@ struct ProposalListView: View {
             List {
                 ForEach(proposals, id: \.id) { proposal in
                     ZStack {
-                        NavigationLink {
+                        NavigationLink(tag: proposal.id, selection: $selectedProposalID.value) {
                             ProposalDetailView(url: proposal.proposalURL)
                             #if os(iOS)
                                 // 💡 Navigation 下部に余白が表示される問題の対処
