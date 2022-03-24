@@ -24,7 +24,8 @@ The Swift Proposal Browswer that build with SwiftUI. (**beta** currently)
 ## Setup
 
 ```bash
-make setup # Install required tools for development
+brew install mint # if `mint` not installed
+mint bootstrap
 ```
 
 ## FAQ
