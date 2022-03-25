@@ -204,7 +204,7 @@ private extension Item {
         case .star:
             return "SCROLL_TO_TOP_STAR"
         case .setting:
-            preconditionFailure()
+            return ""
         }
     }
 }
