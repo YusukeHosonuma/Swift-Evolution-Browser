@@ -16,6 +16,7 @@ import GoogleSignIn
 private enum Item: Int {
     case all
     case star
+    case setting
 }
 
 //
@@ -55,7 +56,7 @@ public struct RootView: View {
     }
     #endif
 
-    private let component = Component()
+    private let component = Component.shared
 
     public init() {}
 
@@ -77,27 +78,32 @@ public struct RootView: View {
         NavigationView {
             List {
                 //
-                // All Proposals
+                // 📝 All Proposals
                 //
                 NavigationLink(tag: Item.all, selection: selectionHandler, destination: {
-                    NavigationView {
-                        allView()
-                    }
+                    allProposalView()
                 }) {
                     Label("All", systemImage: "list.bullet")
                 }
 
                 //
-                // Stared
+                // ⭐️ Stared
                 //
                 NavigationLink(tag: Item.star, selection: selectionHandler, destination: {
-                    NavigationView {
-                        staredView()
-                    }
+                    staredView()
                 }) {
                     Label { Text("Stared") } icon: {
                         Image(systemName: "star.fill").foregroundColor(.yellow)
                     }
+                }
+
+                //
+                // ⚙️ Setting
+                //
+                NavigationLink(tag: Item.setting, selection: selectionHandler, destination: {
+                    SettingView()
+                }) {
+                    Label("Settings", systemImage: "gearshape")
                 }
             }
             .listStyle(SidebarListStyle())
@@ -107,28 +113,34 @@ public struct RootView: View {
         ScrollViewReader { proxy in
             TabView(selection: selectionHandler) {
                 //
-                // All Proposals
+                // 📝 All Proposals
                 //
-                NavigationView {
-                    allView()
-                    noneSelectedView()
-                }
-                .tabItem {
-                    Label("All", systemImage: "list.bullet")
-                }
-                .itemTag(.all)
+                allProposalView()
+                    .tabItem {
+                        Label("All", systemImage: "list.bullet")
+                    }
+                    .itemTag(.all)
 
                 //
-                // Stared
+                // ⭐️ Stared
+                //
+                staredView()
+                    .tabItem {
+                        Label("Shared", systemImage: "star.fill")
+                    }
+                    .itemTag(.star)
+
+                //
+                // ⚙️ Setting
                 //
                 NavigationView {
-                    staredView()
-                    noneSelectedView()
+                    SettingView()
+                        .navigationTitle("Settings")
                 }
                 .tabItem {
-                    Label("Shared", systemImage: "star.fill")
+                    Label("Settings", systemImage: "gearshape")
                 }
-                .itemTag(.star)
+                .itemTag(.setting)
             }
             .onChange(of: tappedTwice) { tapped in
                 if tapped {
@@ -142,29 +154,41 @@ public struct RootView: View {
         #endif
     }
 
-    func allView() -> some View {
-        ProposalListContainerView()
-            .environmentObject(component.proposalListViewModelAll)
-            .environmentObject(component.storageSelectedProposalIDAll)
-        #if os(iOS)
-            .navigationTitle("All Proposals")
-            .scrollToTop(.all)
-            .appToolbar()
-        #endif
+    func allProposalView() -> some View {
+        NavigationView {
+            ProposalListContainerView()
+                .environmentObject(component.proposalListViewModelAll)
+                .environmentObject(component.storageSelectedProposalIDAll)
+            #if os(iOS)
+                .navigationTitle("All Proposals")
+                .scrollToTop(.all)
+                .appToolbar()
+            #endif
+
+            #if os(iOS)
+            noneSelectedView()
+            #endif
+        }
     }
 
     func staredView() -> some View {
-        ProposalListContainerView()
-            .environmentObject(component.proposalListViewModelStared)
-            .environmentObject(component.storageSelectedProposalIDStared)
-        #if os(iOS)
-            .navigationTitle("Stared")
-            .scrollToTop(.star)
-            .appToolbar()
-        #endif
+        NavigationView {
+            ProposalListContainerView()
+                .environmentObject(component.proposalListViewModelStared)
+                .environmentObject(component.storageSelectedProposalIDStared)
+            #if os(iOS)
+                .navigationTitle("Stared")
+                .scrollToTop(.star)
+                .appToolbar()
+            #endif
+
+            #if os(iOS)
+            noneSelectedView()
+            #endif
+        }
     }
 
-    // Note: show when no selected on iPad.
+    // 💡 Note: Show when no selected on iPad.
     func noneSelectedView() -> some View {
         Text("Please select proposal from sidebar.")
     }
@@ -179,6 +203,8 @@ private extension Item {
             return "SCROLL_TO_TOP_ALL"
         case .star:
             return "SCROLL_TO_TOP_STAR"
+        case .setting:
+            preconditionFailure()
         }
     }
 }

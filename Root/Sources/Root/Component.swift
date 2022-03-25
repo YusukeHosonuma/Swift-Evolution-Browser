@@ -11,6 +11,8 @@ import Foundation
 import Proposal
 
 final class Component {
+    static let shared: Component = .init()
+
     //
     // 💾 Storage
     //
