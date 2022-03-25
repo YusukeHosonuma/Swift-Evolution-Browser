@@ -16,6 +16,7 @@ import GoogleSignIn
 private enum Item: Int {
     case all
     case star
+    case setting
 }
 
 //
@@ -129,6 +130,18 @@ public struct RootView: View {
                     Label("Shared", systemImage: "star.fill")
                 }
                 .itemTag(.star)
+
+                //
+                // Setting
+                //
+                NavigationView {
+                    SettingView()
+                        .navigationTitle("Settings")
+                }
+                .tabItem {
+                    Label("Settings", systemImage: "gearshape")
+                }
+                .itemTag(.setting)
             }
             .onChange(of: tappedTwice) { tapped in
                 if tapped {
@@ -179,6 +192,8 @@ private extension Item {
             return "SCROLL_TO_TOP_ALL"
         case .star:
             return "SCROLL_TO_TOP_STAR"
+        case .setting:
+            preconditionFailure()
         }
     }
 }
