@@ -78,7 +78,7 @@ public struct RootView: View {
         NavigationView {
             List {
                 //
-                // All Proposals
+                // 📝 All Proposals
                 //
                 NavigationLink(tag: Item.all, selection: selectionHandler, destination: {
                     NavigationView {
@@ -89,7 +89,7 @@ public struct RootView: View {
                 }
 
                 //
-                // Stared
+                // ⭐️ Stared
                 //
                 NavigationLink(tag: Item.star, selection: selectionHandler, destination: {
                     NavigationView {
@@ -100,6 +100,15 @@ public struct RootView: View {
                         Image(systemName: "star.fill").foregroundColor(.yellow)
                     }
                 }
+
+                //
+                // ⚙️ Setting
+                //
+                NavigationLink(tag: Item.setting, selection: selectionHandler, destination: {
+                    SettingView()
+                }) {
+                    Label("Settings", systemImage: "gearshape")
+                }
             }
             .listStyle(SidebarListStyle())
         }
@@ -108,7 +117,7 @@ public struct RootView: View {
         ScrollViewReader { proxy in
             TabView(selection: selectionHandler) {
                 //
-                // All Proposals
+                // 📝 All Proposals
                 //
                 NavigationView {
                     allView()
@@ -120,7 +129,7 @@ public struct RootView: View {
                 .itemTag(.all)
 
                 //
-                // Stared
+                // ⭐️ Stared
                 //
                 NavigationView {
                     staredView()
@@ -132,7 +141,7 @@ public struct RootView: View {
                 .itemTag(.star)
 
                 //
-                // Setting
+                // ⚙️ Setting
                 //
                 NavigationView {
                     SettingView()

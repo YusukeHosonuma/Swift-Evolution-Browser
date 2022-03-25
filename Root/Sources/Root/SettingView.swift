@@ -23,16 +23,18 @@ private var shareOnTwitterURL: URL = {
     return url
 }()
 
-struct SettingView: View {
+public struct SettingView: View {
     @EnvironmentObject private var authState: AuthState
 
     @State private var isPresentLoginView = false
     @State private var isPresentLogoutConfirmSheet = false
 
-    var body: some View {
+    public init() {}
+
+    public var body: some View {
         List {
             //
-            // Account section.
+            // 🙋‍♂️ Account section.
             //
             Section("Account") {
                 if authState.isLogin {
@@ -50,7 +52,7 @@ struct SettingView: View {
                 }
             }
             //
-            // Links section.
+            // 🔗 Links section.
             //
             Section("Links") {
                 Link(destination: repositoryURL) {
@@ -65,13 +67,13 @@ struct SettingView: View {
             }
         }
         //
-        // Sign-in sheet.
+        // ✋ Sign-in sheet.
         //
         .sheet(isPresented: $isPresentLoginView) {
             LoginView()
         }
         //
-        // Sign-out confirm sheet.
+        // 👋 Sign-out confirm sheet.
         //
         .confirmationDialog("Are you sign-out?", isPresented: $isPresentLogoutConfirmSheet, titleVisibility: .visible) {
             Button("Sign-out", role: .destructive) {
