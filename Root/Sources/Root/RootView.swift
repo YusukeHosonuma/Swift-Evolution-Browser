@@ -56,7 +56,7 @@ public struct RootView: View {
     }
     #endif
 
-    private let component = Component()
+    private let component = Component.shared
 
     public init() {}
 
