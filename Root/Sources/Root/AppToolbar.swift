@@ -19,6 +19,9 @@ struct AppToolbar: ViewModifier {
     func body(content: Content) -> some View {
         content
             .toolbar {
+                //
+                // Login / Logout
+                //
                 ToolbarItem {
                     Button(action: onTapAccountButton) {
                         Image(systemName: "person.fill")
@@ -29,6 +32,19 @@ struct AppToolbar: ViewModifier {
                         }
                     }
                 }
+
+                //
+                // Toggle sidebar
+                //
+                #if os(macOS)
+                ToolbarItem(placement: .navigation) {
+                    Button {
+                        toggleSidebar()
+                    } label: {
+                        Image(systemName: "sidebar.leading")
+                    }
+                }
+                #endif
             }
             .sheet(isPresented: $isPresentAuthView) {
                 LoginView()
