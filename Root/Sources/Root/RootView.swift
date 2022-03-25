@@ -13,7 +13,7 @@ import SwiftUI
 import GoogleSignIn
 #endif
 
-private enum Item: Int, Hashable {
+private enum Item: Int {
     case all
     case star
 }
@@ -75,32 +75,30 @@ public struct RootView: View {
     func content() -> some View {
         #if os(macOS)
         NavigationView {
-            List(selection: selectionHandler) {
+            List {
                 //
                 // All Proposals
                 //
-                NavigationLink {
+                NavigationLink(tag: Item.all, selection: selectionHandler, destination: {
                     NavigationView {
                         allView()
                     }
-                } label: {
+                }) {
                     Label("All", systemImage: "list.bullet")
                 }
-                .itemTag(.all)
 
                 //
                 // Stared
                 //
-                NavigationLink {
+                NavigationLink(tag: Item.star, selection: selectionHandler, destination: {
                     NavigationView {
                         staredView()
                     }
-                } label: {
+                }) {
                     Label { Text("Stared") } icon: {
                         Image(systemName: "star.fill").foregroundColor(.yellow)
                     }
                 }
-                .itemTag(.star)
             }
             .listStyle(SidebarListStyle())
         }
