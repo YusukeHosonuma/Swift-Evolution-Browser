@@ -51,8 +51,8 @@
 		7046EB2E27E9E8A6003B883D /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		7071872827D884A1009A8169 /* MainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApp.swift; sourceTree = "<group>"; };
 		7071872A27D884A3009A8169 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		7071872F27D884A3009A8169 /* SwiftEvolutionBroswerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftEvolutionBroswerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7071873527D884A3009A8169 /* SwiftEvolutionBroswerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftEvolutionBroswerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7071872F27D884A3009A8169 /* SE Browser (iOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SE Browser (iOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7071873527D884A3009A8169 /* SE Browser (macOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SE Browser (macOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7071873727D884A3009A8169 /* macOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macOS.entitlements; sourceTree = "<group>"; };
 		7071873C27D884A3009A8169 /* Tests iOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests iOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7071874027D884A3009A8169 /* Tests_iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_iOS.swift; sourceTree = "<group>"; };
@@ -134,8 +134,8 @@
 		7071873027D884A3009A8169 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7071872F27D884A3009A8169 /* SwiftEvolutionBroswerApp.app */,
-				7071873527D884A3009A8169 /* SwiftEvolutionBroswerApp.app */,
+				7071872F27D884A3009A8169 /* SE Browser (iOS).app */,
+				7071873527D884A3009A8169 /* SE Browser (macOS).app */,
 				7071873C27D884A3009A8169 /* Tests iOS.xctest */,
 				7071874827D884A3009A8169 /* Tests macOS.xctest */,
 			);
@@ -178,9 +178,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7071872E27D884A3009A8169 /* SwiftEvolutionBroswerApp (iOS) */ = {
+		7071872E27D884A3009A8169 /* SE Browser (iOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7071875827D884A3009A8169 /* Build configuration list for PBXNativeTarget "SwiftEvolutionBroswerApp (iOS)" */;
+			buildConfigurationList = 7071875827D884A3009A8169 /* Build configuration list for PBXNativeTarget "SE Browser (iOS)" */;
 			buildPhases = (
 				70A91E1B27E5D411005684DD /* Format Sources */,
 				7071872B27D884A3009A8169 /* Sources */,
@@ -191,17 +191,17 @@
 			);
 			dependencies = (
 			);
-			name = "SwiftEvolutionBroswerApp (iOS)";
+			name = "SE Browser (iOS)";
 			packageProductDependencies = (
 				70D3B46027D9D8D0001CB591 /* Root */,
 			);
 			productName = "SwiftEvolutionBroswerApp (iOS)";
-			productReference = 7071872F27D884A3009A8169 /* SwiftEvolutionBroswerApp.app */;
+			productReference = 7071872F27D884A3009A8169 /* SE Browser (iOS).app */;
 			productType = "com.apple.product-type.application";
 		};
-		7071873427D884A3009A8169 /* SwiftEvolutionBroswerApp (macOS) */ = {
+		7071873427D884A3009A8169 /* SE Browser (macOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7071875B27D884A3009A8169 /* Build configuration list for PBXNativeTarget "SwiftEvolutionBroswerApp (macOS)" */;
+			buildConfigurationList = 7071875B27D884A3009A8169 /* Build configuration list for PBXNativeTarget "SE Browser (macOS)" */;
 			buildPhases = (
 				70A91E1C27E5D46D005684DD /* Format Sources */,
 				7071873127D884A3009A8169 /* Sources */,
@@ -212,12 +212,12 @@
 			);
 			dependencies = (
 			);
-			name = "SwiftEvolutionBroswerApp (macOS)";
+			name = "SE Browser (macOS)";
 			packageProductDependencies = (
 				70D3B46227D9D8D8001CB591 /* Root */,
 			);
 			productName = "SwiftEvolutionBroswerApp (macOS)";
-			productReference = 7071873527D884A3009A8169 /* SwiftEvolutionBroswerApp.app */;
+			productReference = 7071873527D884A3009A8169 /* SE Browser (macOS).app */;
 			productType = "com.apple.product-type.application";
 		};
 		7071873B27D884A3009A8169 /* Tests iOS */ = {
@@ -297,8 +297,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7071872E27D884A3009A8169 /* SwiftEvolutionBroswerApp (iOS) */,
-				7071873427D884A3009A8169 /* SwiftEvolutionBroswerApp (macOS) */,
+				7071872E27D884A3009A8169 /* SE Browser (iOS) */,
+				7071873427D884A3009A8169 /* SE Browser (macOS) */,
 				7071873B27D884A3009A8169 /* Tests iOS */,
 				7071874727D884A3009A8169 /* Tests macOS */,
 			);
@@ -423,12 +423,12 @@
 /* Begin PBXTargetDependency section */
 		7071873E27D884A3009A8169 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7071872E27D884A3009A8169 /* SwiftEvolutionBroswerApp (iOS) */;
+			target = 7071872E27D884A3009A8169 /* SE Browser (iOS) */;
 			targetProxy = 7071873D27D884A3009A8169 /* PBXContainerItemProxy */;
 		};
 		7071874A27D884A3009A8169 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7071873427D884A3009A8169 /* SwiftEvolutionBroswerApp (macOS) */;
+			target = 7071873427D884A3009A8169 /* SE Browser (macOS) */;
 			targetProxy = 7071874927D884A3009A8169 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -569,7 +569,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.penginmura.swiftevolutionbrowser;
-				PRODUCT_NAME = SwiftEvolutionBroswerApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -601,7 +601,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.penginmura.swiftevolutionbrowser;
-				PRODUCT_NAME = SwiftEvolutionBroswerApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -634,7 +634,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.penginmura.swiftevolutionbrowser;
-				PRODUCT_NAME = SwiftEvolutionBroswerApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -665,7 +665,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.penginmura.swiftevolutionbrowser;
-				PRODUCT_NAME = SwiftEvolutionBroswerApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -763,7 +763,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7071875827D884A3009A8169 /* Build configuration list for PBXNativeTarget "SwiftEvolutionBroswerApp (iOS)" */ = {
+		7071875827D884A3009A8169 /* Build configuration list for PBXNativeTarget "SE Browser (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7071875927D884A3009A8169 /* Debug */,
@@ -772,7 +772,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7071875B27D884A3009A8169 /* Build configuration list for PBXNativeTarget "SwiftEvolutionBroswerApp (macOS)" */ = {
+		7071875B27D884A3009A8169 /* Build configuration list for PBXNativeTarget "SE Browser (macOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7071875C27D884A3009A8169 /* Debug */,
