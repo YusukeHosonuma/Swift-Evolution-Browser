@@ -7,6 +7,7 @@
 
 import Auth
 import Foundation
+import SFReadableSymbols
 import SwiftUI
 
 private let repositoryURLString = "https://github.com/YusukeHosonuma/Swift-Evolution-Browser"
@@ -41,13 +42,13 @@ public struct SettingView: View {
                     Button {
                         isPresentLogoutConfirmSheet = true
                     } label: {
-                        Label("Sign-out", systemImage: "person.crop.circle")
+                        Label("Sign-out", symbol: "􀉭")
                     }
                 } else {
                     Button {
                         isPresentLoginView = true
                     } label: {
-                        Label("Sign-in", systemImage: "person.crop.circle")
+                        Label("Sign-out", symbol: "􀉭")
                     }
                 }
             }
@@ -56,13 +57,13 @@ public struct SettingView: View {
             //
             Section("Links") {
                 Link(destination: repositoryURL) {
-                    Label("Source Code on GitHub", systemImage: "text.book.closed.fill")
+                    Label("Source Code on GitHub", symbol: "􀫘")
                 }
                 Link(destination: twitterURL) {
-                    Label("Author", systemImage: "bubble.left.fill")
+                    Label("Author", symbol: "􀌫")
                 }
                 Link(destination: shareOnTwitterURL) {
-                    Label("Share on Twitter", systemImage: "arrowshape.turn.up.right.fill")
+                    Label("Share on Twitter", symbol: "􀉑")
                 }
             }
         }

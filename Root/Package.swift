@@ -17,6 +17,7 @@ let package = Package(
         .package(url: "https://github.com/google/GoogleSignIn-iOS.git", from: "6.1.0"),
         .package(url: "https://github.com/apple/swift-algorithms", from: "1.0.0"),
         .package(url: "https://github.com/YusukeHosonuma/SwiftParamTest.git", from: "2.2.0"),
+        .package(url: "https://github.com/YusukeHosonuma/SFReadableSymbols.git", from: "1.0.0"),
     ],
     targets: [
         //
@@ -25,6 +26,7 @@ let package = Package(
         .target(name: "Root", dependencies: [
             "Auth",
             "Proposal",
+            "SFReadableSymbols",
         ]),
         .testTarget(name: "RootTests", dependencies: ["Root"]),
         //

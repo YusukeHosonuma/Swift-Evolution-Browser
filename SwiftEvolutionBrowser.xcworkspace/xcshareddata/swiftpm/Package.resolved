@@ -136,6 +136,15 @@
       }
     },
     {
+      "identity" : "sfreadablesymbols",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/YusukeHosonuma/SFReadableSymbols.git",
+      "state" : {
+        "revision" : "e7d4c2a28ff151774ae50234632a9a1c73b658fb",
+        "version" : "1.0.0"
+      }
+    },
+    {
       "identity" : "shlist",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/YusukeHosonuma/SHList.git",
