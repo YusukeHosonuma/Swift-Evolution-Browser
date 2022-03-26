@@ -8,6 +8,7 @@
 import Core
 import Foundation
 import SwiftUI
+import SFReadableSymbols
 
 struct ProposalListView: View {
     @Environment(\.scrollToTopID) private var scrollToTopID
@@ -38,14 +39,14 @@ struct ProposalListView: View {
                                         Button {
                                             isPresentActivitySheet = true
                                         } label: {
-                                            Image(systemName: "square.and.arrow.up")
+                                            Image(symbol: "􀈂")
                                         }
                                     }
                                     ToolbarItem(placement: .navigationBarTrailing) {
                                         Menu {
                                             ProposalMenu(proposal: proposal)
                                         } label: {
-                                            Image(systemName: "ellipsis")
+                                            Image(symbol: "􀍠")
                                         }
                                     }
                                     #else
@@ -53,7 +54,7 @@ struct ProposalListView: View {
                                         Menu {
                                             ProposalMenu(proposal: proposal)
                                         } label: {
-                                            Image(systemName: "ellipsis")
+                                            Image(symbol: "􀍠")
                                         }
                                     }
                                     #endif
