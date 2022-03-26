@@ -13,10 +13,10 @@ let package = Package(
         .library(name: "Root", targets: ["Root"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", .upToNextMajor(from: "8.10.0")),
-        .package(url: "https://github.com/google/GoogleSignIn-iOS.git", .upToNextMajor(from: "6.1.0")),
-        .package(url: "https://github.com/apple/swift-algorithms", .upToNextMajor(from: "1.0.0")),
-        .package(url: "https://github.com/YusukeHosonuma/SwiftParamTest.git", .upToNextMajor(from: "2.2.0")),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "8.10.0"),
+        .package(url: "https://github.com/google/GoogleSignIn-iOS.git", from: "6.1.0"),
+        .package(url: "https://github.com/apple/swift-algorithms", from: "1.0.0"),
+        .package(url: "https://github.com/YusukeHosonuma/SwiftParamTest.git", from: "2.2.0"),
     ],
     targets: [
         //
