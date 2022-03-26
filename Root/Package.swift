@@ -26,6 +26,7 @@ let package = Package(
         .target(name: "Root", dependencies: [
             "Auth",
             "Proposal",
+            "Setting",
             "SFReadableSymbols",
         ]),
         .testTarget(name: "RootTests", dependencies: ["Root"]),
@@ -35,13 +36,33 @@ let package = Package(
         .target(name: "Proposal", dependencies: [
             "Core",
             "Auth",
+            "Service",
             "SwiftEvolutionAPI",
             .product(name: "Algorithms", package: "swift-algorithms"),
+        ]),
+        .target(name: "Setting", dependencies: [
+            "Core",
+            "Auth",
+            "Service",
+            "SFReadableSymbols",
+        ]),
+        //
+        // ☁️ Service
+        //
+        .target(name: "Service", dependencies: [
+            "Core",
+            "Auth",
             .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
             .product(name: "FirebaseFirestoreSwift-Beta", package: "firebase-ios-sdk"),
             .product(name: "FirebaseFirestoreCombine-Community", package: "firebase-ios-sdk"),
         ]),
-        .testTarget(name: "ProposalTests", dependencies: ["Proposal", "SwiftParamTest"]),
+        .target(name: "Auth", dependencies: [
+            .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS", condition: .when(platforms: [.iOS])),
+            .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
+            .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
+            .product(name: "FirebaseFirestoreSwift-Beta", package: "firebase-ios-sdk"),
+            .product(name: "FirebaseFirestoreCombine-Community", package: "firebase-ios-sdk"),
+        ]),
         //
         // ⚙️ Core
         //
@@ -50,13 +71,10 @@ let package = Package(
         // 📚 Library
         //
         .target(name: "SwiftEvolutionAPI", dependencies: []),
-        .target(name: "Auth", dependencies: [
-            .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS", condition: .when(platforms: [.iOS])),
-            .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
-            .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
-            .product(name: "FirebaseFirestoreSwift-Beta", package: "firebase-ios-sdk"),
-            .product(name: "FirebaseFirestoreCombine-Community", package: "firebase-ios-sdk"),
-        ]),
+        //
+        // ☑️ Tests
+        //
         .testTarget(name: "AuthTests", dependencies: ["Auth"]),
+        .testTarget(name: "ProposalTests", dependencies: ["Proposal", "SwiftParamTest"]),
     ]
 )

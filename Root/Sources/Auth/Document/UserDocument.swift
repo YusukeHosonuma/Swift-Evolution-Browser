@@ -23,8 +23,10 @@ public struct UserDocument: Codable {
         self.stars = stars
         self.searchHistories = searchHistories
     }
+}
 
-    public mutating func toggleStar(_ proposalID: String) {
+public extension UserDocument {
+    mutating func toggleStar(_ proposalID: String) {
         if stars.contains(proposalID) {
             stars = stars.filter { $0 != proposalID }
         } else {
@@ -32,11 +34,15 @@ public struct UserDocument: Codable {
         }
     }
 
-    public mutating func addSearchHistory(_ keyword: String) {
+    mutating func addSearchHistory(_ keyword: String) {
         var xs = searchHistories ?? []
         xs.removeAll { $0 == keyword }
         xs.insert(keyword, at: 0)
         searchHistories = Array(xs.prefix(UserDocument.maxSearchHistoryCount))
+    }
+
+    mutating func clearSearchHistory() {
+        searchHistories = []
     }
 }
 

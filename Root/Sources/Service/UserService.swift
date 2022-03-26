@@ -9,7 +9,7 @@ import Auth
 import Combine
 import Foundation
 
-struct NotLoginedError: Error {}
+public struct NotLoginedError: Error {}
 
 public struct UserData {
     public var stars: [String]
@@ -24,6 +24,7 @@ public protocol UserService {
     func listen() async -> AnyPublisher<UserData, Never>
     func toggleStar(proposalID: String) async throws
     func addSearchHistory(_ keyword: String) async throws
+    func clearSearchHistory() async throws
 }
 
 public final class UserServiceFirestore: UserService {
@@ -60,6 +61,14 @@ public final class UserServiceFirestore: UserService {
 
         var doc = await UserDocument.get(user: user)
         doc.addSearchHistory(keyword)
+        await doc.update()
+    }
+
+    public func clearSearchHistory() async throws {
+        guard let user = await authState.user else { throw NotLoginedError() }
+
+        var doc = await UserDocument.get(user: user)
+        doc.clearSearchHistory()
         await doc.update()
     }
 }
