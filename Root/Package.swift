@@ -35,21 +35,26 @@ let package = Package(
         .target(name: "Proposal", dependencies: [
             "Core",
             "Auth",
+            "Service",
             "SwiftEvolutionAPI",
             .product(name: "Algorithms", package: "swift-algorithms"),
+        ]),
+        .testTarget(name: "ProposalTests", dependencies: ["Proposal", "SwiftParamTest"]),
+        .target(name: "Setting", dependencies: [
+            "Core",
+            "Auth",
+            "Service",
+        ]),
+        //
+        // ☁️ Service
+        //
+        .target(name: "Service", dependencies: [
+            "Core",
+            "Auth",
             .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
             .product(name: "FirebaseFirestoreSwift-Beta", package: "firebase-ios-sdk"),
             .product(name: "FirebaseFirestoreCombine-Community", package: "firebase-ios-sdk"),
         ]),
-        .testTarget(name: "ProposalTests", dependencies: ["Proposal", "SwiftParamTest"]),
-        //
-        // ⚙️ Core
-        //
-        .target(name: "Core", dependencies: []),
-        //
-        // 📚 Library
-        //
-        .target(name: "SwiftEvolutionAPI", dependencies: []),
         .target(name: "Auth", dependencies: [
             .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS", condition: .when(platforms: [.iOS])),
             .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
@@ -58,5 +63,13 @@ let package = Package(
             .product(name: "FirebaseFirestoreCombine-Community", package: "firebase-ios-sdk"),
         ]),
         .testTarget(name: "AuthTests", dependencies: ["Auth"]),
+        //
+        // ⚙️ Core
+        //
+        .target(name: "Core", dependencies: []),
+        //
+        // 📚 Library
+        //
+        .target(name: "SwiftEvolutionAPI", dependencies: []),
     ]
 )

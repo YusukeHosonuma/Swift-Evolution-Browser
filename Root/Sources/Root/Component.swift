@@ -9,6 +9,7 @@ import Auth
 import Core
 import Foundation
 import Proposal
+import Service
 
 final class Component {
     static let shared: Component = .init()

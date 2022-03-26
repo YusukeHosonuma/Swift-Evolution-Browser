@@ -9,7 +9,7 @@ import Auth
 import Combine
 import Foundation
 
-struct NotLoginedError: Error {}
+public struct NotLoginedError: Error {}
 
 public struct UserData {
     public var stars: [String]

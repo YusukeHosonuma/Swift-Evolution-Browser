@@ -5,10 +5,10 @@
 //  Created by Yusuke Hosonuma on 2022/03/04.
 //
 
-import Auth
 import Combine
 import Core
 import Foundation
+import Service
 
 public enum ProposalData {
     case loading
