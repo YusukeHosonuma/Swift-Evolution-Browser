@@ -44,10 +44,10 @@
 
 /* Begin PBXFileReference section */
 		700EE3EE27D9EFFE00A9D65A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		700EE3F227D9F02E00A9D65A /* SwiftEvolutionBroswerApp--macOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SwiftEvolutionBroswerApp--macOS--Info.plist"; sourceTree = "<group>"; };
-		700EE3F327D9F0A500A9D65A /* SwiftEvolutionBroswerApp--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SwiftEvolutionBroswerApp--iOS--Info.plist"; sourceTree = "<group>"; };
+		700EE3F227D9F02E00A9D65A /* macOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = macOS.plist; sourceTree = "<group>"; };
+		700EE3F327D9F0A500A9D65A /* iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = iOS.plist; sourceTree = "<group>"; };
 		701DE6CE27EABB6100246CA3 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
-		7043A7DD27DACBA400232812 /* SwiftEvolutionBroswerApp (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "SwiftEvolutionBroswerApp (iOS).entitlements"; sourceTree = "<group>"; };
+		7043A7DD27DACBA400232812 /* iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOS.entitlements; sourceTree = "<group>"; };
 		7046EB2E27E9E8A6003B883D /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		7071872827D884A1009A8169 /* MainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApp.swift; sourceTree = "<group>"; };
 		7071872A27D884A3009A8169 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -99,9 +99,6 @@
 		700EE3F127D9F00400A9D65A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				700EE3F327D9F0A500A9D65A /* SwiftEvolutionBroswerApp--iOS--Info.plist */,
-				7043A7DD27DACBA400232812 /* SwiftEvolutionBroswerApp (iOS).entitlements */,
-				700EE3F227D9F02E00A9D65A /* SwiftEvolutionBroswerApp--macOS--Info.plist */,
 				7071872A27D884A3009A8169 /* Assets.xcassets */,
 				700EE3EE27D9EFFE00A9D65A /* GoogleService-Info.plist */,
 				7046EB2E27E9E8A6003B883D /* InfoPlist.strings */,
@@ -110,10 +107,20 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		705EECD027EE8E8D00A58A97 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				700EE3F327D9F0A500A9D65A /* iOS.plist */,
+				7043A7DD27DACBA400232812 /* iOS.entitlements */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
 		7071872227D884A1009A8169 = {
 			isa = PBXGroup;
 			children = (
 				7071872727D884A1009A8169 /* Shared */,
+				705EECD027EE8E8D00A58A97 /* iOS */,
 				7071873627D884A3009A8169 /* macOS */,
 				7071873F27D884A3009A8169 /* Tests iOS */,
 				7071874B27D884A3009A8169 /* Tests macOS */,
@@ -146,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				7071873727D884A3009A8169 /* macOS.entitlements */,
+				700EE3F227D9F02E00A9D65A /* macOS.plist */,
 			);
 			path = macOS;
 			sourceTree = "<group>";
@@ -550,13 +558,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Shared/Resources/SwiftEvolutionBroswerApp (iOS).entitlements";
+				CODE_SIGN_ENTITLEMENTS = iOS/iOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P437HSA6PY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Shared/Resources/SwiftEvolutionBroswerApp--iOS--Info.plist";
+				INFOPLIST_FILE = iOS/iOS.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -582,13 +590,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Shared/Resources/SwiftEvolutionBroswerApp (iOS).entitlements";
+				CODE_SIGN_ENTITLEMENTS = iOS/iOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P437HSA6PY;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Shared/Resources/SwiftEvolutionBroswerApp--iOS--Info.plist";
+				INFOPLIST_FILE = iOS/iOS.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -624,7 +632,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Shared/Resources/SwiftEvolutionBroswerApp--macOS--Info.plist";
+				INFOPLIST_FILE = macOS/macOS.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -655,7 +663,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Shared/Resources/SwiftEvolutionBroswerApp--macOS--Info.plist";
+				INFOPLIST_FILE = macOS/macOS.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
