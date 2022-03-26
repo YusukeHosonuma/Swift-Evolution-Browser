@@ -7,6 +7,7 @@
 
 import Auth
 import Foundation
+import Service
 import SFReadableSymbols
 import SwiftUI
 
@@ -25,10 +26,7 @@ private var shareOnTwitterURL: URL = {
 }()
 
 public struct SettingView: View {
-    @EnvironmentObject private var authState: AuthState
-
-    @State private var isPresentLoginView = false
-    @State private var isPresentLogoutConfirmSheet = false
+    @EnvironmentObject private var viewModel: SettingViewModel
 
     public init() {}
 
@@ -38,17 +36,17 @@ public struct SettingView: View {
             // 🙋‍♂️ Account section.
             //
             Section("Account") {
-                if authState.isLogin {
+                if viewModel.isSignIn {
                     Button {
-                        isPresentLogoutConfirmSheet = true
+                        viewModel.onTapSignOut()
                     } label: {
-                        Label("Sign-out", symbol: "􀉭")
+                        Label("Sign-Out", symbol: "􀉭")
                     }
                 } else {
                     Button {
-                        isPresentLoginView = true
+                        viewModel.onTapSignIn()
                     } label: {
-                        Label("Sign-out", symbol: "􀉭")
+                        Label("Sign-In", symbol: "􀉭")
                     }
                 }
             }
@@ -70,16 +68,45 @@ public struct SettingView: View {
         //
         // ✋ Sign-in sheet.
         //
-        .sheet(isPresented: $isPresentLoginView) {
+        .sheet(isPresented: $viewModel.isPresentLoginView) {
             LoginView()
         }
         //
         // 👋 Sign-out confirm sheet.
         //
-        .confirmationDialog("Are you sign-out?", isPresented: $isPresentLogoutConfirmSheet, titleVisibility: .visible) {
+        .confirmationDialog("Are you sign-out?", isPresented: $viewModel.isPresentLogoutConfirmSheet, titleVisibility: .visible) {
             Button("Sign-out", role: .destructive) {
-                authState.logout()
+                viewModel.onTapSignOutOnAlert()
             }
         }
+    }
+}
+
+@MainActor
+public final class SettingViewModel: ObservableObject {
+    @Published var isSignIn = false
+    @Published var isPresentLoginView = false
+    @Published var isPresentLogoutConfirmSheet = false
+
+    private var authState: AuthState
+
+    public nonisolated init(
+        authState: AuthState
+    ) {
+        self.authState = authState
+    }
+
+    // MARK: Events
+
+    func onTapSignIn() {
+        isPresentLogoutConfirmSheet = true
+    }
+
+    func onTapSignOut() {
+        isPresentLoginView = true
+    }
+
+    func onTapSignOutOnAlert() {
+        authState.logout()
     }
 }

@@ -10,6 +10,7 @@ import Core
 import Foundation
 import Proposal
 import Service
+import Setting
 
 final class Component {
     static let shared: Component = .init()
@@ -44,6 +45,10 @@ final class Component {
         globalFilter: { $0.star },
         authState: authState,
         dataSource: proposalDataSource
+    )
+
+    lazy var settingViewModel: SettingViewModel = .init(
+        authState: authState
     )
 
     //

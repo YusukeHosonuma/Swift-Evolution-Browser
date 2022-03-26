@@ -26,6 +26,7 @@ let package = Package(
         .target(name: "Root", dependencies: [
             "Auth",
             "Proposal",
+            "Setting",
             "SFReadableSymbols",
         ]),
         .testTarget(name: "RootTests", dependencies: ["Root"]),
@@ -39,11 +40,11 @@ let package = Package(
             "SwiftEvolutionAPI",
             .product(name: "Algorithms", package: "swift-algorithms"),
         ]),
-        .testTarget(name: "ProposalTests", dependencies: ["Proposal", "SwiftParamTest"]),
         .target(name: "Setting", dependencies: [
             "Core",
             "Auth",
             "Service",
+            "SFReadableSymbols",
         ]),
         //
         // ☁️ Service
@@ -62,7 +63,6 @@ let package = Package(
             .product(name: "FirebaseFirestoreSwift-Beta", package: "firebase-ios-sdk"),
             .product(name: "FirebaseFirestoreCombine-Community", package: "firebase-ios-sdk"),
         ]),
-        .testTarget(name: "AuthTests", dependencies: ["Auth"]),
         //
         // ⚙️ Core
         //
@@ -71,5 +71,10 @@ let package = Package(
         // 📚 Library
         //
         .target(name: "SwiftEvolutionAPI", dependencies: []),
+        //
+        // ☑️ Tests
+        //
+        .testTarget(name: "AuthTests", dependencies: ["Auth"]),
+        .testTarget(name: "ProposalTests", dependencies: ["Proposal", "SwiftParamTest"]),
     ]
 )

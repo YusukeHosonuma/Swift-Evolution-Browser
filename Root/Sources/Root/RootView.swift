@@ -8,6 +8,7 @@
 import Auth
 import Core
 import Proposal
+import Setting
 import SFReadableSymbols
 import SwiftUI
 #if os(iOS)
@@ -103,6 +104,7 @@ public struct RootView: View {
                 //
                 NavigationLink(tag: Item.setting, selection: selectionHandler, destination: {
                     SettingView()
+                        .environmentObject(component.settingViewModel)
                 }) {
                     Label("All", symbol: "􀣋")
                 }
@@ -137,6 +139,7 @@ public struct RootView: View {
                 NavigationView {
                     SettingView()
                         .navigationTitle("Settings")
+                        .environmentObject(component.settingViewModel)
                 }
                 .tabItem {
                     Label("All", symbol: "􀣋")
