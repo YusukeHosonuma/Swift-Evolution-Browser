@@ -27,7 +27,6 @@ let package = Package(
             "Auth",
             "Proposal",
             "Setting",
-            "SFReadableSymbols",
         ]),
         .testTarget(name: "RootTests", dependencies: ["Root"]),
         //
@@ -66,7 +65,9 @@ let package = Package(
         //
         // ⚙️ Core
         //
-        .target(name: "Core", dependencies: []),
+        .target(name: "Core", dependencies: [
+            "SFReadableSymbols",
+        ]),
         //
         // 📚 Library
         //

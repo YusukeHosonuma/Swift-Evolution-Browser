@@ -8,6 +8,7 @@
 import Auth
 import Core
 import Foundation
+import SFReadableSymbols
 import SwiftUI
 
 struct AppToolbar: ViewModifier {
@@ -19,18 +20,6 @@ struct AppToolbar: ViewModifier {
     func body(content: Content) -> some View {
         content
             .toolbar {
-                // ☑️ Moved to `Setting` tab.
-                // ToolbarItem {
-                //     Button(action: onTapAccountButton) {
-                //         Image(systemName: "person.fill")
-                //     }
-                //     .confirmationDialog("Are you logout?", isPresented: $isPresentConfirmSheet) {
-                //         if authState.isLogin {
-                //             Button("Logout", action: onTapLogout)
-                //         }
-                //     }
-                // }
-
                 //
                 // Toggle sidebar
                 //
@@ -39,29 +28,12 @@ struct AppToolbar: ViewModifier {
                     Button {
                         toggleSidebar()
                     } label: {
-                        Image(systemName: "sidebar.leading")
+                        Image(symbol: "􀰱")
                     }
                 }
                 #endif
             }
-            .sheet(isPresented: $isPresentAuthView) {
-                LoginView()
-            }
     }
-
-    // MARK: Events
-
-    // private func onTapLogout() {
-    //     authState.logout()
-    // }
-
-    // private func onTapAccountButton() {
-    //     if authState.isLogin {
-    //         isPresentConfirmSheet = true
-    //     } else {
-    //         isPresentAuthView = true
-    //     }
-    // }
 }
 
 extension View {

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SFReadableSymbols
 import SwiftUI
 
 public struct ProposalMenu: View {
@@ -21,12 +22,12 @@ public struct ProposalMenu: View {
         Button {
             openURL(proposal.proposalURL)
         } label: {
-            Label("Open in Browser", systemImage: "globe")
+            Label("Open in Browser", symbol: "􀆪")
         }
         Button {
             openURL(URL.searchInForums(proposalID: proposal.id))
         } label: {
-            Label("Search in Forums", systemImage: "swift")
+            Label("Search in Forums", symbol: "􀫊")
         }
         Button {
             openURL(URL.searchInTwitter(proposalID: proposal.id))
