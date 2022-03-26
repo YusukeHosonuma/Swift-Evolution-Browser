@@ -8,6 +8,7 @@
 import Auth
 import Core
 import Proposal
+import SFReadableSymbols
 import SwiftUI
 #if os(iOS)
 import GoogleSignIn
@@ -83,7 +84,7 @@ public struct RootView: View {
                 NavigationLink(tag: Item.all, selection: selectionHandler, destination: {
                     allProposalView()
                 }) {
-                    Label("All", systemImage: "list.bullet")
+                    Label("All", symbol: "􀋲")
                 }
 
                 //
@@ -93,7 +94,7 @@ public struct RootView: View {
                     staredView()
                 }) {
                     Label { Text("Stared") } icon: {
-                        Image(systemName: "star.fill").foregroundColor(.yellow)
+                        Label("All", symbol: "􀋃").foregroundColor(.yellow)
                     }
                 }
 
@@ -103,7 +104,7 @@ public struct RootView: View {
                 NavigationLink(tag: Item.setting, selection: selectionHandler, destination: {
                     SettingView()
                 }) {
-                    Label("Settings", systemImage: "gearshape")
+                    Label("All", symbol: "􀣋")
                 }
             }
             .listStyle(SidebarListStyle())
@@ -117,7 +118,7 @@ public struct RootView: View {
                 //
                 allProposalView()
                     .tabItem {
-                        Label("All", systemImage: "list.bullet")
+                        Label("All", symbol: "􀋲")
                     }
                     .itemTag(.all)
 
@@ -126,7 +127,7 @@ public struct RootView: View {
                 //
                 staredView()
                     .tabItem {
-                        Label("Shared", systemImage: "star.fill")
+                        Label("All", symbol: "􀋃")
                     }
                     .itemTag(.star)
 
@@ -138,7 +139,7 @@ public struct RootView: View {
                         .navigationTitle("Settings")
                 }
                 .tabItem {
-                    Label("Settings", systemImage: "gearshape")
+                    Label("All", symbol: "􀣋")
                 }
                 .itemTag(.setting)
             }
