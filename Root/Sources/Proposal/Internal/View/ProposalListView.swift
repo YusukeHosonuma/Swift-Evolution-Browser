@@ -7,8 +7,8 @@
 
 import Core
 import Foundation
-import SwiftUI
 import SFReadableSymbols
+import SwiftUI
 
 struct ProposalListView: View {
     @Environment(\.scrollToTopID) private var scrollToTopID

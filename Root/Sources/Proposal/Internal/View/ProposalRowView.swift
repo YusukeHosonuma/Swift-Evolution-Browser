@@ -6,8 +6,8 @@
 //
 
 import Core
-import SwiftUI
 import SFReadableSymbols
+import SwiftUI
 
 struct ProposalRowView: View {
     let proposal: Proposal

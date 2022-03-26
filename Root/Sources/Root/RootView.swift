@@ -95,7 +95,7 @@ public struct RootView: View {
                     staredView()
                 }) {
                     Label { Text("Stared") } icon: {
-                        Label("All", symbol: "􀋃").foregroundColor(.yellow)
+                        Label("Star", symbol: "􀋃").foregroundColor(.yellow)
                     }
                 }
 
@@ -106,7 +106,7 @@ public struct RootView: View {
                     SettingView()
                         .environmentObject(component.settingViewModel)
                 }) {
-                    Label("All", symbol: "􀣋")
+                    Label("Setting", symbol: "􀣋")
                 }
             }
             .listStyle(SidebarListStyle())
@@ -129,7 +129,7 @@ public struct RootView: View {
                 //
                 staredView()
                     .tabItem {
-                        Label("All", symbol: "􀋃")
+                        Label("Star", symbol: "􀋃")
                     }
                     .itemTag(.star)
 
@@ -142,7 +142,7 @@ public struct RootView: View {
                         .environmentObject(component.settingViewModel)
                 }
                 .tabItem {
-                    Label("All", symbol: "􀣋")
+                    Label("Setting", symbol: "􀣋")
                 }
                 .itemTag(.setting)
             }
