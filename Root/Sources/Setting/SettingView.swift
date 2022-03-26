@@ -11,6 +11,8 @@ import Service
 import SFReadableSymbols
 import SwiftUI
 
+private let privacyPolicyURL = URL(string: "https://yusukehosonuma.github.io/Swift-Evolution-Browser/privacy-policy")!
+
 private let repositoryURLString = "https://github.com/YusukeHosonuma/Swift-Evolution-Browser"
 private let repositoryURL = URL(string: repositoryURLString)!
 
@@ -62,6 +64,9 @@ public struct SettingView: View {
             // 🔗 Links section.
             //
             Section("Links") {
+                Link(destination: privacyPolicyURL) {
+                    Label("Privacy Policy", symbol: "􀉪")
+                }
                 Link(destination: repositoryURL) {
                     Label("Source Code on GitHub", symbol: "􀫘")
                 }
