@@ -5,4 +5,5 @@
   Created by Yusuke Hosonuma on 2022/03/22.
   
 */
+"CFBundleName" = "SE Browser";
 "CFBundleDisplayName" = "SE Browser";
