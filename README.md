@@ -72,7 +72,9 @@ A. メインテーマは『学習』（とリハビリ）
 
 ## Links
 
-[Effective SwiftUI 候補（仮説）](https://zenn.dev/tobi462/scraps/905f2e6ac9b895)
+- [Effective SwiftUI 候補（仮説）](https://zenn.dev/tobi462/scraps/905f2e6ac9b895)
+- [SFReadableSymbols](https://github.com/YusukeHosonuma/SFReadableSymbols)
+- [SwiftParamTest](https://github.com/YusukeHosonuma/SwiftParamTest)
 
 ## Author
 
