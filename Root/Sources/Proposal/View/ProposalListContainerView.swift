@@ -8,6 +8,7 @@
 import Auth
 import Combine
 import Core
+import SFReadableSymbols
 import SwiftUI
 #if os(iOS)
 import UIKit
@@ -62,6 +63,34 @@ public struct ProposalListContainerView: View {
                 contentView(content)
             }
         }
+        .toolbar {
+            ToolbarItem {
+                #if os(macOS)
+                Picker(selection: $viewModel.sort) {
+                    Label("Latest", symbol: "􀄨")
+                        .tag(Sort.latest)
+                    Label("Oldtest", symbol: "􀄩")
+                        .tag(Sort.oldest)
+                } label: {
+                    Image(symbol: "􀄬")
+                }
+                #else
+                Menu {
+                    Picker(selection: $viewModel.sort) {
+                        Label("Latest", symbol: "􀄨")
+                            .tag(Sort.latest)
+                        Label("Oldtest", symbol: "􀄩")
+                            .tag(Sort.oldest)
+                    } label: {
+                        // ref: https://stackoverflow.com/questions/69381385/swiftui-custom-picker-label-not-rendering
+                        EmptyView()
+                    }
+                } label: {
+                    Image(symbol: "􀄬")
+                }
+                #endif
+            }
+        }
         .alert("Network Error", isPresented: $viewModel.isPresentNetworkErrorAlert) {}
         .sheet(isPresented: $viewModel.isPresentAuthView) {
             LoginView()
@@ -98,17 +127,17 @@ public struct ProposalListContainerView: View {
             suggestions: {
                 if content.searchQuery.isEmpty {
                     //
-                    // Search by xxx
+                    // 🔍 Search by xxx
                     //
-                    Label("Search by Swift version", systemImage: "swift")
+                    Label("Search by Swift version", symbol: "􀫊")
                         .searchCompletion("Swift")
-                    Label("Search by Status", systemImage: "flag")
+                    Label("Search by Status", symbol: "􀋉")
                         .searchCompletion("Status")
                     //
-                    // Histories
+                    // 🕒 Histories
                     //
                     ForEach(content.searchHistories, id: \.self) {
-                        Label($0, systemImage: "clock")
+                        Label($0, symbol: "􀐫")
                             .searchCompletion($0)
                     }
                 } else {
@@ -130,12 +159,18 @@ public struct ProposalListContainerView: View {
     }
 }
 
+enum Sort {
+    case latest
+    case oldest
+}
+
 @MainActor
 public final class ProposalListViewModel: ObservableObject {
     @Published var state: State = .loading
     @Published var isPresentNetworkErrorAlert = false
     @Published var isPresentAuthView = false
     @Published var toHideKeyboard = false
+    @Published var sort: Sort = .latest
 
     enum State: Equatable {
         case loading
@@ -143,10 +178,13 @@ public final class ProposalListViewModel: ObservableObject {
         case success(Content)
     }
 
+    // TODO: Refactor - remove enum state management.
+
     struct Content: Equatable {
         var allProposals: [Proposal]
         var searchQuery: String = ""
         var searchHistories: [String]
+        var sort: Sort = .latest
 
         init(proposals: [Proposal], searchHistories: [String]) {
             allProposals = proposals
@@ -154,7 +192,13 @@ public final class ProposalListViewModel: ObservableObject {
         }
 
         var filteredProposals: [Proposal] {
-            allProposals.search(by: searchQuery)
+            let xs = allProposals.search(by: searchQuery)
+            switch sort {
+            case .latest:
+                return xs.sorted { $0.id > $1.id }
+            case .oldest:
+                return xs.sorted { $0.id < $1.id }
+            }
         }
 
         var suggestions: [Suggestion] {
@@ -188,6 +232,15 @@ public final class ProposalListViewModel: ObservableObject {
         #if os(iOS)
         feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
         #endif
+
+        $sort
+            .map { [weak self] in
+                guard let self = self, case var .success(content) = self.state else { return .error }
+                content.sort = $0
+                return .success(content)
+            }
+            .assign(to: &$state)
+
         dataSource.proposals
             .receive(on: DispatchQueue.main)
             .map { [weak self] proposalData in

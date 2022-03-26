@@ -29,7 +29,7 @@ public final class ProposalAPIClient: ProposalAPI {
                     proposalURL: URL(string: "https://github.com/apple/swift-evolution/blob/main/proposals/\($0.link)")!,
                     status: convertStatus(status: $0.status)
                 )
-            }.reversed()
+            }
     }
 
     // Note:
