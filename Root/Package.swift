@@ -43,7 +43,6 @@ let package = Package(
             "Core",
             "Auth",
             "Service",
-            "SFReadableSymbols",
         ]),
         //
         // ☁️ Service
