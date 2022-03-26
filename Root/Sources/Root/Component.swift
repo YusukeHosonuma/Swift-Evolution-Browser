@@ -48,7 +48,8 @@ final class Component {
     )
 
     lazy var settingViewModel: SettingViewModel = .init(
-        authState: authState
+        authState: authState,
+        userService: userService
     )
 
     //

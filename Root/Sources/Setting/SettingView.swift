@@ -42,6 +42,14 @@ public struct SettingView: View {
                     } label: {
                         Label("Sign-Out", symbol: "􀉭")
                     }
+                    Button {
+                        Task {
+                            await viewModel.onTapClearSearchHistory()
+                        }
+                    } label: {
+                        Label("Clear search history", symbol: "􀐫")
+                    }
+                    .disabled(viewModel.isDisabledClearSearchHistoryButton)
                 } else {
                     Button {
                         viewModel.onTapSignIn()
@@ -79,6 +87,9 @@ public struct SettingView: View {
                 viewModel.onTapSignOutOnAlert()
             }
         }
+        .task {
+            await viewModel.onAppear()
+        }
     }
 }
 
@@ -87,26 +98,49 @@ public final class SettingViewModel: ObservableObject {
     @Published var isSignIn = false
     @Published var isPresentLoginView = false
     @Published var isPresentLogoutConfirmSheet = false
+    @Published var isDisabledClearSearchHistoryButton = false
 
-    private var authState: AuthState
+    private let authState: AuthState
+    private let userService: UserService
+    private var initialized = false
 
     public nonisolated init(
-        authState: AuthState
+        authState: AuthState,
+        userService: UserService
     ) {
         self.authState = authState
+        self.userService = userService
+    }
+
+    func onAppear() async {
+        defer { initialized = true }
+        guard initialized == false else { return }
+
+        authState.$isLogin.assign(to: &$isSignIn)
+        await userService.listen()
+            .map(\.searchHistories.isEmpty)
+            .assign(to: &$isDisabledClearSearchHistoryButton)
     }
 
     // MARK: Events
 
     func onTapSignIn() {
-        isPresentLogoutConfirmSheet = true
+        isPresentLoginView = true
     }
 
     func onTapSignOut() {
-        isPresentLoginView = true
+        isPresentLogoutConfirmSheet = true
     }
 
     func onTapSignOutOnAlert() {
         authState.logout()
+    }
+
+    func onTapClearSearchHistory() async {
+        do {
+            try await userService.clearSearchHistory()
+        } catch {
+            preconditionFailure()
+        }
     }
 }
