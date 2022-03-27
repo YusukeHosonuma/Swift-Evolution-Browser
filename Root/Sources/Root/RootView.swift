@@ -141,6 +141,7 @@ public struct RootView: View {
                         .navigationTitle("Settings")
                         .environmentObject(component.settingViewModel)
                 }
+                .navigationViewStyle(.stack)
                 .tabItem {
                     Label("Setting", symbol: "􀣋")
                 }
