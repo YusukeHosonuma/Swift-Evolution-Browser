@@ -70,7 +70,7 @@ public struct SettingView: View {
                 }
                 Link(destination: repositoryURL) {
                     Label("Source Code on GitHub", symbol: "􀫘")
-                    
+
                     // ☑️ Remove: GitHub icon is not allowed to change color.
                     // IconLabel("GitHub", icon: "github-icon", bundle: .module)
                 }

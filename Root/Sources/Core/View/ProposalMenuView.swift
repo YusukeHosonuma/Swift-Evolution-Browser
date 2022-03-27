@@ -32,7 +32,7 @@ public struct ProposalMenu: View {
         Button {
             openURL(URL.searchInTwitter(proposalID: proposal.id))
         } label: {
-            Text("Search in Twitter")
+            Label("Search in Twitter", symbol: "􀌫")
         }
     }
 }
