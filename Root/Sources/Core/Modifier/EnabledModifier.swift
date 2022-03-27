@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+public extension View {
+    func enabled(_ enabled: Bool) -> some View {
+        modifier(EnabledModifier(enabled))
+    }
+}
+
 public struct EnabledModifier: ViewModifier {
     private let enabled: Bool
 
@@ -17,11 +23,5 @@ public struct EnabledModifier: ViewModifier {
     public func body(content: Content) -> some View {
         content
             .disabled(enabled == false)
-    }
-}
-
-public extension View {
-    func enabled(_ enabled: Bool) -> some View {
-        modifier(EnabledModifier(enabled))
     }
 }
