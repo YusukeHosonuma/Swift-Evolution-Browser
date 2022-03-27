@@ -6,6 +6,7 @@
 //
 
 import Auth
+import Core
 import Foundation
 import Service
 import SFReadableSymbols
@@ -69,6 +70,9 @@ public struct SettingView: View {
                 }
                 Link(destination: repositoryURL) {
                     Label("Source Code on GitHub", symbol: "􀫘")
+                    
+                    // ☑️ Remove: GitHub icon is not allowed to change color.
+                    // IconLabel("GitHub", icon: "github-icon", bundle: .module)
                 }
                 Link(destination: twitterURL) {
                     Label("Author", symbol: "􀌫")
