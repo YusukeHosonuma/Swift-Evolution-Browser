@@ -94,8 +94,8 @@ public struct RootView: View {
                 NavigationLink(tag: Item.star, selection: selectionHandler, destination: {
                     staredView()
                 }) {
-                    Label { Text("Stared") } icon: {
-                        Label("Star", symbol: "􀋃").foregroundColor(.yellow)
+                    Label { Text("Star") } icon: {
+                        Image(symbol: "􀋃").foregroundColor(.yellow)
                     }
                 }
 
