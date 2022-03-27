@@ -10,16 +10,45 @@ import Foundation
 import SwiftUI
 
 struct ProposalDetailView: View {
-    let url: URL
+    private let url: URL
+    @StateObject private var webViewState = WebViewState()
 
-    @State private var isLoading = true
+    init(url: URL) {
+        self.url = url
+    }
 
     var body: some View {
         ZStack {
-            WebView(url: url, isLoading: $isLoading)
-            if isLoading {
+            WebView(url: url, state: webViewState)
+            if webViewState.isLoading {
                 ProgressView()
             }
         }
+        .toolbar {
+            ToolbarItemGroup(placement: toolbarPlacement) {
+                Spacer()
+                Button {
+                    webViewState.goBack()
+                } label: {
+                    Image(symbol: "􀯶")
+                }
+                .enabled(webViewState.canGoBack)
+
+                Button {
+                    webViewState.goForward()
+                } label: {
+                    Image(symbol: "􀯻")
+                }
+                .enabled(webViewState.canGoForward)
+            }
+        }
+    }
+
+    private var toolbarPlacement: ToolbarItemPlacement {
+        #if os(macOS)
+            .automatic
+        #else
+            .bottomBar
+        #endif
     }
 }
