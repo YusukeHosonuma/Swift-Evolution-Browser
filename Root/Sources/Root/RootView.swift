@@ -16,36 +16,13 @@ import SwiftUI
 import GoogleSignIn
 #endif
 
-private enum Item: Int, Defaults.Serializable {
-    case all
-    case star
-    case setting
-}
-
-private extension Defaults.Keys {
-    static let selectedTab = Key<Item?>("root-view.selected-tab", default: .all)
-}
-
 //
 // 💻 Root view
 //
 public struct RootView: View {
     @Default(.selectedTab) private var selectedTab
 
-    #if os(macOS)
-    // Note:
-    // Adopt to data type of List's `selection`.
-    private var selectionHandler: Binding<Item?> {
-        .init(
-            get: { self.selectedTab },
-            set: {
-                if let value = $0 {
-                    self.selectedTab = value
-                }
-            }
-        )
-    }
-    #else
+    #if os(iOS)
     @State private var tappedTwice: Bool = false
 
     // Note:
@@ -87,7 +64,7 @@ public struct RootView: View {
                 //
                 // 📝 All Proposals
                 //
-                NavigationLink(tag: Item.all, selection: selectionHandler, destination: {
+                NavigationLink(tag: Item.all, selection: $selectedTab, destination: {
                     allProposalView()
                 }) {
                     Label("All", symbol: "􀋲")
@@ -96,7 +73,7 @@ public struct RootView: View {
                 //
                 // ⭐️ Stared
                 //
-                NavigationLink(tag: Item.star, selection: selectionHandler, destination: {
+                NavigationLink(tag: Item.star, selection: $selectedTab, destination: {
                     staredView()
                 }) {
                     Label { Text("Star") } icon: {
@@ -107,7 +84,7 @@ public struct RootView: View {
                 //
                 // ⚙️ Setting
                 //
-                NavigationLink(tag: Item.setting, selection: selectionHandler, destination: {
+                NavigationLink(tag: Item.setting, selection: $selectedTab, destination: {
                     SettingView()
                         .environmentObject(component.settingViewModel)
                 }) {
@@ -205,6 +182,16 @@ public struct RootView: View {
 }
 
 // MARK: Private
+
+private extension Defaults.Keys {
+    static let selectedTab = Key<Item?>("root-view.selected-tab", default: .all)
+}
+
+private enum Item: Int, Defaults.Serializable {
+    case all
+    case star
+    case setting
+}
 
 private extension Item {
     var scrollToTopID: String {
