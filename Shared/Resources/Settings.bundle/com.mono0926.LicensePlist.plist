@@ -20,9 +20,25 @@
 		</dict>
 		<dict>
 			<key>File</key>
+			<string>com.mono0926.LicensePlist/AppAuth-iOS</string>
+			<key>Title</key>
+			<string>appauth-ios</string>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+		</dict>
+		<dict>
+			<key>File</key>
 			<string>com.mono0926.LicensePlist/boringssl-SwiftPM</string>
 			<key>Title</key>
 			<string>boringssl-swiftpm</string>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+		</dict>
+		<dict>
+			<key>File</key>
+			<string>com.mono0926.LicensePlist/Defaults</string>
+			<key>Title</key>
+			<string>defaults</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
@@ -60,6 +76,14 @@
 		</dict>
 		<dict>
 			<key>File</key>
+			<string>com.mono0926.LicensePlist/GoogleSignIn-iOS</string>
+			<key>Title</key>
+			<string>googlesignin-ios</string>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+		</dict>
+		<dict>
+			<key>File</key>
 			<string>com.mono0926.LicensePlist/GoogleUtilities</string>
 			<key>Title</key>
 			<string>googleutilities</string>
@@ -84,6 +108,14 @@
 		</dict>
 		<dict>
 			<key>File</key>
+			<string>com.mono0926.LicensePlist/GTMAppAuth</string>
+			<key>Title</key>
+			<string>gtmappauth</string>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+		</dict>
+		<dict>
+			<key>File</key>
 			<string>com.mono0926.LicensePlist/leveldb</string>
 			<key>Title</key>
 			<string>leveldb</string>
@@ -103,6 +135,14 @@
 			<string>com.mono0926.LicensePlist/promises</string>
 			<key>Title</key>
 			<string>promises</string>
+			<key>Type</key>
+			<string>PSChildPaneSpecifier</string>
+		</dict>
+		<dict>
+			<key>File</key>
+			<string>com.mono0926.LicensePlist/SFReadableSymbols</string>
+			<key>Title</key>
+			<string>sfreadablesymbols</string>
 			<key>Type</key>
 			<string>PSChildPaneSpecifier</string>
 		</dict>
