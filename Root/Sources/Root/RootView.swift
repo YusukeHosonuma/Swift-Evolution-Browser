@@ -7,6 +7,7 @@
 
 import Auth
 import Core
+import Defaults
 import Proposal
 import Setting
 import SFReadableSymbols
@@ -15,37 +16,18 @@ import SwiftUI
 import GoogleSignIn
 #endif
 
-private enum Item: Int {
-    case all
-    case star
-    case setting
-}
-
 //
 // 💻 Root view
 //
 public struct RootView: View {
-    @AppStorage("selectedTab") private var selectedTab: Item = .all
+    @Default(.selectedTab) private var selectedTab
 
-    #if os(macOS)
-    // Note:
-    // Adopt to data type of List's `selection`.
-    private var selectionHandler: Binding<Item?> {
-        .init(
-            get: { self.selectedTab },
-            set: {
-                if let value = $0 {
-                    self.selectedTab = value
-                }
-            }
-        )
-    }
-    #else
+    #if os(iOS)
     @State private var tappedTwice: Bool = false
 
     // Note:
     // For scroll to top when tab is tapped.
-    private var selectionHandler: Binding<Item> {
+    private var selectionHandler: Binding<Item?> {
         .init(
             get: { self.selectedTab },
             set: {
@@ -82,7 +64,7 @@ public struct RootView: View {
                 //
                 // 📝 All Proposals
                 //
-                NavigationLink(tag: Item.all, selection: selectionHandler, destination: {
+                NavigationLink(tag: Item.all, selection: $selectedTab, destination: {
                     allProposalView()
                 }) {
                     Label("All", symbol: "􀋲")
@@ -91,7 +73,7 @@ public struct RootView: View {
                 //
                 // ⭐️ Stared
                 //
-                NavigationLink(tag: Item.star, selection: selectionHandler, destination: {
+                NavigationLink(tag: Item.star, selection: $selectedTab, destination: {
                     staredView()
                 }) {
                     Label { Text("Star") } icon: {
@@ -102,7 +84,7 @@ public struct RootView: View {
                 //
                 // ⚙️ Setting
                 //
-                NavigationLink(tag: Item.setting, selection: selectionHandler, destination: {
+                NavigationLink(tag: Item.setting, selection: $selectedTab, destination: {
                     SettingView()
                         .environmentObject(component.settingViewModel)
                 }) {
@@ -148,9 +130,9 @@ public struct RootView: View {
                 .itemTag(.setting)
             }
             .onChange(of: tappedTwice) { tapped in
-                if tapped {
+                if tapped, let selected = self.selectedTab {
                     withAnimation {
-                        proxy.scrollTo(self.selectedTab.scrollToTopID)
+                        proxy.scrollTo(selected.scrollToTopID)
                     }
                     tappedTwice = false
                 }
@@ -201,6 +183,16 @@ public struct RootView: View {
 
 // MARK: Private
 
+private extension Defaults.Keys {
+    static let selectedTab = Key<Item?>("root-view.selected-tab", default: .all)
+}
+
+private enum Item: Int, Defaults.Serializable {
+    case all
+    case star
+    case setting
+}
+
 private extension Item {
     var scrollToTopID: String {
         switch self {
@@ -222,14 +214,11 @@ private extension View {
 
 private extension View {
     func itemTag(_ tag: Item) -> some View {
-        // ⚠️ SwiftUI Bug:
-        // iOS では型レベル（Optional<Item>）で一致させないと動かないが、
-        // macOS では逆に型レベルで一致させると動かない。
-        // #if os(iOS)
-        // self.tag(Optional.some(tag))
-        // #else
-        // self.tag(tag)
-        // #endif
+        // 💡 Note: Adopt to selection's `Binding<T>` type.
+        #if os(macOS)
         self.tag(tag)
+        #else
+        self.tag(Optional.some(tag))
+        #endif
     }
 }

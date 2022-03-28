@@ -18,6 +18,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-algorithms", from: "1.0.0"),
         .package(url: "https://github.com/YusukeHosonuma/SwiftParamTest.git", from: "2.2.0"),
         .package(url: "https://github.com/YusukeHosonuma/SFReadableSymbols.git", from: "1.0.0"),
+        .package(url: "https://github.com/sindresorhus/Defaults.git", from: "6.2.1"),
     ],
     targets: [
         //
@@ -66,6 +67,7 @@ let package = Package(
         //
         .target(name: "Core", dependencies: [
             "SFReadableSymbols",
+            "Defaults",
         ]),
         //
         // 📚 Library
