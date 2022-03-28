@@ -69,7 +69,7 @@ public struct ProposalListContainerView: View {
                 Picker(selection: $viewModel.sort) {
                     Label("Latest", symbol: "􀄨")
                         .tag(Sort.latest)
-                    Label("Oldtest", symbol: "􀄩")
+                    Label("Oldest", symbol: "􀄩")
                         .tag(Sort.oldest)
                 } label: {
                     Image(symbol: "􀄬")
@@ -79,7 +79,7 @@ public struct ProposalListContainerView: View {
                     Picker(selection: $viewModel.sort) {
                         Label("Latest", symbol: "􀄨")
                             .tag(Sort.latest)
-                        Label("Oldtest", symbol: "􀄩")
+                        Label("Oldest", symbol: "􀄩")
                             .tag(Sort.oldest)
                     } label: {
                         // ref: https://stackoverflow.com/questions/69381385/swiftui-custom-picker-label-not-rendering
