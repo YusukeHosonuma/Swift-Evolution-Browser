@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7071872E27D884A3009A8169"
-               BuildableName = "SEBrowser.app"
-               BlueprintName = "SE Browser (iOS)"
+               BlueprintIdentifier = "7071873427D884A3009A8169"
+               BuildableName = "SE Browser (macOS).app"
+               BlueprintName = "SE Browser (macOS)"
                ReferencedContainer = "container:SwiftEvolutionBroswerApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7071873B27D884A3009A8169"
-               BuildableName = "Tests iOS.xctest"
-               BlueprintName = "Tests iOS"
+               BlueprintIdentifier = "7071874727D884A3009A8169"
+               BuildableName = "Tests macOS.xctest"
+               BlueprintName = "Tests macOS"
                ReferencedContainer = "container:SwiftEvolutionBroswerApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -54,17 +54,13 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7071872E27D884A3009A8169"
-            BuildableName = "SEBrowser.app"
-            BlueprintName = "SE Browser (iOS)"
+            BlueprintIdentifier = "7071873427D884A3009A8169"
+            BuildableName = "SE Browser (macOS).app"
+            BlueprintName = "SE Browser (macOS)"
             ReferencedContainer = "container:SwiftEvolutionBroswerApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
-         <CommandLineArgument
-            argument = "-FIRAnalyticsDebugEnabled"
-            isEnabled = "NO">
-         </CommandLineArgument>
          <CommandLineArgument
             argument = "-FIRDebugEnabled"
             isEnabled = "NO">
@@ -81,9 +77,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7071872E27D884A3009A8169"
-            BuildableName = "SEBrowser.app"
-            BlueprintName = "SE Browser (iOS)"
+            BlueprintIdentifier = "7071873427D884A3009A8169"
+            BuildableName = "SE Browser (macOS).app"
+            BlueprintName = "SE Browser (macOS)"
             ReferencedContainer = "container:SwiftEvolutionBroswerApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
