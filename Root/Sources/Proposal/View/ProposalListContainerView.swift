@@ -287,8 +287,10 @@ public final class ProposalListViewModel: ObservableObject {
             #if os(iOS)
             toHideKeyboard = true
             #endif
-            Task {
-                await dataSource.addSearchHistory(query)
+            if authState.isLogin {
+                Task {
+                    await dataSource.addSearchHistory(query)
+                }
             }
         }
     }
@@ -296,9 +298,11 @@ public final class ProposalListViewModel: ObservableObject {
     func onSubmitSearch() {
         guard case let .success(content) = state else { return }
 
-        if content.searchQuery != "Swift", content.searchQuery != "Status" {
-            Task {
-                await dataSource.addSearchHistory(content.searchQuery)
+        if authState.isLogin {
+            if content.searchQuery != "Swift", content.searchQuery != "Status" {
+                Task {
+                    await dataSource.addSearchHistory(content.searchQuery)
+                }
             }
         }
     }
