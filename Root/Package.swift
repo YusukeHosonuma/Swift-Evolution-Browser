@@ -28,6 +28,7 @@ let package = Package(
             "Auth",
             "Proposal",
             "Setting",
+            .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk"),
         ]),
         .testTarget(name: "RootTests", dependencies: ["Root"]),
         //

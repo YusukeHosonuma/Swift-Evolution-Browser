@@ -6,9 +6,11 @@
 //
 
 import Core
-import FirebaseAnalytics
 import Foundation
 import SwiftUI
+#if os(iOS)
+import FirebaseAnalytics
+#endif
 
 struct ProposalDetailView: View {
     private let proposal: Proposal
@@ -44,12 +46,14 @@ struct ProposalDetailView: View {
             }
         }
         .onAppear {
+            #if os(iOS)
             // 💡 TODO: This is 1st example.
-            Analytics.logEvent(AnalyticsEventSelectContent, parameters: [
-                AnalyticsParameterItemID: "id-\(proposal.id)",
-                AnalyticsParameterItemName: proposal.title,
-                AnalyticsParameterContentType: "cont",
-            ])
+            // Analytics.logEvent(AnalyticsEventSelectContent, parameters: [
+            //     AnalyticsParameterItemID: "id-\(proposal.id)",
+            //     AnalyticsParameterItemName: proposal.title,
+            //     AnalyticsParameterContentType: "cont",
+            // ])
+            #endif
         }
     }
 
