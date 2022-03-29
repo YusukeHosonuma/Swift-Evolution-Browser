@@ -6,20 +6,21 @@
 //
 
 import Core
+import FirebaseAnalytics
 import Foundation
 import SwiftUI
 
 struct ProposalDetailView: View {
-    private let url: URL
+    private let proposal: Proposal
     @StateObject private var webViewState = WebViewState()
 
-    init(url: URL) {
-        self.url = url
+    init(proposal: Proposal) {
+        self.proposal = proposal
     }
 
     var body: some View {
         ZStack {
-            WebView(url: url, state: webViewState)
+            WebView(url: proposal.proposalURL, state: webViewState)
             if webViewState.isLoading {
                 ProgressView()
             }
@@ -41,6 +42,14 @@ struct ProposalDetailView: View {
                 }
                 .enabled(webViewState.canGoForward)
             }
+        }
+        .onAppear {
+            // 💡 TODO: This is 1st example.
+            Analytics.logEvent(AnalyticsEventSelectContent, parameters: [
+                AnalyticsParameterItemID: "id-\(proposal.id)",
+                AnalyticsParameterItemName: proposal.title,
+                AnalyticsParameterContentType: "cont",
+            ])
         }
     }
 

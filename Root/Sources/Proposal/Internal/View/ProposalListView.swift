@@ -28,7 +28,7 @@ struct ProposalListView: View {
                 ForEach(proposals, id: \.id) { proposal in
                     ZStack {
                         NavigationLink(tag: proposal.id, selection: $selectedProposalID.value) {
-                            ProposalDetailView(url: proposal.proposalURL)
+                            ProposalDetailView(proposal: proposal)
                             #if os(iOS)
                                 // 💡 Navigation 下部に余白が表示される問題の対処
                                 .navigationBarTitleDisplayMode(.inline)

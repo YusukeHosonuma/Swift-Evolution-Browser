@@ -68,6 +68,7 @@ let package = Package(
         .target(name: "Core", dependencies: [
             "SFReadableSymbols",
             "Defaults",
+            .product(name: "FirebaseAnalytics", package: "firebase-ios-sdk", condition: .when(platforms: [.iOS])),
         ]),
         //
         // 📚 Library
