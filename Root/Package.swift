@@ -56,6 +56,7 @@ let package = Package(
             .product(name: "FirebaseFirestoreCombine-Community", package: "firebase-ios-sdk"),
         ]),
         .target(name: "Auth", dependencies: [
+            "Core",
             .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS", condition: .when(platforms: [.iOS])),
             .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
             .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
