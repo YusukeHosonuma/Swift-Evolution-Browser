@@ -21,9 +21,7 @@ public final class Logger {
         // 💡 Assertion error to crash when development.
         assertionFailure(message)
 
-        #if os(iOS)
         Crashlytics.crashlytics().record(error: error.nsError(path: path))
-        #endif
     }
 }
 
