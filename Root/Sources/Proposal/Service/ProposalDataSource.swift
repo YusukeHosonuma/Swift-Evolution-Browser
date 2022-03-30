@@ -7,6 +7,7 @@
 
 import Combine
 import Core
+import FirebaseAnalytics
 import Foundation
 import Service
 
@@ -70,18 +71,10 @@ public class ProposalDataSourceImpl: ProposalDataSource, ObservableObject {
     }
 
     public func toggleStar(proposal: Proposal) async {
-        do {
-            try await userService.toggleStar(proposalID: proposal.id)
-        } catch {
-            preconditionFailure("\(error)")
-        }
+        await userService.toggleStar(proposalID: proposal.id)
     }
 
     public func addSearchHistory(_ keyword: String) async {
-        do {
-            try await userService.addSearchHistory(keyword)
-        } catch {
-            preconditionFailure("\(error)")
-        }
+        await userService.addSearchHistory(keyword)
     }
 }

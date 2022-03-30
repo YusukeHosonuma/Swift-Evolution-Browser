@@ -21,9 +21,9 @@ public struct UserData {
 
 public protocol UserService {
     func listen() async -> AnyPublisher<UserData, Never>
-    func toggleStar(proposalID: String) async throws
-    func addSearchHistory(_ keyword: String) async throws
-    func clearSearchHistory() async throws
+    func toggleStar(proposalID: String) async
+    func addSearchHistory(_ keyword: String) async
+    func clearSearchHistory() async
 }
 
 public final class UserServiceFirestore: UserService {
@@ -47,7 +47,7 @@ public final class UserServiceFirestore: UserService {
         }
     }
 
-    public func toggleStar(proposalID: String) async throws {
+    public func toggleStar(proposalID: String) async {
         guard let user = await authState.user else { Logger.error(.loginIsNeeded); return }
 
         var doc = await UserDocument.get(user: user)
@@ -55,7 +55,7 @@ public final class UserServiceFirestore: UserService {
         await doc.update()
     }
 
-    public func addSearchHistory(_ keyword: String) async throws {
+    public func addSearchHistory(_ keyword: String) async {
         guard let user = await authState.user else { Logger.error(.loginIsNeeded); return }
 
         var doc = await UserDocument.get(user: user)
@@ -63,7 +63,7 @@ public final class UserServiceFirestore: UserService {
         await doc.update()
     }
 
-    public func clearSearchHistory() async throws {
+    public func clearSearchHistory() async {
         guard let user = await authState.user else { Logger.error(.loginIsNeeded); return }
 
         var doc = await UserDocument.get(user: user)

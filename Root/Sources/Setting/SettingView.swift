@@ -146,10 +146,6 @@ public final class SettingViewModel: ObservableObject {
     }
 
     func onTapClearSearchHistory() async {
-        do {
-            try await userService.clearSearchHistory()
-        } catch {
-            preconditionFailure()
-        }
+        await userService.clearSearchHistory() // FIXME:
     }
 }
