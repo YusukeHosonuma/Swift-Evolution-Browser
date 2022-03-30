@@ -146,10 +146,8 @@ public final class SettingViewModel: ObservableObject {
     }
 
     func onTapClearSearchHistory() async {
-        do {
-            try await userService.clearSearchHistory()
-        } catch {
-            preconditionFailure()
+        if authState.isLogin {
+            await userService.clearSearchHistory()
         }
     }
 }

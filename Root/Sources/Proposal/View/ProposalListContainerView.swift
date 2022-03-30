@@ -289,7 +289,7 @@ public final class ProposalListViewModel: ObservableObject {
             #endif
             if authState.isLogin {
                 Task {
-                    await dataSource.addSearchHistory(query)
+                    await dataSource.authedAddSearchHistory(query)
                 }
             }
         }
@@ -301,18 +301,18 @@ public final class ProposalListViewModel: ObservableObject {
         if authState.isLogin {
             if content.searchQuery != "Swift", content.searchQuery != "Status" {
                 Task {
-                    await dataSource.addSearchHistory(content.searchQuery)
+                    await dataSource.authedAddSearchHistory(content.searchQuery)
                 }
             }
         }
     }
 
     func onTapStar(proposal: Proposal) async {
-        if let _ = authState.user {
+        if authState.isLogin {
             #if os(iOS)
             feedbackGenerator.impactOccurred()
             #endif
-            await dataSource.toggleStar(proposal: proposal)
+            await dataSource.authedToggleStar(proposal: proposal)
         } else {
             isPresentAuthView = true
         }

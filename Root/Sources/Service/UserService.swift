@@ -7,9 +7,8 @@
 
 import Auth
 import Combine
+import Core
 import Foundation
-
-public struct NotLoginedError: Error {}
 
 public struct UserData {
     public var stars: [String]
@@ -22,9 +21,9 @@ public struct UserData {
 
 public protocol UserService {
     func listen() async -> AnyPublisher<UserData, Never>
-    func toggleStar(proposalID: String) async throws
-    func addSearchHistory(_ keyword: String) async throws
-    func clearSearchHistory() async throws
+    func toggleStar(proposalID: String) async
+    func addSearchHistory(_ keyword: String) async
+    func clearSearchHistory() async
 }
 
 public final class UserServiceFirestore: UserService {
@@ -48,24 +47,24 @@ public final class UserServiceFirestore: UserService {
         }
     }
 
-    public func toggleStar(proposalID: String) async throws {
-        guard let user = await authState.user else { throw NotLoginedError() }
+    public func toggleStar(proposalID: String) async {
+        guard let user = await authState.user else { Logger.error(.loginIsNeeded); return }
 
         var doc = await UserDocument.get(user: user)
         doc.toggleStar(proposalID)
         await doc.update()
     }
 
-    public func addSearchHistory(_ keyword: String) async throws {
-        guard let user = await authState.user else { throw NotLoginedError() }
+    public func addSearchHistory(_ keyword: String) async {
+        guard let user = await authState.user else { Logger.error(.loginIsNeeded); return }
 
         var doc = await UserDocument.get(user: user)
         doc.addSearchHistory(keyword)
         await doc.update()
     }
 
-    public func clearSearchHistory() async throws {
-        guard let user = await authState.user else { throw NotLoginedError() }
+    public func clearSearchHistory() async {
+        guard let user = await authState.user else { Logger.error(.loginIsNeeded); return }
 
         var doc = await UserDocument.get(user: user)
         doc.clearSearchHistory()

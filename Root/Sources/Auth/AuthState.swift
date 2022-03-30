@@ -40,7 +40,7 @@ public final class AuthState: ObservableObject {
         do {
             try Auth.auth().signOut()
         } catch {
-            preconditionFailure("\(error)")
+            Logger.error(.logoutFailed(error))
         }
     }
 

@@ -7,6 +7,7 @@
 
 import Combine
 import Core
+import FirebaseAnalytics
 import Foundation
 import Service
 
@@ -22,8 +23,8 @@ public protocol ProposalDataSource {
 
     func onInitialize() async
     func refresh() async throws
-    func toggleStar(proposal: Proposal) async
-    func addSearchHistory(_ keyword: String) async
+    func authedToggleStar(proposal: Proposal) async
+    func authedAddSearchHistory(_ keyword: String) async
 }
 
 @MainActor
@@ -69,19 +70,11 @@ public class ProposalDataSourceImpl: ProposalDataSource, ObservableObject {
         latestProposals.send(proposals)
     }
 
-    public func toggleStar(proposal: Proposal) async {
-        do {
-            try await userService.toggleStar(proposalID: proposal.id)
-        } catch {
-            preconditionFailure("\(error)")
-        }
+    public func authedToggleStar(proposal: Proposal) async {
+        await userService.toggleStar(proposalID: proposal.id)
     }
 
-    public func addSearchHistory(_ keyword: String) async {
-        do {
-            try await userService.addSearchHistory(keyword)
-        } catch {
-            preconditionFailure("\(error)")
-        }
+    public func authedAddSearchHistory(_ keyword: String) async {
+        await userService.addSearchHistory(keyword)
     }
 }
