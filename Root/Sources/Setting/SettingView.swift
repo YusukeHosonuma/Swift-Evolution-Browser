@@ -146,6 +146,8 @@ public final class SettingViewModel: ObservableObject {
     }
 
     func onTapClearSearchHistory() async {
-        await userService.clearSearchHistory() // FIXME:
+        if authState.isLogin {
+            await userService.clearSearchHistory()
+        }
     }
 }

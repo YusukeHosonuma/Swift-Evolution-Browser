@@ -23,8 +23,8 @@ public protocol ProposalDataSource {
 
     func onInitialize() async
     func refresh() async throws
-    func toggleStar(proposal: Proposal) async
-    func addSearchHistory(_ keyword: String) async
+    func authedToggleStar(proposal: Proposal) async
+    func authedAddSearchHistory(_ keyword: String) async
 }
 
 @MainActor
@@ -70,11 +70,11 @@ public class ProposalDataSourceImpl: ProposalDataSource, ObservableObject {
         latestProposals.send(proposals)
     }
 
-    public func toggleStar(proposal: Proposal) async {
+    public func authedToggleStar(proposal: Proposal) async {
         await userService.toggleStar(proposalID: proposal.id)
     }
 
-    public func addSearchHistory(_ keyword: String) async {
+    public func authedAddSearchHistory(_ keyword: String) async {
         await userService.addSearchHistory(keyword)
     }
 }
