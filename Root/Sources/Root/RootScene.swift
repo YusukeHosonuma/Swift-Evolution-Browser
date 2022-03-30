@@ -25,6 +25,11 @@ public struct RootScene: Scene {
                     appDelegate.showAboutPanel()
                 }
             }
+            CommandGroup(replacing: CommandGroupPlacement.help) {
+                Button("Acknowledgments") {
+                    appDelegate.showAcknowledgmentPanel()
+                }
+            }
         }
         #endif
     }
@@ -34,6 +39,7 @@ public struct RootScene: Scene {
 #if os(macOS)
 private class AppDelegate: NSObject, NSApplicationDelegate {
     private var aboutBoxWindowController: NSWindowController?
+    private var acknowledgmentWindowController: NSWindowController?
 
     func showAboutPanel() {
         if aboutBoxWindowController == nil {
@@ -47,6 +53,20 @@ private class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         aboutBoxWindowController?.showWindow(aboutBoxWindowController?.window)
+    }
+
+    func showAcknowledgmentPanel() {
+        if acknowledgmentWindowController == nil {
+            let styleMask: NSWindow.StyleMask = [.closable, .miniaturizable, /* .resizable,*/ .titled]
+            let window = NSWindow()
+            window.styleMask = styleMask
+            window.title = "Acknowledgments"
+            window.contentView = NSHostingView(rootView: AcknowledgmentsView())
+            window.center()
+            acknowledgmentWindowController = NSWindowController(window: window)
+        }
+
+        acknowledgmentWindowController?.showWindow(acknowledgmentWindowController?.window)
     }
 }
 #endif
