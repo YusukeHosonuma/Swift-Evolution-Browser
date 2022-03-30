@@ -28,7 +28,6 @@ let package = Package(
             "Auth",
             "Proposal",
             "Setting",
-            .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk"),
         ]),
         .testTarget(name: "RootTests", dependencies: ["Root"]),
         //
@@ -69,6 +68,7 @@ let package = Package(
         .target(name: "Core", dependencies: [
             "SFReadableSymbols",
             "Defaults",
+            .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk"),
             .product(name: "FirebaseAnalytics", package: "firebase-ios-sdk", condition: .when(platforms: [.iOS])),
         ]),
         //

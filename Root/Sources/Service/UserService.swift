@@ -7,9 +7,8 @@
 
 import Auth
 import Combine
+import Core
 import Foundation
-
-public struct NotLoginedError: Error {}
 
 public struct UserData {
     public var stars: [String]
@@ -49,7 +48,7 @@ public final class UserServiceFirestore: UserService {
     }
 
     public func toggleStar(proposalID: String) async throws {
-        guard let user = await authState.user else { throw NotLoginedError() }
+        guard let user = await authState.user else { Logger.error(.loginIsNeeded); return }
 
         var doc = await UserDocument.get(user: user)
         doc.toggleStar(proposalID)
@@ -57,7 +56,7 @@ public final class UserServiceFirestore: UserService {
     }
 
     public func addSearchHistory(_ keyword: String) async throws {
-        guard let user = await authState.user else { throw NotLoginedError() }
+        guard let user = await authState.user else { Logger.error(.loginIsNeeded); return }
 
         var doc = await UserDocument.get(user: user)
         doc.addSearchHistory(keyword)
@@ -65,7 +64,7 @@ public final class UserServiceFirestore: UserService {
     }
 
     public func clearSearchHistory() async throws {
-        guard let user = await authState.user else { throw NotLoginedError() }
+        guard let user = await authState.user else { Logger.error(.loginIsNeeded); return }
 
         var doc = await UserDocument.get(user: user)
         doc.clearSearchHistory()
