@@ -25,6 +25,11 @@ public struct RootScene: Scene {
                     appDelegate.showAboutPanel()
                 }
             }
+            CommandGroup(replacing: CommandGroupPlacement.help) {
+                Button("Acknowledgments") {
+                    appDelegate.showAcknowledgmentPanel()
+                }
+            }
         }
         #endif
     }
@@ -32,21 +37,36 @@ public struct RootScene: Scene {
 
 // ref: https://stackoverflow.com/questions/64624261/swiftui-change-about-view-in-macos-app
 #if os(macOS)
-private class AppDelegate: NSObject, NSApplicationDelegate {
-    private var aboutBoxWindowController: NSWindowController?
+private final class AppDelegate: NSObject, NSApplicationDelegate {
+    private var aboutPanel: Panel = .init(title: "", content: AboutView())
+    private var acknowledgmentPanel: Panel = .init(title: "Acknowledgments", content: AcknowledgmentsView())
 
     func showAboutPanel() {
-        if aboutBoxWindowController == nil {
+        aboutPanel.show()
+    }
+
+    func showAcknowledgmentPanel() {
+        acknowledgmentPanel.show()
+    }
+}
+
+private final class Panel<Content: View> {
+    private var windowController: NSWindowController?
+
+    init(title: String, content: Content) {
+        if windowController == nil {
             let styleMask: NSWindow.StyleMask = [.closable, .miniaturizable, /* .resizable,*/ .titled]
             let window = NSWindow()
             window.styleMask = styleMask
-            window.title = ""
-            window.contentView = NSHostingView(rootView: AboutView())
+            window.title = title
+            window.contentView = NSHostingView(rootView: content)
             window.center()
-            aboutBoxWindowController = NSWindowController(window: window)
+            windowController = NSWindowController(window: window)
         }
+    }
 
-        aboutBoxWindowController?.showWindow(aboutBoxWindowController?.window)
+    func show() {
+        windowController?.showWindow(windowController?.window)
     }
 }
 #endif

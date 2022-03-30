@@ -15,7 +15,7 @@ struct MainApp: App {
         // Initialize Firestore
         FirebaseApp.configure()
     }
-    
+
     var body: some Scene {
         RootScene()
     }
