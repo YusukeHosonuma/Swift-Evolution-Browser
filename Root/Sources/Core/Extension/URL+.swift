@@ -2,12 +2,16 @@
 //  File.swift
 //
 //
-//  Created by Yusuke Hosonuma on 2022/03/21.
+//  Created by Yusuke Hosonuma on 2022/03/30.
 //
 
 import Foundation
 
 public extension URL {
+    var displayString: String {
+        (host ?? "") + path
+    }
+
     static func searchInForums(proposalID: String) -> URL {
         URL(string: "https://forums.swift.org/search?q=\(proposalID)%20%23evolution")!
     }
