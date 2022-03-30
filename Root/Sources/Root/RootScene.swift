@@ -37,36 +37,36 @@ public struct RootScene: Scene {
 
 // ref: https://stackoverflow.com/questions/64624261/swiftui-change-about-view-in-macos-app
 #if os(macOS)
-private class AppDelegate: NSObject, NSApplicationDelegate {
-    private var aboutBoxWindowController: NSWindowController?
-    private var acknowledgmentWindowController: NSWindowController?
+private final class AppDelegate: NSObject, NSApplicationDelegate {
+    private var aboutPanel: Panel = .init(title: "", content: AboutView())
+    private var acknowledgmentPanel: Panel = .init(title: "Acknowledgments", content: AcknowledgmentsView())
 
     func showAboutPanel() {
-        if aboutBoxWindowController == nil {
-            let styleMask: NSWindow.StyleMask = [.closable, .miniaturizable, /* .resizable,*/ .titled]
-            let window = NSWindow()
-            window.styleMask = styleMask
-            window.title = ""
-            window.contentView = NSHostingView(rootView: AboutView())
-            window.center()
-            aboutBoxWindowController = NSWindowController(window: window)
-        }
-
-        aboutBoxWindowController?.showWindow(aboutBoxWindowController?.window)
+        aboutPanel.show()
     }
 
     func showAcknowledgmentPanel() {
-        if acknowledgmentWindowController == nil {
+        acknowledgmentPanel.show()
+    }
+}
+
+private final class Panel<Content: View> {
+    private var windowController: NSWindowController?
+
+    init(title: String, content: Content) {
+        if windowController == nil {
             let styleMask: NSWindow.StyleMask = [.closable, .miniaturizable, /* .resizable,*/ .titled]
             let window = NSWindow()
             window.styleMask = styleMask
-            window.title = "Acknowledgments"
-            window.contentView = NSHostingView(rootView: AcknowledgmentsView())
+            window.title = title
+            window.contentView = NSHostingView(rootView: content)
             window.center()
-            acknowledgmentWindowController = NSWindowController(window: window)
+            windowController = NSWindowController(window: window)
         }
+    }
 
-        acknowledgmentWindowController?.showWindow(acknowledgmentWindowController?.window)
+    func show() {
+        windowController?.showWindow(windowController?.window)
     }
 }
 #endif
