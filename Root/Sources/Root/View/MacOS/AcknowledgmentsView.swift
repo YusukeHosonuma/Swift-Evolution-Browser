@@ -37,7 +37,7 @@ private func loadLicenses() -> [License] {
         let rootDict = NSDictionary(contentsOfFile: rootPath) as? [String: Any],
         let xs = rootDict["PreferenceSpecifiers"] as? [[String: String]]
     else {
-        preconditionFailure() // FIXME:
+        return [] // ☑️ Not occur
     }
 
     return xs.compactMap {
