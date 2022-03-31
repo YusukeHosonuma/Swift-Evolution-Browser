@@ -5,6 +5,7 @@
 //  Created by Yusuke Hosonuma on 2022/03/10.
 //
 
+import Core
 import Foundation
 import SwiftUI
 
@@ -54,7 +55,8 @@ public struct LoginView: View {
 
     private func appleLoginButton() -> some View {
         AppleLoginButton(inProgress: $inProgress) { error in
-            if let _ = error {
+            if let error = error {
+                Logger.error(.appleSignInFailed(error))
                 isPresentedLoginFailedAlert = true
             } else {
                 dismiss()
