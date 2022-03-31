@@ -15,6 +15,7 @@ The Swift Proposal Browser that build with SwiftUI.
 - Multi-platform (iOS / iPad / macOS)
 - SPM multi-module
 - async/await
+- Combine
 - SwiftUI 3.0 ([searchable](https://developer.apple.com/documentation/swiftui/emptyview/searchable(text:placement:)) / [refreshable](https://developer.apple.com/documentation/SwiftUI/View/refreshable(action:)))
 - Firebase (Auth / Firestore / Crashlytics / Analytics)
 
@@ -65,15 +66,13 @@ Q. この視認性の高いコードは何？<br>
 A. [SFReadableSymbols](https://github.com/YusukeHosonuma/SFReadableSymbols) という OSS があるらしいですよ。（露骨な宣伝だ...
 
 Q. この[クールなテストコード](https://github.com/YusukeHosonuma/Swift-Evolution-Browser/blob/0.1.0/Root/Tests/ProposalTests/Array%2BProposalTests.swift#L52-L79)は何？<br>
-A. [SwiftParamTest](https://github.com/YusukeHosonuma/SwiftParamTest) という OSS があるらしいですよ。（露骨な宣伝だ…
 ```swift
 assert(to: search) {
-...
     args("Swift 3.0", expect: ["SE-001"])
     args("3.0",       expect: ["SE-001"])
     args("Swift 4.0", expect: ["SE-002", "SE-003"])
-...
 ```
+A. [SwiftParamTest](https://github.com/YusukeHosonuma/SwiftParamTest) という OSS があるらしいですよ。（露骨な宣伝だ…
 
 Q. ところでコンセプトは？<br>
 A. メインテーマは『学習』（とリハビリ）
