@@ -1,22 +1,26 @@
 # Swift Evolution Browser
 
-The Swift Proposal Browswer that build with SwiftUI. (**beta** currently)
+The Swift Proposal Browser that build with SwiftUI.
 
-|iOS|iPad|macOS|
-|--|--|--|
-|<img src="./Screenshot/screenshot-ios.png" width="160px">|<img src="./Screenshot/screenshot-ipad.png" width="400px">|<img src="./Screenshot/screenshot-mac.png" width="400px">|
+|iOS|iPad|
+|--|--|
+|<img src="./Screenshot/screenshot-ios.png" width="200px">|<img src="./Screenshot/screenshot-ipad.png" width="500px">|
+
+|macOS|
+|--|
+|<img src="./Screenshot/screenshot-mac.png" width="700px">|
 
 ## Feature
-- Pure SwiftUI （not use [The Composable Architecture](https://github.com/pointfreeco/swift-composable-architecture)）
-- Multi-platform （iOS / iPad / macOS）
+- Pure SwiftUI (not use [The Composable Architecture](https://github.com/pointfreeco/swift-composable-architecture))
+- Multi-platform (iOS / iPad / macOS)
 - SPM multi-module
-- Async/Await
-- SwiftUI 3.0 （[searchable](https://developer.apple.com/documentation/swiftui/emptyview/searchable(text:placement:)) / [refreshable](https://developer.apple.com/documentation/SwiftUI/View/refreshable(action:))）
-- Firebase （Auth / Firestore）
+- async/await
+- SwiftUI 3.0 ([searchable](https://developer.apple.com/documentation/swiftui/emptyview/searchable(text:placement:)) / [refreshable](https://developer.apple.com/documentation/SwiftUI/View/refreshable(action:)))
+- Firebase (Auth / Firestore / Crashlytics / Analytics)
 
 ## Requirements
 
-- Xcode 13.3 (RC)
+- Xcode 13.3
 - Swift 5.6
 - iOS 15+
 - macOS 12+
@@ -24,7 +28,7 @@ The Swift Proposal Browswer that build with SwiftUI. (**beta** currently)
 ## Setup
 
 ```bash
-brew install mint # if `mint` not installed
+brew install mint
 mint bootstrap
 ```
 
@@ -56,11 +60,12 @@ A. 最新の iOS/macOS プラットフォームで期待どおりの動作をし
 Q.  [SFSafeSymbols](https://github.com/SFSafeSymbols/SFSafeSymbols) を利用していないのはなぜ？<br>
 A. Effective SwiftUI 候補（仮説）: [SFSafeSymbols が本当に必要かよく検討する](https://zenn.dev/link/comments/4547fe0f96de01)
 
-Q. エラーケースの実装甘くない？<br>
-A. 通信エラーは作り込んでいますが、現状一部では `preconditionFialure` で雑に落としている箇所もあります。
+Q. この視認性の高いコードは何？<br>
+<img src="./Screenshot/screenshot-readable-sfsymbols.png" width="400px"><br>
+A. [SFReadableSymbols](https://github.com/YusukeHosonuma/SFReadableSymbols) という OSS があるらしいですよ。（露骨な宣伝だ...
 
 Q. この[クールなテストコード](https://github.com/YusukeHosonuma/Swift-Evolution-Browser/blob/0.1.0/Root/Tests/ProposalTests/Array%2BProposalTests.swift#L52-L79)は何？<br>
-A. [SwiftParamTest](https://github.com/YusukeHosonuma/SwiftParamTest) という OSS があるらしいです。（露骨な宣伝だ…）
+A. [SwiftParamTest](https://github.com/YusukeHosonuma/SwiftParamTest) という OSS があるらしいですよ。（露骨な宣伝だ…
 ```swift
 assert(to: search) {
 ...
