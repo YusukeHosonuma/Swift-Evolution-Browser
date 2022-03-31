@@ -11,11 +11,19 @@ import FirebaseAuth
 import Foundation
 import SwiftUI
 
+enum AppleLoginError: Error {
+    case failedToGetCredential
+    case invalidState
+    case unableToFetchIdentityToken
+    case unableToSerializeTokenStringFromData(appleIDTokenDebugDescription: String)
+    case failedToSignIn(Error)
+}
+
 struct AppleLoginButton: View {
     @Binding var inProgress: Bool
     @State var currentNonce: String?
 
-    private let completion: (Error?) -> Void
+    private let completion: (AppleLoginError?) -> Void
 
     init(inProgress: Binding<Bool>, completion: @escaping (Error?) -> Void) {
         _inProgress = inProgress
@@ -57,25 +65,27 @@ struct AppleLoginButton: View {
     private func signIn(authorization: ASAuthorization) {
         inProgress = true
 
-        // TODO: エラー処理は細かく精査してないので、とりあえず`fatalError`にして失敗した時にすぐに気付けるようにしておく。
-
         guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential else {
-            fatalError()
+            completion(.failedToGetCredential)
+            return
         }
 
         guard let nonce = currentNonce else {
             print("Invalid state: A login callback was received, but no login request was sent.")
-            fatalError()
+            completion(.invalidState)
+            return
         }
 
         guard let appleIDToken = appleIDCredential.identityToken else {
             print("Unable to fetch identity token")
-            fatalError()
+            completion(.unableToFetchIdentityToken)
+            return
         }
 
         guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
             print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
-            fatalError()
+            completion(.unableToSerializeTokenStringFromData(appleIDTokenDebugDescription: appleIDToken.debugDescription))
+            return
         }
 
         let credential = OAuthProvider.credential(withProviderID: "apple.com",
@@ -87,7 +97,7 @@ struct AppleLoginButton: View {
 
             if let error = error as NSError? {
                 print("Firebase sign-in is failure. - \(error.localizedDescription)")
-                completion(error)
+                completion(.failedToSignIn(error))
             } else {
                 completion(nil)
             }

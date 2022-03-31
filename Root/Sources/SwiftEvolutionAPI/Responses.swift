@@ -128,7 +128,7 @@ public enum TypeEnum: String, Codable, Equatable {
 
 // MARK: - StatusClass
 public struct StatusClass: Codable, Equatable {
-    public var state: State
+    public var state: State?
     public var version: String?
     public var end: String?
     public var start: String?

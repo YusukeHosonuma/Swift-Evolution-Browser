@@ -34,6 +34,7 @@ public struct Proposal: Equatable {
             .returnedForRevision,
             .withdrawn,
             .scheduledForReview,
+            .unknown,
         ]
 
         case accepted
@@ -46,6 +47,7 @@ public struct Proposal: Equatable {
         case returnedForRevision
         case withdrawn
         case scheduledForReview
+        case unknown
 
         public var label: String {
             switch self {
@@ -69,6 +71,8 @@ public struct Proposal: Equatable {
                 return "Withdrawn"
             case .scheduledForReview:
                 return "Scheduled for Review"
+            case .unknown:
+                return "-"
             }
         }
     }

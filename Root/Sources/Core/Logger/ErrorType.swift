@@ -10,11 +10,13 @@ import Foundation
 public enum ErrorType {
     case loginIsNeeded
     case logoutFailed(Error)
+    case appleSignInFailed(Error)
 
     var code: Int {
         switch self {
         case .loginIsNeeded: return 100
         case .logoutFailed: return 101
+        case .appleSignInFailed: return 200
         }
     }
 
@@ -22,13 +24,15 @@ public enum ErrorType {
         switch self {
         case .loginIsNeeded: return "Login is needed"
         case .logoutFailed: return "Logout failed"
+        case .appleSignInFailed: return "Apple SignIn is failed"
         }
     }
 
     var message: String {
         switch self {
         case .loginIsNeeded: return "A method that requires login was called with an not logged-in user."
-        case .logoutFailed: return "Logout failed"
+        case .logoutFailed: return "Logout failed."
+        case .appleSignInFailed: return "Apple SignIn is failed."
         }
     }
 
@@ -42,7 +46,8 @@ public enum ErrorType {
         case .loginIsNeeded:
             break
 
-        case let .logoutFailed(error):
+        case let .logoutFailed(error): fallthrough
+        case let .appleSignInFailed(error):
             userInfo["cause"] = error
         }
 
