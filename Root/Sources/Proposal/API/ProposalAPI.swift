@@ -36,7 +36,11 @@ public final class ProposalAPIClient: ProposalAPI {
     // It may be easier to deal with this in Codable.
 
     func convertStatus(status: StatusClass) -> Proposal.Status {
-        switch status.state {
+        guard let state = status.state else {
+            return .unknown
+        }
+
+        switch state {
         case .accepted:
             return .accepted
         case .activeReview:

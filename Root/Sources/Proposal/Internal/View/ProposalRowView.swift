@@ -105,6 +105,13 @@ struct ProposalRowView_Previews: PreviewProvider {
             proposalURL: URL(string: "https://github.com/")!,
             status: .withdrawn
         ),
+        Proposal(
+            id: "SE-0xxx",
+            title: "Cool feature",
+            star: false,
+            proposalURL: URL(string: "https://github.com/")!,
+            status: .unknown
+        ),
     ]
 
     static var previews: some View {

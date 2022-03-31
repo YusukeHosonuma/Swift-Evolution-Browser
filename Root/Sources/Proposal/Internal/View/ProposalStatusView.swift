@@ -44,6 +44,8 @@ struct ProposalStatusView: View {
             v(.red)
         case .scheduledForReview:
             v(.orange)
+        case .unknown:
+            EmptyView()
         }
     }
 
