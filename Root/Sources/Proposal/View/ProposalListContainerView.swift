@@ -10,6 +10,7 @@ import Combine
 import Core
 import SFReadableSymbols
 import SwiftUI
+import SwiftUICommon
 #if os(iOS)
 import UIKit
 #endif
