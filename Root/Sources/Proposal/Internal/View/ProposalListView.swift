@@ -9,6 +9,7 @@ import Core
 import Foundation
 import SFReadableSymbols
 import SwiftUI
+import SwiftUICommon
 
 struct ProposalListView: View {
     @Environment(\.scrollToTopID) private var scrollToTopID
