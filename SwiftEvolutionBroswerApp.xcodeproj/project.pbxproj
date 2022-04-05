@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		700EE3EF27D9EFFE00A9D65A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 700EE3EE27D9EFFE00A9D65A /* GoogleService-Info.plist */; };
 		700EE3F027D9EFFE00A9D65A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 700EE3EE27D9EFFE00A9D65A /* GoogleService-Info.plist */; };
-		7013562E27F93CD800905DDB /* macOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 700EE3F227D9F02E00A9D65A /* macOS.plist */; };
 		701DE6CF27EABB6100246CA3 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 701DE6CE27EABB6100246CA3 /* Settings.bundle */; };
 		701DE6D027EABB6100246CA3 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 701DE6CE27EABB6100246CA3 /* Settings.bundle */; };
 		7046EB2F27E9E8A6003B883D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7046EB2E27E9E8A6003B883D /* InfoPlist.strings */; };
@@ -333,7 +332,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				701DE6D027EABB6100246CA3 /* Settings.bundle in Resources */,
-				7013562E27F93CD800905DDB /* macOS.plist in Resources */,
 				7071875527D884A3009A8169 /* Assets.xcassets in Resources */,
 				7046EB3027E9E8A6003B883D /* InfoPlist.strings in Resources */,
 				700EE3F027D9EFFE00A9D65A /* GoogleService-Info.plist in Resources */,
