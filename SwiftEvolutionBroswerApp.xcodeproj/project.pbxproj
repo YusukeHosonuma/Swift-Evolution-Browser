@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		700EE3EF27D9EFFE00A9D65A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 700EE3EE27D9EFFE00A9D65A /* GoogleService-Info.plist */; };
 		700EE3F027D9EFFE00A9D65A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 700EE3EE27D9EFFE00A9D65A /* GoogleService-Info.plist */; };
+		7013562E27F93CD800905DDB /* macOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 700EE3F227D9F02E00A9D65A /* macOS.plist */; };
 		701DE6CF27EABB6100246CA3 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 701DE6CE27EABB6100246CA3 /* Settings.bundle */; };
 		701DE6D027EABB6100246CA3 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 701DE6CE27EABB6100246CA3 /* Settings.bundle */; };
 		7046EB2F27E9E8A6003B883D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7046EB2E27E9E8A6003B883D /* InfoPlist.strings */; };
@@ -332,6 +333,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				701DE6D027EABB6100246CA3 /* Settings.bundle in Resources */,
+				7013562E27F93CD800905DDB /* macOS.plist in Resources */,
 				7071875527D884A3009A8169 /* Assets.xcassets in Resources */,
 				7046EB3027E9E8A6003B883D /* InfoPlist.strings in Resources */,
 				700EE3F027D9EFFE00A9D65A /* GoogleService-Info.plist in Resources */,
@@ -601,8 +603,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/iOS.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = P437HSA6PY;
 				ENABLE_BITCODE = YES;
 				ENABLE_PREVIEWS = YES;
@@ -613,7 +616,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -621,6 +624,7 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.penginmura.swiftevolutionbrowser;
 				PRODUCT_NAME = SEBrowser;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -634,8 +638,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = iOS/iOS.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = P437HSA6PY;
 				ENABLE_BITCODE = YES;
 				ENABLE_PREVIEWS = YES;
@@ -646,7 +651,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -654,6 +659,7 @@
 				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.penginmura.swiftevolutionbrowser;
 				PRODUCT_NAME = SEBrowser;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
