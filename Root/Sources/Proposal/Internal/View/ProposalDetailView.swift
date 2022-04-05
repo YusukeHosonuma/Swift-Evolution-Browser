@@ -8,6 +8,7 @@
 import Core
 import Foundation
 import SwiftUI
+import SwiftUICommon
 #if os(iOS)
 import FirebaseAnalytics
 #endif
@@ -23,7 +24,8 @@ struct ProposalDetailView: View {
     var body: some View {
         ZStack {
             WebView(url: proposal.proposalURL, state: webViewState)
-            if webViewState.isLoading {
+
+            if webViewState.isFirstLoading {
                 ProgressView()
             }
         }
