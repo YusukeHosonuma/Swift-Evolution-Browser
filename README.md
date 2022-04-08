@@ -35,7 +35,7 @@ mint bootstrap
 
 ## FAQ
 Q. とりあえず触ってみたい。<br>
-A. 現在、TestFlight にて[ベータ配信](https://testflight.apple.com/join/5TM5bE8P)しています。
+A. [macOS版は AppStore でリリース済み](https://apps.apple.com/app/id1615741502)です。
 
 Q. 不具合を見つけた。<br>
 A. あなたには PR を投げる権利が与えられています！私はそれを歓迎します！（日本語が嬉しい）
