@@ -55,8 +55,9 @@ struct ProposalListView: View {
                                         Menu {
                                             ProposalMenu(proposal: proposal)
                                         } label: {
-                                            Image(symbol: "􀍠")
+                                            Image(symbol: "􀈂")
                                         }
+                                        .menuIndicator(.hidden)
                                     }
                                     #endif
                                 }
