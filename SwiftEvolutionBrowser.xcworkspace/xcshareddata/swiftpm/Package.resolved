@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleUtilities.git",
       "state" : {
-        "revision" : "b3bb0c5551fb3f80ca939829639ab5b093edd14f",
-        "version" : "7.7.0"
+        "revision" : "f4abe56ce62a779e64b525eb133c8fc2a84bbc1f",
+        "version" : "7.7.1"
       }
     },
     {
@@ -140,8 +140,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/promises.git",
       "state" : {
-        "revision" : "611337c330350c9c1823ad6d671e7f936af5ee13",
-        "version" : "2.0.0"
+        "revision" : "46c1e6b5ac09d8f82c991061c659f67e573d425d",
+        "version" : "2.1.0"
       }
     },
     {
@@ -199,12 +199,12 @@
       }
     },
     {
-      "identity" : "swiftuicommon",
+      "identity" : "swiftui-common",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/YusukeHosonuma/SwiftUICommon.git",
+      "location" : "https://github.com/YusukeHosonuma/SwiftUI-Common.git",
       "state" : {
-        "revision" : "b375a35ffec7d4493708b2430ff6993f38db5596",
-        "version" : "0.1.1"
+        "revision" : "915a4a0b0ef5b044300e329ef1bf74256f37b91b",
+        "version" : "0.1.2"
       }
     }
   ],
