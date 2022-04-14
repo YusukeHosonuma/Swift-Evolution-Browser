@@ -21,8 +21,8 @@ public struct LoginView: View {
     public var body: some View {
         #if os(macOS)
         VStack {
-            Text("Login").font(.title2).bold()
-            Text("Please select login method:").font(.body).padding(2)
+            Text(LocalizedStringKey("Login")).font(.title2).bold()
+            Text(LocalizedStringKey("Please select login method:")).font(.body).padding(2)
             Spacer()
             appleLoginButton()
             googleLoginButton()
@@ -31,7 +31,7 @@ public struct LoginView: View {
         .frame(width: 360, height: 180)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") {
+                Button(LocalizedStringKey("Cancel")) {
                     dismiss()
                 }
             }
@@ -44,7 +44,7 @@ public struct LoginView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button(LocalizedStringKey("Cancel")) {
                         dismiss()
                     }
                 }
@@ -65,7 +65,7 @@ public struct LoginView: View {
         .signInWithAppleButtonStyle(colorScheme == .dark ? .white : .black)
         .frame(width: 280, height: 44)
         .alert(isPresented: $isPresentedLoginFailedAlert) {
-            Alert(title: Text("Login is failed."))
+            Alert(title: Text(LocalizedStringKey("Login is failed.")))
         }
     }
 

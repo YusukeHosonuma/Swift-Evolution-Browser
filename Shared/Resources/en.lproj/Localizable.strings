@@ -1,0 +1,58 @@
+/* 
+  Localizable.strings
+  SwiftEvolutionBroswerApp
+
+  Created by Yusuke Hosonuma on 2022/04/14.
+  
+*/
+
+//
+// macOS
+//
+"Please select login method:" = "Please select login method:";
+
+//
+// Main
+//
+"All" = "All";
+"Star" = "Star";
+"Settings" = "Setting";
+"All Proposals" = "All Proposals";
+"Stared" = "Stared";
+"Please select proposal from sidebar." = "Please select proposal from sidebar.";
+"Cancel" = "Cancel";
+"Version" = "Version";
+
+//
+// Setting view
+//
+"Account" = "Account";
+"Sign-In" = "Sign-In";
+"Sign-Out" = "Sign-Out";
+"Clear search history" = "Clear search history";
+"Links" = "Links";
+"Privacy Policy" = "Privacy Policy";
+"Source Code on GitHub" = "Source Code on GitHub";
+"Author" = "Author";
+"Share on Twitter" = "Share on Twitter";
+"Are you sign-out?" = "Are you sign-out?";
+"Login is failed." = "Login is failed.";
+
+//
+// Search
+//
+"Network error" = "Network error";
+"Retry" = "Retry";
+"Latest" = "Latest";
+"Oldest" = "Oldest";
+"Search Proposal" = "Search Proposal";
+"Search by Swift version" = "Search by Swift version";
+"Search by Status" = "Search by Status";
+"No results found" = "No results found";
+
+//
+// Share
+//
+"Open in Browser" = "Open in Browser";
+"Search in Forums" = "Search in Forums";
+"Search in Twitter" = "Search in Twitter";

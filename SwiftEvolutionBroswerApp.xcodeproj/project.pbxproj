@@ -21,6 +21,8 @@
 		7071875127D884A3009A8169 /* MainApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7071872827D884A1009A8169 /* MainApp.swift */; };
 		7071875427D884A3009A8169 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7071872A27D884A3009A8169 /* Assets.xcassets */; };
 		7071875527D884A3009A8169 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7071872A27D884A3009A8169 /* Assets.xcassets */; };
+		70C4C8782807B18E009AB1B4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70C4C87B2807B18E009AB1B4 /* Localizable.strings */; };
+		70C4C8792807B18E009AB1B4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 70C4C87B2807B18E009AB1B4 /* Localizable.strings */; };
 		70D3B46127D9D8D0001CB591 /* Root in Frameworks */ = {isa = PBXBuildFile; productRef = 70D3B46027D9D8D0001CB591 /* Root */; };
 		70D3B46327D9D8D8001CB591 /* Root in Frameworks */ = {isa = PBXBuildFile; productRef = 70D3B46227D9D8D8001CB591 /* Root */; };
 /* End PBXBuildFile section */
@@ -60,6 +62,8 @@
 		7071874827D884A3009A8169 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7071874C27D884A3009A8169 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		7071874E27D884A3009A8169 /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
+		70C4C87A2807B18E009AB1B4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		70C4C87C2807B190009AB1B4 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +107,7 @@
 				700EE3EE27D9EFFE00A9D65A /* GoogleService-Info.plist */,
 				7046EB2E27E9E8A6003B883D /* InfoPlist.strings */,
 				701DE6CE27EABB6100246CA3 /* Settings.bundle */,
+				70C4C87B2807B18E009AB1B4 /* Localizable.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -299,6 +304,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 7071872227D884A1009A8169;
 			packageReferences = (
@@ -320,6 +326,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70C4C8782807B18E009AB1B4 /* Localizable.strings in Resources */,
 				701DE6CF27EABB6100246CA3 /* Settings.bundle in Resources */,
 				7071875427D884A3009A8169 /* Assets.xcassets in Resources */,
 				7046EB2F27E9E8A6003B883D /* InfoPlist.strings in Resources */,
@@ -331,6 +338,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70C4C8792807B18E009AB1B4 /* Localizable.strings in Resources */,
 				701DE6D027EABB6100246CA3 /* Settings.bundle in Resources */,
 				7071875527D884A3009A8169 /* Assets.xcassets in Resources */,
 				7046EB3027E9E8A6003B883D /* InfoPlist.strings in Resources */,
@@ -482,6 +490,18 @@
 			targetProxy = 7071874927D884A3009A8169 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		70C4C87B2807B18E009AB1B4 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				70C4C87A2807B18E009AB1B4 /* en */,
+				70C4C87C2807B190009AB1B4 /* ja */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		7071875627D884A3009A8169 /* Debug */ = {
