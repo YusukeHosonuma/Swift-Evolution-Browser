@@ -67,7 +67,7 @@ public struct RootView: View {
                 NavigationLink(tag: Item.all, selection: $selectedTab, destination: {
                     allProposalView()
                 }) {
-                    Label("All", symbol: "􀋲")
+                    Label(LocalizedStringKey("All"), symbol: "􀋲")
                 }
 
                 //
@@ -76,7 +76,7 @@ public struct RootView: View {
                 NavigationLink(tag: Item.star, selection: $selectedTab, destination: {
                     staredView()
                 }) {
-                    Label { Text("Star") } icon: {
+                    Label { Text(LocalizedStringKey("Star")) } icon: {
                         Image(symbol: "􀋃").foregroundColor(.yellow)
                     }
                 }
@@ -88,7 +88,7 @@ public struct RootView: View {
                     SettingView()
                         .environmentObject(component.settingViewModel)
                 }) {
-                    Label("Setting", symbol: "􀣋")
+                    Label(LocalizedStringKey("Settings"), symbol: "􀣋")
                 }
             }
             .listStyle(SidebarListStyle())
@@ -102,7 +102,7 @@ public struct RootView: View {
                 //
                 allProposalView()
                     .tabItem {
-                        Label("All", symbol: "􀋲")
+                        Label(LocalizedStringKey("All"), symbol: "􀋲")
                     }
                     .itemTag(.all)
 
@@ -111,7 +111,7 @@ public struct RootView: View {
                 //
                 staredView()
                     .tabItem {
-                        Label("Star", symbol: "􀋃")
+                        Label(LocalizedStringKey("Star"), symbol: "􀋃")
                     }
                     .itemTag(.star)
 
@@ -120,12 +120,12 @@ public struct RootView: View {
                 //
                 NavigationView {
                     SettingView()
-                        .navigationTitle("Settings")
+                        .navigationTitle(LocalizedStringKey("Settings"))
                         .environmentObject(component.settingViewModel)
                 }
                 .navigationViewStyle(.stack)
                 .tabItem {
-                    Label("Setting", symbol: "􀣋")
+                    Label(LocalizedStringKey("Settings"), symbol: "􀣋")
                 }
                 .itemTag(.setting)
             }
@@ -147,7 +147,7 @@ public struct RootView: View {
                 .environmentObject(component.proposalListViewModelAll)
                 .environmentObject(component.storageSelectedProposalIDAll)
             #if os(iOS)
-                .navigationTitle("All Proposals")
+                .navigationTitle(LocalizedStringKey("All Proposals"))
                 .scrollToTop(.all)
                 .appToolbar()
             #endif
@@ -164,7 +164,7 @@ public struct RootView: View {
                 .environmentObject(component.proposalListViewModelStared)
                 .environmentObject(component.storageSelectedProposalIDStared)
             #if os(iOS)
-                .navigationTitle("Stared")
+                .navigationTitle(LocalizedStringKey("Stared"))
                 .scrollToTop(.star)
                 .appToolbar()
             #endif
@@ -177,7 +177,7 @@ public struct RootView: View {
 
     // 💡 Note: Show when no selected on iPad.
     func noneSelectedView() -> some View {
-        Text("Please select proposal from sidebar.")
+        Text(LocalizedStringKey("Please select proposal from sidebar."))
     }
 }
 
