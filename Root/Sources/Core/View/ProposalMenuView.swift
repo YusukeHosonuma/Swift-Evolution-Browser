@@ -22,17 +22,17 @@ public struct ProposalMenu: View {
         Button {
             openURL(proposal.proposalURL)
         } label: {
-            Label("Open in Browser", symbol: "􀆪")
+            Label(LocalizedStringKey("Open in Browser"), symbol: "􀆪")
         }
         Button {
             openURL(URL.searchInForums(proposalID: proposal.id))
         } label: {
-            Label("Search in Forums", symbol: "􀫊")
+            Label(LocalizedStringKey("Search in Forums"), symbol: "􀫊")
         }
         Button {
             openURL(URL.searchInTwitter(proposalID: proposal.id))
         } label: {
-            Label("Search in Twitter", symbol: "􀌫")
+            Label(LocalizedStringKey("Search in Twitter"), symbol: "􀌫")
         }
     }
 }

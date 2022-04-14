@@ -48,8 +48,8 @@ public struct ProposalListContainerView: View {
                     .searchable(text: .constant(""))
             case .error:
                 VStack {
-                    Text("Network error")
-                    Button("Retry") {
+                    Text(LocalizedStringKey("Network error"))
+                    Button(LocalizedStringKey("Retry")) {
                         Task {
                             await viewModel.onTapRetry()
                         }
@@ -68,9 +68,9 @@ public struct ProposalListContainerView: View {
             ToolbarItem {
                 #if os(macOS)
                 Picker(selection: $viewModel.sort) {
-                    Label("Latest", symbol: "􀄨")
+                    Label(LocalizedStringKey("Latest"), symbol: "􀄨")
                         .tag(Sort.latest)
-                    Label("Oldest", symbol: "􀄩")
+                    Label(LocalizedStringKey("Oldest"), symbol: "􀄩")
                         .tag(Sort.oldest)
                 } label: {
                     Image(symbol: "􀄬")
@@ -78,9 +78,9 @@ public struct ProposalListContainerView: View {
                 #else
                 Menu {
                     Picker(selection: $viewModel.sort) {
-                        Label("Latest", symbol: "􀄨")
+                        Label(LocalizedStringKey("Latest"), symbol: "􀄨")
                             .tag(Sort.latest)
-                        Label("Oldest", symbol: "􀄩")
+                        Label(LocalizedStringKey("Oldest"), symbol: "􀄩")
                             .tag(Sort.oldest)
                     } label: {
                         // ref: https://stackoverflow.com/questions/69381385/swiftui-custom-picker-label-not-rendering
@@ -124,15 +124,15 @@ public struct ProposalListContainerView: View {
                 viewModel.onChangeQuery(query)
             }),
             placement: searchFieldPlacement,
-            prompt: Text("Search Proposal"),
+            prompt: Text(LocalizedStringKey("Search Proposal")),
             suggestions: {
                 if content.searchQuery.isEmpty {
                     //
                     // 🔍 Search by xxx
                     //
-                    Label("Search by Swift version", symbol: "􀫊")
+                    Label(LocalizedStringKey("Search by Swift version"), symbol: "􀫊")
                         .searchCompletion("Swift")
-                    Label("Search by Status", symbol: "􀋉")
+                    Label(LocalizedStringKey("Search by Status"), symbol: "􀋉")
                         .searchCompletion("Status")
                     //
                     // 🕒 Histories

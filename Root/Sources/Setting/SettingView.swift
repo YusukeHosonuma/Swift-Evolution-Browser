@@ -38,47 +38,47 @@ public struct SettingView: View {
             //
             // 🙋‍♂️ Account section.
             //
-            Section("Account") {
+            Section(LocalizedStringKey("Account")) {
                 if viewModel.isSignIn {
                     Button {
                         viewModel.onTapSignOut()
                     } label: {
-                        Label("Sign-Out", symbol: "􀉭")
+                        Label(LocalizedStringKey("Sign-Out"), symbol: "􀉭")
                     }
                     Button {
                         Task {
                             await viewModel.onTapClearSearchHistory()
                         }
                     } label: {
-                        Label("Clear search history", symbol: "􀐫")
+                        Label(LocalizedStringKey("Clear search history"), symbol: "􀐫")
                     }
                     .disabled(viewModel.isDisabledClearSearchHistoryButton)
                 } else {
                     Button {
                         viewModel.onTapSignIn()
                     } label: {
-                        Label("Sign-In", symbol: "􀉭")
+                        Label(LocalizedStringKey("Sign-In"), symbol: "􀉭")
                     }
                 }
             }
             //
             // 🔗 Links section.
             //
-            Section("Links") {
+            Section(LocalizedStringKey("Links")) {
                 Link(destination: privacyPolicyURL) {
-                    Label("Privacy Policy", symbol: "􀉪")
+                    Label(LocalizedStringKey("Privacy Policy"), symbol: "􀉪")
                 }
                 Link(destination: repositoryURL) {
-                    Label("Source Code on GitHub", symbol: "􀫘")
+                    Label(LocalizedStringKey("Source Code on GitHub"), symbol: "􀫘")
 
                     // ☑️ Remove: GitHub icon is not allowed to change color.
                     // IconLabel("GitHub", icon: "github-icon", bundle: .module)
                 }
                 Link(destination: twitterURL) {
-                    Label("Author", symbol: "􀌫")
+                    Label(LocalizedStringKey("Author"), symbol: "􀌫")
                 }
                 Link(destination: shareOnTwitterURL) {
-                    Label("Share on Twitter", symbol: "􀉑")
+                    Label(LocalizedStringKey("Share on Twitter"), symbol: "􀉑")
                 }
             }
         }
@@ -91,8 +91,8 @@ public struct SettingView: View {
         //
         // 👋 Sign-out confirm sheet.
         //
-        .confirmationDialog("Are you sign-out?", isPresented: $viewModel.isPresentLogoutConfirmSheet, titleVisibility: .visible) {
-            Button("Sign-out", role: .destructive) {
+        .confirmationDialog(LocalizedStringKey("Are you sign-out?"), isPresented: $viewModel.isPresentLogoutConfirmSheet, titleVisibility: .visible) {
+            Button(LocalizedStringKey("Sign-Out"), role: .destructive) {
                 viewModel.onTapSignOutOnAlert()
             }
         }
