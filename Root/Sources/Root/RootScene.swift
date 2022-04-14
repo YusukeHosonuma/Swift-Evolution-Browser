@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftUICommon
+import SwiftUISimulator
 
 public struct RootScene: Scene {
     #if os(macOS)
@@ -17,7 +18,9 @@ public struct RootScene: Scene {
 
     public var body: some Scene {
         WindowGroup {
-            RootView()
+            SimulatorView {
+                RootView()
+            }
         }
         #if os(macOS)
         .commands {

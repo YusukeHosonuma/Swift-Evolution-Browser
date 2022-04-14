@@ -206,6 +206,15 @@
         "revision" : "915a4a0b0ef5b044300e329ef1bf74256f37b91b",
         "version" : "0.1.2"
       }
+    },
+    {
+      "identity" : "swiftui-simulator",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/YusukeHosonuma/SwiftUI-Simulator.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "3ef0b790ebb90520cd4f2cf518d1df197dddf03e"
+      }
     }
   ],
   "version" : 2
