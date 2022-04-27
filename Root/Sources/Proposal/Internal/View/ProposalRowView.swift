@@ -43,6 +43,7 @@ struct ProposalRowView: View {
             }
         }
         .padding(.vertical, 4)
+        .debugFilename() // ✅
     }
 }
 

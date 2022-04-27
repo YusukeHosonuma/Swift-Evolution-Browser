@@ -99,6 +99,7 @@ public struct SettingView: View {
         .task {
             await viewModel.onAppear()
         }
+        .debugFilename()
     }
 }
 

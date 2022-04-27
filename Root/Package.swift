@@ -30,7 +30,6 @@ let package = Package(
             "Auth",
             "Proposal",
             "Setting",
-            .product(name: "SwiftUISimulator", package: "SwiftUI-Simulator"),
         ]),
         .testTarget(name: "RootTests", dependencies: ["Root"]),
         //
@@ -72,6 +71,7 @@ let package = Package(
         .target(name: "Core", dependencies: [
             "SFReadableSymbols",
             "Defaults",
+            .product(name: "SwiftUISimulator", package: "SwiftUI-Simulator"),
             .product(name: "SwiftUICommon", package: "SwiftUI-Common"),
             .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk"),
             .product(name: "FirebaseAnalytics", package: "firebase-ios-sdk", condition: .when(platforms: [.iOS])),

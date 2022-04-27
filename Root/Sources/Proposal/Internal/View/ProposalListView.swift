@@ -81,8 +81,9 @@ struct ProposalListView: View {
                 }
                 .id(scrollToTopID)
             }
+            .debugFilename()
             #if os(iOS)
-            .listStyle(.insetGrouped)
+                .listStyle(.insetGrouped)
             #endif
         }
     }

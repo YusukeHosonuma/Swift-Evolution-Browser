@@ -48,6 +48,7 @@
 		700EE3EE27D9EFFE00A9D65A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		700EE3F227D9F02E00A9D65A /* macOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = macOS.plist; sourceTree = "<group>"; };
 		700EE3F327D9F0A500A9D65A /* iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = iOS.plist; sourceTree = "<group>"; };
+		70140A742807EB19007D734A /* SwiftUI-Simulator */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "SwiftUI-Simulator"; path = "../SwiftUI-Simulator"; sourceTree = "<group>"; };
 		701DE6CE27EABB6100246CA3 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		7043A7DD27DACBA400232812 /* iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOS.entitlements; sourceTree = "<group>"; };
 		7046EB2E27E9E8A6003B883D /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
@@ -62,6 +63,7 @@
 		7071874827D884A3009A8169 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7071874C27D884A3009A8169 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		7071874E27D884A3009A8169 /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
+		70752021280BDA0F009BB546 /* SwiftUI-Common */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "SwiftUI-Common"; path = "../SwiftUI-Common"; sourceTree = "<group>"; };
 		70C4C87A2807B18E009AB1B4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		70C4C87C2807B190009AB1B4 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -124,6 +126,8 @@
 		7071872227D884A1009A8169 = {
 			isa = PBXGroup;
 			children = (
+				70752021280BDA0F009BB546 /* SwiftUI-Common */,
+				70140A742807EB19007D734A /* SwiftUI-Simulator */,
 				7071872727D884A1009A8169 /* Shared */,
 				705EECD027EE8E8D00A58A97 /* iOS */,
 				7071873627D884A3009A8169 /* macOS */,

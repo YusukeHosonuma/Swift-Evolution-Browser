@@ -7,20 +7,44 @@
 
 import SwiftUI
 import SwiftUICommon
+
+#if DEBUG
 import SwiftUISimulator
+#endif
 
 public struct RootScene: Scene {
     #if os(macOS)
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     #endif
 
+    #if DEBUG
+    @State private var isEnableDebugFilename = false
+    #endif
+
     public init() {}
 
     public var body: some Scene {
         WindowGroup {
-            SimulatorView {
+            #if DEBUG
+            SimulatorView(debugMenu: {
+                Toggle(isOn: $isEnableDebugFilename) {
+                    Label("Debug View", systemImage: "ant.circle")
+                }
+            }) {
                 RootView()
+                    .environment(\.debugFilename, isEnableDebugFilename)
             }
+            // SimulatorView(
+            //     defaultDevices: [.iPhone11, .iPhone13ProMax], // Set<Device>
+            //     defaultLocaleIdentifiers: ["it", "fr"], // Set<String>
+            //     defaultCalendarIdentifiers: [.gregorian, .iso8601], // Set<Calendar.Identifier>
+            //     defaultTimeZones: [.europeParis, .europeBerlin] // Set<TimeZones>
+            // ) {
+            //     RootView()
+            // }
+            #else
+            RootView()
+            #endif
         }
         #if os(macOS)
         .commands {

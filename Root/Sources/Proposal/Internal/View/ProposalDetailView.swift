@@ -47,6 +47,7 @@ struct ProposalDetailView: View {
                 .enabled(webViewState.canGoForward)
             }
         }
+        .debugFilename()
         .onAppear {
             #if os(iOS)
             // 💡 TODO: This is 1st example.

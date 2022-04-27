@@ -107,6 +107,7 @@ public struct ProposalListContainerView: View {
         .task {
             await viewModel.onAppear()
         }
+        .debugFilename()
     }
 
     func contentView(_ content: ProposalListViewModel.Content) -> some View {

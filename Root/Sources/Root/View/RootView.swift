@@ -55,6 +55,7 @@ public struct RootView: View {
                 GIDSignIn.sharedInstance.handle(url)
                 #endif
             }
+            .debugFilename()
     }
 
     func content() -> some View {

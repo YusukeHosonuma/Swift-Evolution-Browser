@@ -59,5 +59,6 @@ struct ProposalStatusView: View {
                     .stroke(color, lineWidth: 1)
             )
             .opacity(0.9)
+            .debugFilename()
     }
 }
