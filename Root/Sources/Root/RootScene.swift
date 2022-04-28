@@ -36,7 +36,7 @@ public struct RootScene: Scene {
                 }
             } content: {
                 RootView()
-                    .environment(\.debugFilename, isEnabledDebugFilename)
+                    .environment(\.simulatorDebugFilename, isEnabledDebugFilename)
             }
             #else
             RootView()

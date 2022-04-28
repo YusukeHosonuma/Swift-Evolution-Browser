@@ -49,6 +49,7 @@
 		700EE3F227D9F02E00A9D65A /* macOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = macOS.plist; sourceTree = "<group>"; };
 		700EE3F327D9F0A500A9D65A /* iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = iOS.plist; sourceTree = "<group>"; };
 		701DE6CE27EABB6100246CA3 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		7038BF67281A4319006A0D0E /* SwiftUI-Simulator */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "SwiftUI-Simulator"; path = "../SwiftUI-Simulator"; sourceTree = "<group>"; };
 		7043A7DD27DACBA400232812 /* iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iOS.entitlements; sourceTree = "<group>"; };
 		7046EB2E27E9E8A6003B883D /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		7071872827D884A1009A8169 /* MainApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainApp.swift; sourceTree = "<group>"; };
@@ -124,6 +125,7 @@
 		7071872227D884A1009A8169 = {
 			isa = PBXGroup;
 			children = (
+				7038BF67281A4319006A0D0E /* SwiftUI-Simulator */,
 				7071872727D884A1009A8169 /* Shared */,
 				705EECD027EE8E8D00A58A97 /* iOS */,
 				7071873627D884A3009A8169 /* macOS */,
