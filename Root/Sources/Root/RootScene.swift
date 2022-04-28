@@ -8,6 +8,10 @@
 import SwiftUI
 import SwiftUICommon
 
+#if DEBUG
+import SwiftUISimulator
+#endif
+
 public struct RootScene: Scene {
     #if os(macOS)
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
@@ -17,7 +21,13 @@ public struct RootScene: Scene {
 
     public var body: some Scene {
         WindowGroup {
+            #if DEBUG
+            SimulatorView {
+                RootView()
+            }
+            #else
             RootView()
+            #endif
         }
         #if os(macOS)
         .commands {
