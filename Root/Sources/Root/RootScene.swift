@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftUICommon
 
-#if DEBUG
+#if DEBUG && os(iOS)
 import SwiftUISimulator
 #endif
 
@@ -17,7 +17,7 @@ public struct RootScene: Scene {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     #endif
 
-    #if DEBUG
+    #if DEBUG && os(iOS)
     @State private var isEnabledDebugFilename = false
     #endif
 
@@ -25,7 +25,7 @@ public struct RootScene: Scene {
 
     public var body: some Scene {
         WindowGroup {
-            #if DEBUG
+            #if DEBUG && os(iOS)
             SimulatorView {
                 Menu {
                     Toggle(isOn: $isEnabledDebugFilename) {

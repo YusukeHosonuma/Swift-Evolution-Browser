@@ -72,7 +72,7 @@ let package = Package(
             "SFReadableSymbols",
             "Defaults",
             .product(name: "SwiftUICommon", package: "SwiftUI-Common"),
-            .product(name: "SwiftUISimulator", package: "SwiftUI-Simulator"),
+            .product(name: "SwiftUISimulator", package: "SwiftUI-Simulator", condition: .when(platforms: [.iOS])),
             .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk"),
             .product(name: "FirebaseAnalytics", package: "firebase-ios-sdk", condition: .when(platforms: [.iOS])),
         ]),

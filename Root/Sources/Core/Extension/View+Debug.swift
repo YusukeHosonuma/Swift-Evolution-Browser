@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-#if DEBUG
+#if DEBUG && os(iOS)
 import SwiftUISimulator
 #endif
 
 public extension View {
     func debugFilename(_ file: StaticString = #file) -> some View {
-        #if DEBUG
+        #if DEBUG && os(iOS)
         simulatorDebugFilename(file)
         #else
         self
