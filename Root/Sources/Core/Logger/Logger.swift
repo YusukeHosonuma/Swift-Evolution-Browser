@@ -24,11 +24,3 @@ public final class Logger {
         Crashlytics.crashlytics().record(error: error.nsError(path: path))
     }
 }
-
-private extension String {
-    init(_ staticString: StaticString) {
-        self = staticString.withUTF8Buffer {
-            String(decoding: $0, as: UTF8.self)
-        }
-    }
-}

@@ -8,16 +8,39 @@
 import SwiftUI
 import SwiftUICommon
 
+#if DEBUG && os(iOS)
+import SwiftUISimulator
+#endif
+
 public struct RootScene: Scene {
     #if os(macOS)
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    #endif
+
+    #if DEBUG && os(iOS)
+    @State private var isEnabledDebugFilename = false
     #endif
 
     public init() {}
 
     public var body: some Scene {
         WindowGroup {
+            #if DEBUG && os(iOS)
+            SimulatorView {
+                Menu {
+                    Toggle(isOn: $isEnabledDebugFilename) {
+                        Label("Filename", symbol: "􀕹")
+                    }
+                } label: {
+                    Label("Debug", symbol: "􀌜")
+                }
+            } content: {
+                RootView()
+                    .environment(\.simulatorDebugFilename, isEnabledDebugFilename)
+            }
+            #else
             RootView()
+            #endif
         }
         #if os(macOS)
         .commands {

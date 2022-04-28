@@ -57,6 +57,7 @@ struct ProposalDetailView: View {
             // ])
             #endif
         }
+        .debugFilename()
     }
 
     private var toolbarPlacement: ToolbarItemPlacement {
