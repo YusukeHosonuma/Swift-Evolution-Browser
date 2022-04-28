@@ -17,13 +17,26 @@ public struct RootScene: Scene {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     #endif
 
+    #if DEBUG
+    @State private var isEnabledDebugFilename = false
+    #endif
+
     public init() {}
 
     public var body: some Scene {
         WindowGroup {
             #if DEBUG
             SimulatorView {
+                Menu {
+                    Toggle(isOn: $isEnabledDebugFilename) {
+                        Label("Filename", symbol: "􀕹")
+                    }
+                } label: {
+                    Label("Debug", symbol: "􀌜")
+                }
+            } content: {
                 RootView()
+                    .environment(\.debugFilename, isEnabledDebugFilename)
             }
             #else
             RootView()
