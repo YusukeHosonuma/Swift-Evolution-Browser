@@ -99,7 +99,7 @@ public struct ProposalListContainerView: View {
         #if os(iOS)
         .onReceive(viewModel.$toHideKeyboard) {
             if $0 {
-                UIApplication.hideKeyboard()
+                hideKeyboard()
                 viewModel.toHideKeyboard = false
             }
         }
