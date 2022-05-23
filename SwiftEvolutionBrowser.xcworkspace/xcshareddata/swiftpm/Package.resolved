@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/abseil-cpp-SwiftPM.git",
       "state" : {
-        "revision" : "fffc3c2729be5747390ad02d5100291a0d9ad26a",
-        "version" : "0.20200225.4"
+        "revision" : "d302de612e3d57c6f4afaf087da18fba8eac72a7",
+        "version" : "0.20220203.1"
       }
     },
     {
@@ -23,8 +23,26 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/boringssl-SwiftPM.git",
       "state" : {
-        "revision" : "734a8247442fde37df4364c21f6a0085b6a36728",
-        "version" : "0.7.2"
+        "revision" : "79db6516894a932d0ddaff3b05b9da1e4f6c4069",
+        "version" : "0.9.0"
+      }
+    },
+    {
+      "identity" : "colorizeswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mtynior/ColorizeSwift.git",
+      "state" : {
+        "revision" : "2a354639173d021f4648cf1912b2b00a3a7cd83c",
+        "version" : "1.6.0"
+      }
+    },
+    {
+      "identity" : "curry",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/thoughtbot/Curry.git",
+      "state" : {
+        "revision" : "4331dd50bc1db007db664a23f32e6f3df93d4e1a",
+        "version" : "4.0.2"
       }
     },
     {
@@ -41,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk",
       "state" : {
-        "revision" : "ccb2bccb82e62ad9e8a4e757a43ce6a04ceae1c9",
-        "version" : "8.14.0"
+        "revision" : "cfa854c9c1073c4d1b83b20dfcb1ef7ceb85388b",
+        "version" : "9.0.0"
       }
     },
     {
@@ -59,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleAppMeasurement.git",
       "state" : {
-        "revision" : "9b74e6a3f875208c04c22b39b580a21d4de0f4f9",
-        "version" : "8.14.0"
+        "revision" : "6a3123fab90f3884167990bee9bb30097d99c98c",
+        "version" : "9.0.0"
       }
     },
     {
@@ -91,12 +109,12 @@
       }
     },
     {
-      "identity" : "grpc-swiftpm",
+      "identity" : "grpc-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/grpc-SwiftPM.git",
+      "location" : "https://github.com/grpc/grpc-ios.git",
       "state" : {
-        "revision" : "fb405dd2c7901485f7e158b24e3a0a47e4efd8b5",
-        "version" : "1.28.4"
+        "revision" : "87cbe43709371123e95ca10d6956938741388af7",
+        "version" : "1.44.1-grpc"
       }
     },
     {
@@ -104,8 +122,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/gtm-session-fetcher.git",
       "state" : {
-        "revision" : "eca9404a18f53727e4698211aaf2615eb93b962a",
-        "version" : "1.7.1"
+        "revision" : "4e9bbf2808b8fee444e84a48f5f3c12641987d3e",
+        "version" : "1.7.2"
       }
     },
     {
@@ -172,6 +190,15 @@
       }
     },
     {
+      "identity" : "swift-case-paths",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pointfreeco/swift-case-paths.git",
+      "state" : {
+        "revision" : "ce9c0d897db8a840c39de64caaa9b60119cf4be8",
+        "version" : "0.8.1"
+      }
+    },
+    {
       "identity" : "swift-numerics",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-numerics",
@@ -199,12 +226,30 @@
       }
     },
     {
+      "identity" : "swiftprettyprint",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/YusukeHosonuma/SwiftPrettyPrint",
+      "state" : {
+        "revision" : "65b8a439c9e499aebb838c0418c72f7d0e66c6ae",
+        "version" : "1.3.0"
+      }
+    },
+    {
       "identity" : "swiftui-common",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/YusukeHosonuma/SwiftUI-Common.git",
       "state" : {
-        "revision" : "7ae08ce85e838857df6a1bfdbd9cbd8e9190d1bc",
-        "version" : "0.3.0"
+        "revision" : "476ba14bf55e5c693ae05c42ff350619b2215cba",
+        "version" : "1.1.0"
+      }
+    },
+    {
+      "identity" : "userdefaultsbrowser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/YusukeHosonuma/UserDefaultsBrowser.git",
+      "state" : {
+        "revision" : "24f5e6578ae0013208df2ab9d49b4f656d02aa0c",
+        "version" : "1.0.2"
       }
     }
   ],

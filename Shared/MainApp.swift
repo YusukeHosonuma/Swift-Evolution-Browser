@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Root
-import Firebase
+import FirebaseCore
 
 @main
 struct MainApp: App {

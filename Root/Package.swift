@@ -13,13 +13,13 @@ let package = Package(
         .library(name: "Root", targets: ["Root"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "8.10.0"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "9.0.0"),
         .package(url: "https://github.com/google/GoogleSignIn-iOS.git", from: "6.1.0"),
         .package(url: "https://github.com/apple/swift-algorithms", from: "1.0.0"),
         .package(url: "https://github.com/YusukeHosonuma/SwiftParamTest.git", from: "2.2.0"),
         .package(url: "https://github.com/YusukeHosonuma/SFReadableSymbols.git", from: "1.0.0"),
         .package(url: "https://github.com/sindresorhus/Defaults.git", from: "6.2.1"),
-        .package(url: "https://github.com/YusukeHosonuma/SwiftUI-Common.git", from: "0.1.0"),
+        .package(url: "https://github.com/YusukeHosonuma/SwiftUI-Common.git", from: "1.0.0"),
         .package(url: "https://github.com/YusukeHosonuma/SwiftUI-Simulator.git", branch: "main"),
     ],
     targets: [
@@ -54,7 +54,7 @@ let package = Package(
             "Core",
             "Auth",
             .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
-            .product(name: "FirebaseFirestoreSwift-Beta", package: "firebase-ios-sdk"),
+            .product(name: "FirebaseFirestoreSwift", package: "firebase-ios-sdk"),
             .product(name: "FirebaseFirestoreCombine-Community", package: "firebase-ios-sdk"),
         ]),
         .target(name: "Auth", dependencies: [
@@ -62,7 +62,7 @@ let package = Package(
             .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS", condition: .when(platforms: [.iOS])),
             .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
             .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
-            .product(name: "FirebaseFirestoreSwift-Beta", package: "firebase-ios-sdk"),
+            .product(name: "FirebaseFirestoreSwift", package: "firebase-ios-sdk"),
             .product(name: "FirebaseFirestoreCombine-Community", package: "firebase-ios-sdk"),
         ]),
         //
