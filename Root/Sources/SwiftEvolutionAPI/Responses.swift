@@ -210,6 +210,7 @@ public enum Resolution: String, Codable, Equatable {
 
 public enum StatusEnum: String, Codable, Equatable {
     case closed = "Closed"
+    case empty = ""
     case inProgress = "In Progress"
     case resolved = "Resolved"
     case statusOpen = "Open"
