@@ -17,7 +17,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: SourcePackages
-          key: ${{ runner.os }}-swiftpm-${{ hashFiles('**/Package.resolved') }}
+          key: ${{ runner.os }}-swiftpm-${{ hashFiles('**/Package.resolvedx') }}
 
       - name: Build
-        run: xcodebuild -workspace SwiftEvolutionBrowser.xcworkspace -scheme "SE Browser (iOS)" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 13 Pro Max,OS=latest' -clonedSourcePackagesDirPath SourcePackages
+        run: xcodebuild -workspace SwiftEvolutionBrowser.xcworkspace -scheme "SE Browser (iOS)" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 13 Pro Max,OS=latest' -clonedSourcePackagesDirPath SourcePackages | xcpretty
