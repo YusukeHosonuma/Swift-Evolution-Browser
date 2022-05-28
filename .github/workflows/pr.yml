@@ -1,0 +1,23 @@
+name: Build
+
+on: pull_request
+
+jobs:
+  build-examples:
+    runs-on: macos-12
+    timeout-minutes: 30
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: SwiftPM cache
+        uses: actions/cache@v3
+        with:
+          path: SourcePackages
+          key: ${{ runner.os }}-swiftpm-${{ hashFiles('**/Package.resolved') }}
+
+      - name: Build
+        run: xcodebuild -workspace SwiftEvolutionBrowser.xcworkspace -scheme "SE Browser (iOS)" -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 13 Pro Max,OS=latest' -clonedSourcePackagesDirPath SourcePackages
