@@ -10,6 +10,7 @@ import Foundation
 import SFReadableSymbols
 import SwiftUI
 import SwiftUICommon
+import ObservableObjectDebugger
 
 struct ProposalListView: View {
     @Environment(\.scrollToTopID) private var scrollToTopID
@@ -88,5 +89,6 @@ struct ProposalListView: View {
             }
         }
         .debugFilename()
+        .debugObserve(selectedProposalID)
     }
 }

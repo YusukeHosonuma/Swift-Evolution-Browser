@@ -65,6 +65,8 @@
 		7071874E27D884A3009A8169 /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
 		70C4C87A2807B18E009AB1B4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		70C4C87C2807B190009AB1B4 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		70D92533285EBDBC00CFCEFB /* SwiftPrettyPrint */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SwiftPrettyPrint; path = ../SwiftPrettyPrint; sourceTree = "<group>"; };
+		70D92534285ED00700CFCEFB /* ObservableObjectDebugger */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ObservableObjectDebugger; path = ../ObservableObjectDebugger; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +127,8 @@
 		7071872227D884A1009A8169 = {
 			isa = PBXGroup;
 			children = (
+				70D92534285ED00700CFCEFB /* ObservableObjectDebugger */,
+				70D92533285EBDBC00CFCEFB /* SwiftPrettyPrint */,
 				7038BF67281A4319006A0D0E /* SwiftUI-Simulator */,
 				7071872727D884A1009A8169 /* Shared */,
 				705EECD027EE8E8D00A58A97 /* iOS */,

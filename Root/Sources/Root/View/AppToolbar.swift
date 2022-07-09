@@ -10,6 +10,7 @@ import Core
 import Foundation
 import SFReadableSymbols
 import SwiftUI
+import ObservableObjectDebugger
 
 struct AppToolbar: ViewModifier {
     @EnvironmentObject private var authState: AuthState
@@ -33,6 +34,7 @@ struct AppToolbar: ViewModifier {
                 }
                 #endif
             }
+            .debugObserve(authState)
     }
 }
 

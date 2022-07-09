@@ -21,6 +21,7 @@ let package = Package(
         .package(url: "https://github.com/sindresorhus/Defaults.git", from: "6.2.1"),
         .package(url: "https://github.com/YusukeHosonuma/SwiftUI-Common.git", from: "1.0.0"),
         .package(url: "https://github.com/YusukeHosonuma/SwiftUI-Simulator.git", branch: "main"),
+        .package(url: "https://github.com/YusukeHosonuma/ObservableObjectDebugger.git", branch: "main"),
     ],
     targets: [
         //
@@ -30,6 +31,7 @@ let package = Package(
             "Auth",
             "Proposal",
             "Setting",
+            "ObservableObjectDebugger",
         ]),
         .testTarget(name: "RootTests", dependencies: ["Root"]),
         //
@@ -40,12 +42,14 @@ let package = Package(
             "Auth",
             "Service",
             "SwiftEvolutionAPI",
+            "ObservableObjectDebugger",
             .product(name: "Algorithms", package: "swift-algorithms"),
         ]),
         .target(name: "Setting", dependencies: [
             "Core",
             "Auth",
             "Service",
+            "ObservableObjectDebugger",
         ]),
         //
         // ☁️ Service
@@ -53,12 +57,14 @@ let package = Package(
         .target(name: "Service", dependencies: [
             "Core",
             "Auth",
+            "ObservableObjectDebugger",
             .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
             .product(name: "FirebaseFirestoreSwift", package: "firebase-ios-sdk"),
             .product(name: "FirebaseFirestoreCombine-Community", package: "firebase-ios-sdk"),
         ]),
         .target(name: "Auth", dependencies: [
             "Core",
+            "ObservableObjectDebugger",
             .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS", condition: .when(platforms: [.iOS])),
             .product(name: "FirebaseAuth", package: "firebase-ios-sdk"),
             .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
@@ -69,6 +75,7 @@ let package = Package(
         // ⚙️ Core
         //
         .target(name: "Core", dependencies: [
+            "ObservableObjectDebugger",
             "SFReadableSymbols",
             "Defaults",
             .product(name: "SwiftUICommon", package: "SwiftUI-Common"),

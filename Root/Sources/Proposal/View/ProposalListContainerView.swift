@@ -11,6 +11,7 @@ import Core
 import SFReadableSymbols
 import SwiftUI
 import SwiftUICommon
+import ObservableObjectDebugger
 #if os(iOS)
 import UIKit
 #endif
@@ -108,6 +109,7 @@ public struct ProposalListContainerView: View {
             await viewModel.onAppear()
         }
         .debugFilename()
+        .debugObserve(viewModel)
     }
 
     func contentView(_ content: ProposalListViewModel.Content) -> some View {

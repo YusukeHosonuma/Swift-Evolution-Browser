@@ -1,257 +1,250 @@
 {
-  "pins" : [
-    {
-      "identity" : "abseil-cpp-swiftpm",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/abseil-cpp-SwiftPM.git",
-      "state" : {
-        "revision" : "d302de612e3d57c6f4afaf087da18fba8eac72a7",
-        "version" : "0.20220203.1"
+  "object": {
+    "pins": [
+      {
+        "package": "abseil",
+        "repositoryURL": "https://github.com/firebase/abseil-cpp-SwiftPM.git",
+        "state": {
+          "branch": null,
+          "revision": "d302de612e3d57c6f4afaf087da18fba8eac72a7",
+          "version": "0.20220203.1"
+        }
+      },
+      {
+        "package": "AppAuth",
+        "repositoryURL": "https://github.com/openid/AppAuth-iOS.git",
+        "state": {
+          "branch": null,
+          "revision": "33660c271c961f8ce1084cc13f2ea8195e864f7d",
+          "version": "1.5.0"
+        }
+      },
+      {
+        "package": "BoringSSL-GRPC",
+        "repositoryURL": "https://github.com/firebase/boringssl-SwiftPM.git",
+        "state": {
+          "branch": null,
+          "revision": "79db6516894a932d0ddaff3b05b9da1e4f6c4069",
+          "version": "0.9.0"
+        }
+      },
+      {
+        "package": "ColorizeSwift",
+        "repositoryURL": "https://github.com/mtynior/ColorizeSwift.git",
+        "state": {
+          "branch": null,
+          "revision": "2a354639173d021f4648cf1912b2b00a3a7cd83c",
+          "version": "1.6.0"
+        }
+      },
+      {
+        "package": "Curry",
+        "repositoryURL": "https://github.com/thoughtbot/Curry.git",
+        "state": {
+          "branch": null,
+          "revision": "4331dd50bc1db007db664a23f32e6f3df93d4e1a",
+          "version": "4.0.2"
+        }
+      },
+      {
+        "package": "Defaults",
+        "repositoryURL": "https://github.com/sindresorhus/Defaults.git",
+        "state": {
+          "branch": null,
+          "revision": "119f654d44f7b90f00dc11f7dd1c94a36f12576b",
+          "version": "6.2.1"
+        }
+      },
+      {
+        "package": "Firebase",
+        "repositoryURL": "https://github.com/firebase/firebase-ios-sdk",
+        "state": {
+          "branch": null,
+          "revision": "cfa854c9c1073c4d1b83b20dfcb1ef7ceb85388b",
+          "version": "9.0.0"
+        }
+      },
+      {
+        "package": "Flatten",
+        "repositoryURL": "https://github.com/YusukeHosonuma/Flatten.git",
+        "state": {
+          "branch": null,
+          "revision": "5286148aa255f57863e0d7e2b827ca6b91677051",
+          "version": "0.1.0"
+        }
+      },
+      {
+        "package": "GoogleAppMeasurement",
+        "repositoryURL": "https://github.com/google/GoogleAppMeasurement.git",
+        "state": {
+          "branch": null,
+          "revision": "6a3123fab90f3884167990bee9bb30097d99c98c",
+          "version": "9.0.0"
+        }
+      },
+      {
+        "package": "GoogleDataTransport",
+        "repositoryURL": "https://github.com/google/GoogleDataTransport.git",
+        "state": {
+          "branch": null,
+          "revision": "15ccdfd25ac55b9239b82809531ff26605e7556e",
+          "version": "9.1.2"
+        }
+      },
+      {
+        "package": "GoogleSignIn",
+        "repositoryURL": "https://github.com/google/GoogleSignIn-iOS.git",
+        "state": {
+          "branch": null,
+          "revision": "60ca2bfd218ccb194a746a79b41d9d50eb7e3af0",
+          "version": "6.1.0"
+        }
+      },
+      {
+        "package": "GoogleUtilities",
+        "repositoryURL": "https://github.com/google/GoogleUtilities.git",
+        "state": {
+          "branch": null,
+          "revision": "f4abe56ce62a779e64b525eb133c8fc2a84bbc1f",
+          "version": "7.7.1"
+        }
+      },
+      {
+        "package": "gRPC",
+        "repositoryURL": "https://github.com/grpc/grpc-ios.git",
+        "state": {
+          "branch": null,
+          "revision": "87cbe43709371123e95ca10d6956938741388af7",
+          "version": "1.44.1-grpc"
+        }
+      },
+      {
+        "package": "GTMSessionFetcher",
+        "repositoryURL": "https://github.com/google/gtm-session-fetcher.git",
+        "state": {
+          "branch": null,
+          "revision": "4e9bbf2808b8fee444e84a48f5f3c12641987d3e",
+          "version": "1.7.2"
+        }
+      },
+      {
+        "package": "GTMAppAuth",
+        "repositoryURL": "https://github.com/google/GTMAppAuth.git",
+        "state": {
+          "branch": null,
+          "revision": "e803d09da0147fbf1bbb30e126c47ff43254e057",
+          "version": "1.2.3"
+        }
+      },
+      {
+        "package": "leveldb",
+        "repositoryURL": "https://github.com/firebase/leveldb.git",
+        "state": {
+          "branch": null,
+          "revision": "0706abcc6b0bd9cedfbb015ba840e4a780b5159b",
+          "version": "1.22.2"
+        }
+      },
+      {
+        "package": "nanopb",
+        "repositoryURL": "https://github.com/firebase/nanopb.git",
+        "state": {
+          "branch": null,
+          "revision": "7ee9ef9f627d85cbe1b8c4f49a3ed26eed216c77",
+          "version": "2.30908.0"
+        }
+      },
+      {
+        "package": "Promises",
+        "repositoryURL": "https://github.com/google/promises.git",
+        "state": {
+          "branch": null,
+          "revision": "46c1e6b5ac09d8f82c991061c659f67e573d425d",
+          "version": "2.1.0"
+        }
+      },
+      {
+        "package": "SFReadableSymbols",
+        "repositoryURL": "https://github.com/YusukeHosonuma/SFReadableSymbols.git",
+        "state": {
+          "branch": null,
+          "revision": "e7d4c2a28ff151774ae50234632a9a1c73b658fb",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "SHList",
+        "repositoryURL": "https://github.com/YusukeHosonuma/SHList.git",
+        "state": {
+          "branch": null,
+          "revision": "6c61f5382dd07a64d76bc8b7fad8cec0d8a4ff7a",
+          "version": "0.1.0"
+        }
+      },
+      {
+        "package": "swift-algorithms",
+        "repositoryURL": "https://github.com/apple/swift-algorithms",
+        "state": {
+          "branch": null,
+          "revision": "b14b7f4c528c942f121c8b860b9410b2bf57825e",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "swift-case-paths",
+        "repositoryURL": "https://github.com/pointfreeco/swift-case-paths.git",
+        "state": {
+          "branch": null,
+          "revision": "ce9c0d897db8a840c39de64caaa9b60119cf4be8",
+          "version": "0.8.1"
+        }
+      },
+      {
+        "package": "swift-numerics",
+        "repositoryURL": "https://github.com/apple/swift-numerics",
+        "state": {
+          "branch": null,
+          "revision": "0a5bc04095a675662cf24757cc0640aa2204253b",
+          "version": "1.0.2"
+        }
+      },
+      {
+        "package": "SwiftProtobuf",
+        "repositoryURL": "https://github.com/apple/swift-protobuf.git",
+        "state": {
+          "branch": null,
+          "revision": "e1499bc69b9040b29184f7f2996f7bab467c1639",
+          "version": "1.19.0"
+        }
+      },
+      {
+        "package": "SwiftParamTest",
+        "repositoryURL": "https://github.com/YusukeHosonuma/SwiftParamTest.git",
+        "state": {
+          "branch": null,
+          "revision": "f513e1dbbdd86e2ca2b672537f4bcb4417f94c27",
+          "version": "2.2.1"
+        }
+      },
+      {
+        "package": "SwiftUI-Common",
+        "repositoryURL": "https://github.com/YusukeHosonuma/SwiftUI-Common.git",
+        "state": {
+          "branch": null,
+          "revision": "476ba14bf55e5c693ae05c42ff350619b2215cba",
+          "version": "1.1.0"
+        }
+      },
+      {
+        "package": "UserDefaultsBrowser",
+        "repositoryURL": "https://github.com/YusukeHosonuma/UserDefaultsBrowser.git",
+        "state": {
+          "branch": null,
+          "revision": "24f5e6578ae0013208df2ab9d49b4f656d02aa0c",
+          "version": "1.0.2"
+        }
       }
-    },
-    {
-      "identity" : "appauth-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/openid/AppAuth-iOS.git",
-      "state" : {
-        "revision" : "33660c271c961f8ce1084cc13f2ea8195e864f7d",
-        "version" : "1.5.0"
-      }
-    },
-    {
-      "identity" : "boringssl-swiftpm",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/boringssl-SwiftPM.git",
-      "state" : {
-        "revision" : "79db6516894a932d0ddaff3b05b9da1e4f6c4069",
-        "version" : "0.9.0"
-      }
-    },
-    {
-      "identity" : "colorizeswift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/mtynior/ColorizeSwift.git",
-      "state" : {
-        "revision" : "2a354639173d021f4648cf1912b2b00a3a7cd83c",
-        "version" : "1.6.0"
-      }
-    },
-    {
-      "identity" : "curry",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/thoughtbot/Curry.git",
-      "state" : {
-        "revision" : "4331dd50bc1db007db664a23f32e6f3df93d4e1a",
-        "version" : "4.0.2"
-      }
-    },
-    {
-      "identity" : "defaults",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sindresorhus/Defaults.git",
-      "state" : {
-        "revision" : "119f654d44f7b90f00dc11f7dd1c94a36f12576b",
-        "version" : "6.2.1"
-      }
-    },
-    {
-      "identity" : "firebase-ios-sdk",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/firebase-ios-sdk",
-      "state" : {
-        "revision" : "cfa854c9c1073c4d1b83b20dfcb1ef7ceb85388b",
-        "version" : "9.0.0"
-      }
-    },
-    {
-      "identity" : "flatten",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/YusukeHosonuma/Flatten.git",
-      "state" : {
-        "revision" : "5286148aa255f57863e0d7e2b827ca6b91677051",
-        "version" : "0.1.0"
-      }
-    },
-    {
-      "identity" : "googleappmeasurement",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/GoogleAppMeasurement.git",
-      "state" : {
-        "revision" : "6a3123fab90f3884167990bee9bb30097d99c98c",
-        "version" : "9.0.0"
-      }
-    },
-    {
-      "identity" : "googledatatransport",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/GoogleDataTransport.git",
-      "state" : {
-        "revision" : "15ccdfd25ac55b9239b82809531ff26605e7556e",
-        "version" : "9.1.2"
-      }
-    },
-    {
-      "identity" : "googlesignin-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/GoogleSignIn-iOS.git",
-      "state" : {
-        "revision" : "60ca2bfd218ccb194a746a79b41d9d50eb7e3af0",
-        "version" : "6.1.0"
-      }
-    },
-    {
-      "identity" : "googleutilities",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/GoogleUtilities.git",
-      "state" : {
-        "revision" : "f4abe56ce62a779e64b525eb133c8fc2a84bbc1f",
-        "version" : "7.7.1"
-      }
-    },
-    {
-      "identity" : "grpc-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/grpc/grpc-ios.git",
-      "state" : {
-        "revision" : "87cbe43709371123e95ca10d6956938741388af7",
-        "version" : "1.44.1-grpc"
-      }
-    },
-    {
-      "identity" : "gtm-session-fetcher",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/gtm-session-fetcher.git",
-      "state" : {
-        "revision" : "4e9bbf2808b8fee444e84a48f5f3c12641987d3e",
-        "version" : "1.7.2"
-      }
-    },
-    {
-      "identity" : "gtmappauth",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/GTMAppAuth.git",
-      "state" : {
-        "revision" : "e803d09da0147fbf1bbb30e126c47ff43254e057",
-        "version" : "1.2.3"
-      }
-    },
-    {
-      "identity" : "leveldb",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/leveldb.git",
-      "state" : {
-        "revision" : "0706abcc6b0bd9cedfbb015ba840e4a780b5159b",
-        "version" : "1.22.2"
-      }
-    },
-    {
-      "identity" : "nanopb",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/nanopb.git",
-      "state" : {
-        "revision" : "7ee9ef9f627d85cbe1b8c4f49a3ed26eed216c77",
-        "version" : "2.30908.0"
-      }
-    },
-    {
-      "identity" : "promises",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/promises.git",
-      "state" : {
-        "revision" : "46c1e6b5ac09d8f82c991061c659f67e573d425d",
-        "version" : "2.1.0"
-      }
-    },
-    {
-      "identity" : "sfreadablesymbols",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/YusukeHosonuma/SFReadableSymbols.git",
-      "state" : {
-        "revision" : "e7d4c2a28ff151774ae50234632a9a1c73b658fb",
-        "version" : "1.0.0"
-      }
-    },
-    {
-      "identity" : "shlist",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/YusukeHosonuma/SHList.git",
-      "state" : {
-        "revision" : "6c61f5382dd07a64d76bc8b7fad8cec0d8a4ff7a",
-        "version" : "0.1.0"
-      }
-    },
-    {
-      "identity" : "swift-algorithms",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-algorithms",
-      "state" : {
-        "revision" : "b14b7f4c528c942f121c8b860b9410b2bf57825e",
-        "version" : "1.0.0"
-      }
-    },
-    {
-      "identity" : "swift-case-paths",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swift-case-paths.git",
-      "state" : {
-        "revision" : "ce9c0d897db8a840c39de64caaa9b60119cf4be8",
-        "version" : "0.8.1"
-      }
-    },
-    {
-      "identity" : "swift-numerics",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-numerics",
-      "state" : {
-        "revision" : "0a5bc04095a675662cf24757cc0640aa2204253b",
-        "version" : "1.0.2"
-      }
-    },
-    {
-      "identity" : "swift-protobuf",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-protobuf.git",
-      "state" : {
-        "revision" : "e1499bc69b9040b29184f7f2996f7bab467c1639",
-        "version" : "1.19.0"
-      }
-    },
-    {
-      "identity" : "swiftparamtest",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/YusukeHosonuma/SwiftParamTest.git",
-      "state" : {
-        "revision" : "f513e1dbbdd86e2ca2b672537f4bcb4417f94c27",
-        "version" : "2.2.1"
-      }
-    },
-    {
-      "identity" : "swiftprettyprint",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/YusukeHosonuma/SwiftPrettyPrint",
-      "state" : {
-        "revision" : "65b8a439c9e499aebb838c0418c72f7d0e66c6ae",
-        "version" : "1.3.0"
-      }
-    },
-    {
-      "identity" : "swiftui-common",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/YusukeHosonuma/SwiftUI-Common.git",
-      "state" : {
-        "revision" : "476ba14bf55e5c693ae05c42ff350619b2215cba",
-        "version" : "1.1.0"
-      }
-    },
-    {
-      "identity" : "userdefaultsbrowser",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/YusukeHosonuma/UserDefaultsBrowser.git",
-      "state" : {
-        "revision" : "24f5e6578ae0013208df2ab9d49b4f656d02aa0c",
-        "version" : "1.0.2"
-      }
-    }
-  ],
-  "version" : 2
+    ]
+  },
+  "version": 1
 }

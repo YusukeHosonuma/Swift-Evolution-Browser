@@ -11,6 +11,7 @@ import Foundation
 import Service
 import SFReadableSymbols
 import SwiftUI
+import ObservableObjectDebugger
 
 private let privacyPolicyURL = URL(string: "https://yusukehosonuma.github.io/Swift-Evolution-Browser/privacy-policy")!
 
@@ -99,6 +100,7 @@ public struct SettingView: View {
         .task {
             await viewModel.onAppear()
         }
+        .debugObserve(viewModel)
     }
 }
 
